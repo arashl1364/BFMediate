@@ -1,0 +1,109 @@
+#install.packages("/Users/AArash/Dropbox/Work/Mediation/package/trial123",    #BFMediate", repos = NULL, type = "source")
+#library(BFMediate)  # library(BFMediate)
+############################
+####### PartialMed #########
+############################
+library(foreign)
+R = 5000
+#Kleiman et al. (2016)    pvalue = 0.028
+Kleiman_Data  = read.spss("C:/Users/jaspe/Google Drive/Frankfurt PhD Economics/Work/Otter job/Arashtrial/Kleiman et al. (Study 4).sav",to.data.frame=TRUE)
+Kleiman_Data_clean = NULL
+Kleiman_Data_clean = Kleiman_Data[which((Kleiman_Data$C_party=='Democratic')&(Kleiman_Data$B_party=='Republican')),]
+Kleiman_Data_clean = Kleiman_Data_clean[which(Kleiman_Data_clean$Check_pass==1),]
+Kleiman_Data_clean = Kleiman_Data_clean[which((Kleiman_Data_clean$Fluency=='4')|(Kleiman_Data_clean$Fluency=='5 (Very fluent)')),]
+Kleiman_Data_clean = Kleiman_Data_clean[-183,] # In order to get closer estimates to the paper in the linear regressions don't run this line
+Data=NULL
+Data$X = ifelse(Kleiman_Data_clean$Condition=="Congruent",-1,1)
+Data$M = Kleiman_Data_clean$Atypical_composite_all
+Data$Y = Kleiman_Data_clean$Ideology_difference
+#m_star
+Vehicle= cbind(Kleiman_Data_clean$V_Tractor,Kleiman_Data_clean$V_Feet,Kleiman_Data_clean$V_Ice_Skat,Kleiman_Data_clean$V_Sled,Kleiman_Data_clean$V_Tank,Kleiman_Data_clean$V_Wheelbar)
+avg_Vehicle=rowMeans(Vehicle)
+Furniture = cbind(Kleiman_Data_clean$F_Cushion,Kleiman_Data_clean$F_Fridge,Kleiman_Data_clean$F_Stove,Kleiman_Data_clean$F_Fan,Kleiman_Data_clean$F_Phone,Kleiman_Data_clean$F_Picture)
+avg_Furniture=rowMeans(Furniture)
+Clothing=cbind(Kleiman_Data_clean$C_Purse,Kleiman_Data_clean$C_Watch,Kleiman_Data_clean$C_Necklace,Kleiman_Data_clean$C_Ring,Kleiman_Data_clean$C_Glasses,Kleiman_Data_clean$C_Bracelet)
+avg_Clothing=rowMeans(Clothing)
+Data$m_star = cbind(avg_Vehicle,avg_Furniture,avg_Clothing)
+# Data$m_star = cbind(Vehicle,Furniture,Clothing)  #using all the indicators
+#y_star
+Data$y_star = cbind(Kleiman_Data_clean$B_ideology,Kleiman_Data_clean$B_economic,Kleiman_Data_clean$B_social) - cbind(Kleiman_Data_clean$C_ideology,Kleiman_Data_clean$C_economic,Kleiman_Data_clean$C_social)
+temp = Data$m_star[,1] ; Data$m_star[,1] = Data$m_star[,3]; Data$m_star[,3] = temp   #changing the order of m_stars
+A_M = c(10,10);
+A_Y = c(10,10,1)
+Kleiman_out_simple = PartialMed(Data = Data, R=R,pars = list(A_M=1/(A_M^2),A_Y=1/(A_Y^2)))
+############################
+########## BFSD ############
+############################
+Kleiman_BF_simple = exp(BFSD(Data = Data, post = Kleiman_out_simple , model = 'cont', prior = list(A=1/(A_Y[3])^2),burnin = 0))
+#######################################
+########## MeasurementMCat ############
+#######################################
+# Barasch et al. (2016) (2)   m_stars are categorical (1-7)
+Barasch_Data2  = read.spss("C:/Users/jaspe/Google Drive/Frankfurt PhD Economics/Work/Otter job/Arashtrial/Study 3 Individual Data.sav",to.data.frame=TRUE)
+temp = cbind(Barasch_Data2$condition,rowMeans(Barasch_Data2[,6:11]),Barasch_Data2$donation)
+temp = temp[which(temp[,1]!=3),]
+Data = NULL
+Data$X =temp[,1]-1
+Data$M =  temp[,2]
+Data$Y = temp[,3]
+Data$m_star = Barasch_Data2[which(Barasch_Data2$condition!=levels(Barasch_Data2$condition)[3]),6:11]
+Data$y_star =temp[,3]
+temp = Data$m_star[1]; Data$m_star[1] = Data$m_star[3]; Data$m_star[3] = temp; #changing the reference indicator
+A_M = c(10,10)
+A_Y = c(10,10,1)
+Mcut = max(Data$m_star) +1
+Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$X), m_star=as.matrix(Data$m_star), Y= as.matrix(Data$Y) ,k=Mcut-1, M_ind=dim(Data$m_star)[2])
+Mcmc=list(R=5000)
+barasch_out_MCat  = rordprobitGibbs_me_M_multi_merr_cpp(Data=Data_cat, Mcmc=Mcmc)
+barasch_BF_multi = exp(BFSD(Data = Data, post = barasch_out_MCat , model = 'cat', prior = list(A=1/(A_Y[3])^2),burnin = 0))
+barasch_BF_multi
+#[1] 0.05091311
+#######################################
+########## MeasurementYCat ############
+#######################################
+#Van Zant et al. (2015) (Study 1a)
+Zant_Data  = read.spss("C:/Users/Jasper/Downloads/Arashtrial/Experiment 1A.sav",to.data.frame=TRUE)
+Zant_Data =subset(Zant_Data, Zant_Data$frame != "Ambiguous Frame") # subset excluding "Ambiguous Frame" based on the degrees in freedom
+Data=NULL
+Data$X = as.vector(ifelse(Zant_Data$frame == "Moral Frame", 1,0)) # coding has been choosen to reflect the sign of the reported results
+Data$M = as.vector(rowMeans(Zant_Data[,64:66])) #composite of 3 based on the paper
+Data$Y = as.vector(Zant_Data$policy_support_index_all) #composite of 6 (the number of different scenarios)
+Data$m_star = Zant_Data[,grepl("kind",names(Zant_Data))|grepl("compassionate",names(Zant_Data))|grepl("caring",names(Zant_Data))]
+# temp = Data$m_star[1]; Data$m_star[1] = Data$m_star[11]; Data$m_star[11] = temp;
+Data$m_star = Data$m_star[,-c(19,20,21)]
+Data$y_star = Zant_Data[,52:57]
+#Changing m_star and Y
+temp = Data$Y; Data$Y = Data$M; Data$M = temp
+temp = Data$y_star; Data$y_star = Data$m_star; Data$m_star= temp
+A_M = c(10,10)
+A_Y = c(10,10,1)
+Ycut = max(as.matrix(Data$y_star)[,1]) +1
+Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$M,Data$X), y = as.matrix(Data$y_star) ,k=Ycut-1, Y_ind=dim(as.matrix(Data$y_star))[2])
+Mcmc=list(R=5000)
+van_zant_out_rev_YCat = rordprobitGibbs_me_multi_merr_cpp(Data=Data_cat, Mcmc=Mcmc)
+van_zant_rev_BF_multi = exp(BFSD(Data = Data, post = van_zant_out_rev_YCat , model = 'cat', prior = list(A=1/(A_Y[3])^2),burnin = 0))
+van_zant_rev_BF_multi
+# [1] 0.006200475
+#######################################
+########## MeasurementMYCat ############
+#######################################
+#Van Zant et al. (2015) (Study 2)      m_star and y_star are both categorical (1-7)
+Data=NULL
+Zant_Data1  = read.spss("/Users/AArash/Dropbox/Work/Mediation/Data/PS/Replicated/2015_6_Van Zant/Experiment_2.sav",to.data.frame=TRUE)
+Data$X = ifelse(Zant_Data1$private_frame == "Pragmatic Private Frame",0,1)
+Data$M = Zant_Data1$moral_character_index
+Data$Y = Zant_Data1$policy_support_index
+Data$m_star = Zant_Data1[,3:11]
+Data$y_star = Zant_Data1[,12:15]
+temp = Data$m_star[1]; Data$m_star[1] = Data$m_star[4]; Data$m_star[4] = temp; #changing the reference indicator
+temp = Data$y_star[1]; Data$y_star[1] = Data$y_star[4]; Data$y_star[4] = temp; #changing the reference indicator
+A_M = c(10,10)
+A_Y = c(10,10,1)
+
+Mcut = max(Data$m_star) + 1
+Ycut = max(Data$y_star) + 1
+Data_cat = list(X=cbind(rep(1,length(Data$X)),Data$X), m_star=as.matrix(Data$m_star), y_star=as.matrix(Data$y_star), k_M = Mcut-1, k_Y=Ycut-1, M_ind=dim(as.matrix(Data$m_star))[2], Y_ind=dim(as.matrix(Data$y_star))[2])
+Mcmc = list(R=5000)
+van_zant_2_out_MYCat = Mediation_Ordered_Multi_Merr(Data=Data_cat, Mcmc=Mcmc)
+van_zant_2_BF_multi = exp(BFSD(Data = Data, post = van_zant_2_out_MYCat , model = 'cat', prior = list(A=1/(A_Y[3])^2),burnin = 0))
+# [1] 0.4297192
