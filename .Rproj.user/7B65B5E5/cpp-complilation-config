@@ -6,10 +6,9 @@
         "-IC:/Users/jaspe/Documents/R/win-library/3.6/RcppArmadillo/include",
         "-std=gnu++11",
         "-IC:/PROGRA~1/R/R-36~1.3/include",
-        "-DNDEBUG",
-        "-fopenmp"
+        "-DNDEBUG"
     ],
-    "hash" : "158834755415882870871588287087",
+    "hash" : "158834755415883515611588351561",
     "is_cpp" : true,
     "pch" : "Rcpp"
 }

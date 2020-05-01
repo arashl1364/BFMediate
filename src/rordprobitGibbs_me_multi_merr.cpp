@@ -1,5 +1,5 @@
+#include "BFMediate.h"
 // [[Rcpp::depends(RcppArmadillo)]]
-//if you include bayesm.h here, you do not need to define functions before calling them
 #include <RcppArmadillo.h>
 using namespace arma; // use the Armadillo library for matrix computations
 using namespace Rcpp;

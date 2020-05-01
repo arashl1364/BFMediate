@@ -6,240 +6,37 @@
 
 using namespace Rcpp;
 
-// breg_me
-List breg_me(arma::vec const& y, arma::mat const& X, arma::vec const& betabar, arma::mat const& A);
-RcppExport SEXP _BFMediate_breg_me(SEXP ySEXP, SEXP XSEXP, SEXP betabarSEXP, SEXP ASEXP) {
+// Mediation_Ordered_Multi_Merr_cpp
+List Mediation_Ordered_Multi_Merr_cpp(arma::mat const& X, arma::mat const& m_star, arma::mat const& y_star, int k_M, int k_Y, int M_ind, int Y_ind, arma::mat const& A_M, arma::vec const& betabar, arma::mat const& Ad_M, double s_M, arma::mat const& inc_root_M, arma::vec const& dstarbar_M, arma::vec const& betahat, arma::mat const& A_Y, arma::vec const& beta_2_bar, arma::mat const& Ad_Y, double s_Y, arma::mat const& inc_root_Y, arma::vec const& dstarbar_Y, arma::vec const& beta_2_hat, int R, int keep, int nprint);
+RcppExport SEXP _BFMediate_Mediation_Ordered_Multi_Merr_cpp(SEXP XSEXP, SEXP m_starSEXP, SEXP y_starSEXP, SEXP k_MSEXP, SEXP k_YSEXP, SEXP M_indSEXP, SEXP Y_indSEXP, SEXP A_MSEXP, SEXP betabarSEXP, SEXP Ad_MSEXP, SEXP s_MSEXP, SEXP inc_root_MSEXP, SEXP dstarbar_MSEXP, SEXP betahatSEXP, SEXP A_YSEXP, SEXP beta_2_barSEXP, SEXP Ad_YSEXP, SEXP s_YSEXP, SEXP inc_root_YSEXP, SEXP dstarbar_YSEXP, SEXP beta_2_hatSEXP, SEXP RSEXP, SEXP keepSEXP, SEXP nprintSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec const& >::type y(ySEXP);
     Rcpp::traits::input_parameter< arma::mat const& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type m_star(m_starSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type y_star(y_starSEXP);
+    Rcpp::traits::input_parameter< int >::type k_M(k_MSEXP);
+    Rcpp::traits::input_parameter< int >::type k_Y(k_YSEXP);
+    Rcpp::traits::input_parameter< int >::type M_ind(M_indSEXP);
+    Rcpp::traits::input_parameter< int >::type Y_ind(Y_indSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type A_M(A_MSEXP);
     Rcpp::traits::input_parameter< arma::vec const& >::type betabar(betabarSEXP);
-    Rcpp::traits::input_parameter< arma::mat const& >::type A(ASEXP);
-    rcpp_result_gen = Rcpp::wrap(breg_me(y, X, betabar, A));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rtrun
-NumericVector rtrun(NumericVector const& mu, NumericVector const& sigma, NumericVector const& a, NumericVector const& b);
-RcppExport SEXP _BFMediate_rtrun(SEXP muSEXP, SEXP sigmaSEXP, SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector const& >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< NumericVector const& >::type sigma(sigmaSEXP);
-    Rcpp::traits::input_parameter< NumericVector const& >::type a(aSEXP);
-    Rcpp::traits::input_parameter< NumericVector const& >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(rtrun(mu, sigma, a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// dstartoc
-arma::vec dstartoc(arma::vec const& dstar);
-RcppExport SEXP _BFMediate_dstartoc(SEXP dstarSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec const& >::type dstar(dstarSEXP);
-    rcpp_result_gen = Rcpp::wrap(dstartoc(dstar));
-    return rcpp_result_gen;
-END_RCPP
-}
-// lldstar
-double lldstar(arma::vec const& dstar, arma::vec const& y, arma::vec const& mu, double ssq_y_tilde);
-RcppExport SEXP _BFMediate_lldstar(SEXP dstarSEXP, SEXP ySEXP, SEXP muSEXP, SEXP ssq_y_tildeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec const& >::type dstar(dstarSEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< double >::type ssq_y_tilde(ssq_y_tildeSEXP);
-    rcpp_result_gen = Rcpp::wrap(lldstar(dstar, y, mu, ssq_y_tilde));
-    return rcpp_result_gen;
-END_RCPP
-}
-// lndMvn
-double lndMvn(arma::vec const& x, arma::vec const& mu, arma::mat const& rooti);
-RcppExport SEXP _BFMediate_lndMvn(SEXP xSEXP, SEXP muSEXP, SEXP rootiSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec const& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat const& >::type rooti(rootiSEXP);
-    rcpp_result_gen = Rcpp::wrap(lndMvn(x, mu, rooti));
-    return rcpp_result_gen;
-END_RCPP
-}
-// dstarRwMetrop
-List dstarRwMetrop(arma::vec const& y, arma::vec const& mu, arma::vec const& olddstar, double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::mat const& rootdi, int ncut, double ssq_y_tilde);
-RcppExport SEXP _BFMediate_dstarRwMetrop(SEXP ySEXP, SEXP muSEXP, SEXP olddstarSEXP, SEXP sSEXP, SEXP inc_rootSEXP, SEXP dstarbarSEXP, SEXP rootdiSEXP, SEXP ncutSEXP, SEXP ssq_y_tildeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec const& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type olddstar(olddstarSEXP);
-    Rcpp::traits::input_parameter< double >::type s(sSEXP);
-    Rcpp::traits::input_parameter< arma::mat const& >::type inc_root(inc_rootSEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type dstarbar(dstarbarSEXP);
-    Rcpp::traits::input_parameter< arma::mat const& >::type rootdi(rootdiSEXP);
-    Rcpp::traits::input_parameter< int >::type ncut(ncutSEXP);
-    Rcpp::traits::input_parameter< double >::type ssq_y_tilde(ssq_y_tildeSEXP);
-    rcpp_result_gen = Rcpp::wrap(dstarRwMetrop(y, mu, olddstar, s, inc_root, dstarbar, rootdi, ncut, ssq_y_tilde));
-    return rcpp_result_gen;
-END_RCPP
-}
-// dstarRwMetrop_1
-List dstarRwMetrop_1(arma::vec const& y, arma::vec const& mu, arma::vec const& olddstar, double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::mat const& rootdi, int ncut, double ssq_y_tilde);
-RcppExport SEXP _BFMediate_dstarRwMetrop_1(SEXP ySEXP, SEXP muSEXP, SEXP olddstarSEXP, SEXP sSEXP, SEXP inc_rootSEXP, SEXP dstarbarSEXP, SEXP rootdiSEXP, SEXP ncutSEXP, SEXP ssq_y_tildeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec const& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type olddstar(olddstarSEXP);
-    Rcpp::traits::input_parameter< double >::type s(sSEXP);
-    Rcpp::traits::input_parameter< arma::mat const& >::type inc_root(inc_rootSEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type dstarbar(dstarbarSEXP);
-    Rcpp::traits::input_parameter< arma::mat const& >::type rootdi(rootdiSEXP);
-    Rcpp::traits::input_parameter< int >::type ncut(ncutSEXP);
-    Rcpp::traits::input_parameter< double >::type ssq_y_tilde(ssq_y_tildeSEXP);
-    rcpp_result_gen = Rcpp::wrap(dstarRwMetrop_1(y, mu, olddstar, s, inc_root, dstarbar, rootdi, ncut, ssq_y_tilde));
-    return rcpp_result_gen;
-END_RCPP
-}
-// breg2
-List breg2(arma::mat const& root, arma::mat const& X, arma::vec const& y, arma::vec const& Abetabar);
-RcppExport SEXP _BFMediate_breg2(SEXP rootSEXP, SEXP XSEXP, SEXP ySEXP, SEXP AbetabarSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat const& >::type root(rootSEXP);
-    Rcpp::traits::input_parameter< arma::mat const& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type Abetabar(AbetabarSEXP);
-    rcpp_result_gen = Rcpp::wrap(breg2(root, X, y, Abetabar));
-    return rcpp_result_gen;
-END_RCPP
-}
-// norm_rs
-double norm_rs(double a, double b);
-RcppExport SEXP _BFMediate_norm_rs(SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type a(aSEXP);
-    Rcpp::traits::input_parameter< double >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(norm_rs(a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// half_norm_rs
-double half_norm_rs(double a, double b);
-RcppExport SEXP _BFMediate_half_norm_rs(SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type a(aSEXP);
-    Rcpp::traits::input_parameter< double >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(half_norm_rs(a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// unif_rs
-double unif_rs(double a, double b);
-RcppExport SEXP _BFMediate_unif_rs(SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type a(aSEXP);
-    Rcpp::traits::input_parameter< double >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(unif_rs(a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// exp_rs
-double exp_rs(double a, double b);
-RcppExport SEXP _BFMediate_exp_rs(SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type a(aSEXP);
-    Rcpp::traits::input_parameter< double >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(exp_rs(a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rtnm
-arma::vec rtnm(arma::vec mus, arma::vec sigmas, arma::vec lower, arma::vec upper);
-RcppExport SEXP _BFMediate_rtnm(SEXP musSEXP, SEXP sigmasSEXP, SEXP lowerSEXP, SEXP upperSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type mus(musSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type sigmas(sigmasSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type lower(lowerSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type upper(upperSEXP);
-    rcpp_result_gen = Rcpp::wrap(rtnm(mus, sigmas, lower, upper));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rtrunVec
-arma::vec rtrunVec(arma::vec const& mu, arma::vec const& sigma, arma::vec const& a, arma::vec const& b);
-RcppExport SEXP _BFMediate_rtrunVec(SEXP muSEXP, SEXP sigmaSEXP, SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec const& >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type sigma(sigmaSEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type a(aSEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(rtrunVec(mu, sigma, a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// startMcmcTimer
-void startMcmcTimer();
-RcppExport SEXP _BFMediate_startMcmcTimer() {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    startMcmcTimer();
-    return R_NilValue;
-END_RCPP
-}
-// infoMcmcTimer
-void infoMcmcTimer(int rep, int R);
-RcppExport SEXP _BFMediate_infoMcmcTimer(SEXP repSEXP, SEXP RSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type rep(repSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type Ad_M(Ad_MSEXP);
+    Rcpp::traits::input_parameter< double >::type s_M(s_MSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type inc_root_M(inc_root_MSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type dstarbar_M(dstarbar_MSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type betahat(betahatSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type A_Y(A_YSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type beta_2_bar(beta_2_barSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type Ad_Y(Ad_YSEXP);
+    Rcpp::traits::input_parameter< double >::type s_Y(s_YSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type inc_root_Y(inc_root_YSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type dstarbar_Y(dstarbar_YSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type beta_2_hat(beta_2_hatSEXP);
     Rcpp::traits::input_parameter< int >::type R(RSEXP);
-    infoMcmcTimer(rep, R);
-    return R_NilValue;
-END_RCPP
-}
-// endMcmcTimer
-void endMcmcTimer();
-RcppExport SEXP _BFMediate_endMcmcTimer() {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    endMcmcTimer();
-    return R_NilValue;
-END_RCPP
-}
-// breg1
-arma::vec breg1(arma::mat const& root, arma::mat const& X, arma::vec const& y, arma::vec const& Abetabar);
-RcppExport SEXP _BFMediate_breg1(SEXP rootSEXP, SEXP XSEXP, SEXP ySEXP, SEXP AbetabarSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat const& >::type root(rootSEXP);
-    Rcpp::traits::input_parameter< arma::mat const& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< arma::vec const& >::type Abetabar(AbetabarSEXP);
-    rcpp_result_gen = Rcpp::wrap(breg1(root, X, y, Abetabar));
+    Rcpp::traits::input_parameter< int >::type keep(keepSEXP);
+    Rcpp::traits::input_parameter< int >::type nprint(nprintSEXP);
+    rcpp_result_gen = Rcpp::wrap(Mediation_Ordered_Multi_Merr_cpp(X, m_star, y_star, k_M, k_Y, M_ind, Y_ind, A_M, betabar, Ad_M, s_M, inc_root_M, dstarbar_M, betahat, A_Y, beta_2_bar, Ad_Y, s_Y, inc_root_Y, dstarbar_Y, beta_2_hat, R, keep, nprint));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -320,24 +117,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_BFMediate_breg_me", (DL_FUNC) &_BFMediate_breg_me, 4},
-    {"_BFMediate_rtrun", (DL_FUNC) &_BFMediate_rtrun, 4},
-    {"_BFMediate_dstartoc", (DL_FUNC) &_BFMediate_dstartoc, 1},
-    {"_BFMediate_lldstar", (DL_FUNC) &_BFMediate_lldstar, 4},
-    {"_BFMediate_lndMvn", (DL_FUNC) &_BFMediate_lndMvn, 3},
-    {"_BFMediate_dstarRwMetrop", (DL_FUNC) &_BFMediate_dstarRwMetrop, 9},
-    {"_BFMediate_dstarRwMetrop_1", (DL_FUNC) &_BFMediate_dstarRwMetrop_1, 9},
-    {"_BFMediate_breg2", (DL_FUNC) &_BFMediate_breg2, 4},
-    {"_BFMediate_norm_rs", (DL_FUNC) &_BFMediate_norm_rs, 2},
-    {"_BFMediate_half_norm_rs", (DL_FUNC) &_BFMediate_half_norm_rs, 2},
-    {"_BFMediate_unif_rs", (DL_FUNC) &_BFMediate_unif_rs, 2},
-    {"_BFMediate_exp_rs", (DL_FUNC) &_BFMediate_exp_rs, 2},
-    {"_BFMediate_rtnm", (DL_FUNC) &_BFMediate_rtnm, 4},
-    {"_BFMediate_rtrunVec", (DL_FUNC) &_BFMediate_rtrunVec, 4},
-    {"_BFMediate_startMcmcTimer", (DL_FUNC) &_BFMediate_startMcmcTimer, 0},
-    {"_BFMediate_infoMcmcTimer", (DL_FUNC) &_BFMediate_infoMcmcTimer, 2},
-    {"_BFMediate_endMcmcTimer", (DL_FUNC) &_BFMediate_endMcmcTimer, 0},
-    {"_BFMediate_breg1", (DL_FUNC) &_BFMediate_breg1, 4},
+    {"_BFMediate_Mediation_Ordered_Multi_Merr_cpp", (DL_FUNC) &_BFMediate_Mediation_Ordered_Multi_Merr_cpp, 24},
     {"_BFMediate_rordprobitGibbs_me_M_multi_merr_cpp_loop", (DL_FUNC) &_BFMediate_rordprobitGibbs_me_M_multi_merr_cpp_loop, 17},
     {"_BFMediate_rordprobitGibbs_me_multi_merr_cpp_loop", (DL_FUNC) &_BFMediate_rordprobitGibbs_me_multi_merr_cpp_loop, 14},
     {"_BFMediate_runiregGibbs_rcpp_me", (DL_FUNC) &_BFMediate_runiregGibbs_rcpp_me, 14},
