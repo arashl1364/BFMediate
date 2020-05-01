@@ -5,7 +5,7 @@ using namespace arma; // use the Armadillo library for matrix computations
 using namespace Rcpp;
 
 
-// [[Rcpp::export]]
+
 List runiregGibbs_betafix(arma::vec const& y, arma::mat const& X, arma::vec const& betabar, arma::mat const& A, double nu, double ssq,
                           double sigmasq, int R, int keep, int nprint, int betafix) {
 
@@ -144,7 +144,7 @@ arma::vec dstartoc(arma::vec const& dstar){
 
 // compute conditional likelihood of data given cut-offs
 // [[Rcpp::export]]
-double lldstar(arma::vec const& dstar, arma::vec const& y, vec const& mu, double ssq_y_tilde){       //y is y*, mu (= z) is y, ssq_y_tilde is the variance of indicator latent variables
+double lldstar(arma::vec const& dstar, arma::vec const& y, arma::vec const& mu, double ssq_y_tilde){       //y is y*, mu (= z) is y, ssq_y_tilde is the variance of indicator latent variables
   arma::vec gamma = dstartoc(dstar);
 
   double sigma_y_tilde = sqrt(ssq_y_tilde);
@@ -166,7 +166,22 @@ double lldstar(arma::vec const& dstar, arma::vec const& y, vec const& mu, double
   return (sum(log(arg)));
 }
 
+// [[Rcpp::export]]
+double lndMvn(arma::vec const& x, arma::vec const& mu, arma::mat const& rooti){
 
+  //Wayne Taylor 9/7/2014
+
+  // function to evaluate log of MV Normal density with  mean mu, var Sigma
+  // Sigma=t(root)%*%root   (root is upper tri cholesky root)
+  // Sigma^-1=rooti%*%t(rooti)
+  // rooti is in the inverse of upper triangular chol root of sigma
+  //          note: this is the UL decomp of sigmai not LU!
+  //                Sigma=root'root   root=inv(rooti)
+
+  arma::vec z = vectorise(trans(rooti)*(x-mu));
+
+  return((-(x.size()/2.0)*log(2*M_PI) -.5*(trans(z)*z) + sum(log(diagvec(rooti))))[0]);
+}
 
 
 // [[Rcpp::export]]
@@ -498,22 +513,7 @@ arma::vec breg1(arma::mat const& root, arma::mat const& X, arma::vec const& y, a
 }
 
 
-// [[Rcpp::export]]
-double lndMvn(arma::vec const& x, arma::vec const& mu, arma::mat const& rooti){
 
-  //Wayne Taylor 9/7/2014
-
-  // function to evaluate log of MV Normal density with  mean mu, var Sigma
-  // Sigma=t(root)%*%root   (root is upper tri cholesky root)
-  // Sigma^-1=rooti%*%t(rooti)
-  // rooti is in the inverse of upper triangular chol root of sigma
-  //          note: this is the UL decomp of sigmai not LU!
-  //                Sigma=root'root   root=inv(rooti)
-
-  arma::vec z = vectorise(trans(rooti)*(x-mu));
-
-  return((-(x.size()/2.0)*log(2*M_PI) -.5*(trans(z)*z) + sum(log(diagvec(rooti))))[0]);
-}
 
 
 
