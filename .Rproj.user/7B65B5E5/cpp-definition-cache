@@ -2,6 +2,258 @@
     {
         "definitions" : [
         ],
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/BFMediate.h",
+        "file_last_write" : 1588360809.000000
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/Mediation_Ordered_Multi_Merr.cpp",
+                "kind" : 6,
+                "line" : 54,
+                "name" : "Mediation_Ordered_Multi_Merr_cpp(const arma::mat &, const arma::mat &, const arma::mat &, int, int, int, int, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, int, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@Mediation_Ordered_Multi_Merr_cpp#&1$@N@arma@S@Mat>#d#S0_#S0_#I#I#I#I#S0_#&1$@N@arma@S@Col>#d#S0_#d#S0_#S2_#S2_#S0_#S2_#S0_#d#S0_#S2_#S2_#I#I#I#"
+            }
+        ],
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/Mediation_Ordered_Multi_Merr.cpp",
+        "file_last_write" : 1588360005.000000
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 9,
+                "name" : "runiregGibbs_betafix(const arma::vec &, const arma::mat &, const arma::vec &, const arma::mat &, double, double, double, int, int, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@runiregGibbs_betafix#&1$@N@arma@S@Col>#d#&1$@N@arma@S@Mat>#d#S0_#S2_#d#d#d#I#I#I#I#"
+            },
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 89,
+                "name" : "breg_me(const arma::vec &, const arma::mat &, const arma::vec &, const arma::mat &)",
+                "parent_name" : "",
+                "usr" : "c:@F@breg_me#&1$@N@arma@S@Col>#d#&1$@N@arma@S@Mat>#d#S0_#S2_#"
+            },
+            {
+                "column" : 15,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 114,
+                "name" : "rtrun(const Rcpp::NumericVector &, const Rcpp::NumericVector &, const Rcpp::NumericVector &, const Rcpp::NumericVector &)",
+                "parent_name" : "",
+                "usr" : "c:@F@rtrun#&1I#S0_#S0_#S0_#"
+            },
+            {
+                "column" : 11,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 131,
+                "name" : "dstartoc(const arma::vec &)",
+                "parent_name" : "",
+                "usr" : "c:@F@dstartoc#&1$@N@arma@S@Col>#d#"
+            },
+            {
+                "column" : 8,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 144,
+                "name" : "lldstar(const arma::vec &, const arma::vec &, const arma::vec &, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@lldstar#&1$@N@arma@S@Col>#d#S0_#S0_#d#"
+            },
+            {
+                "column" : 8,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 167,
+                "name" : "lndMvn(const arma::vec &, const arma::vec &, const arma::mat &)",
+                "parent_name" : "",
+                "usr" : "c:@F@lndMvn#&1$@N@arma@S@Col>#d#S0_#&1$@N@arma@S@Mat>#d#"
+            },
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 184,
+                "name" : "dstarRwMetrop(const arma::vec &, const arma::vec &, const arma::vec &, double, const arma::mat &, const arma::vec &, const arma::mat &, int, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@dstarRwMetrop#&1$@N@arma@S@Col>#d#S0_#S0_#d#&1$@N@arma@S@Mat>#d#S0_#S2_#I#d#"
+            },
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 236,
+                "name" : "dstarRwMetrop_1(const arma::vec &, const arma::vec &, const arma::vec &, double, const arma::mat &, const arma::vec &, const arma::mat &, int, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@dstarRwMetrop_1#&1$@N@arma@S@Col>#d#S0_#S0_#d#&1$@N@arma@S@Mat>#d#S0_#S2_#I#d#"
+            },
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 282,
+                "name" : "breg2(const arma::mat &, const arma::mat &, const arma::vec &, const arma::vec &)",
+                "parent_name" : "",
+                "usr" : "c:@F@breg2#&1$@N@arma@S@Mat>#d#S0_#&1$@N@arma@S@Col>#d#S2_#"
+            },
+            {
+                "column" : 8,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 302,
+                "name" : "norm_rs(double, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@norm_rs#d#d#"
+            },
+            {
+                "column" : 8,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 310,
+                "name" : "half_norm_rs(double, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@half_norm_rs#d#d#"
+            },
+            {
+                "column" : 8,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 318,
+                "name" : "unif_rs(double, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@unif_rs#d#d#"
+            },
+            {
+                "column" : 8,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 338,
+                "name" : "exp_rs(double, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@exp_rs#d#d#"
+            },
+            {
+                "column" : 11,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 362,
+                "name" : "rtnm(arma::vec, arma::vec, arma::vec, arma::vec)",
+                "parent_name" : "",
+                "usr" : "c:@F@rtnm#$@N@arma@S@Col>#d#S0_#S0_#S0_#"
+            },
+            {
+                "column" : 11,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 429,
+                "name" : "rtrunVec(const arma::vec &, const arma::vec &, const arma::vec &, const arma::vec &)",
+                "parent_name" : "",
+                "usr" : "c:@F@rtrunVec#&1$@N@arma@S@Col>#d#S0_#S0_#S0_#"
+            },
+            {
+                "column" : 11,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 452,
+                "name" : "breg1(const arma::mat &, const arma::mat &, const arma::vec &, const arma::vec &)",
+                "parent_name" : "",
+                "usr" : "c:@F@breg1#&1$@N@arma@S@Mat>#d#S0_#&1$@N@arma@S@Col>#d#S2_#"
+            },
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 478,
+                "name" : "rordprobitGibbs_me(const arma::mat &, const arma::mat &, int, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, const int &, int, int, int, arma::mat, const arma::mat &, const arma::mat &, const arma::vec &, const arma::vec &, const arma::vec &)",
+                "parent_name" : "",
+                "usr" : "c:@F@rordprobitGibbs_me#&1$@N@arma@S@Mat>#d#S0_#I#S0_#&1$@N@arma@S@Col>#d#S0_#d#S0_#S2_#S2_#&1I#I#I#I#S1_#S0_#S0_#S2_#S2_#S2_#"
+            },
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+                "kind" : 6,
+                "line" : 626,
+                "name" : "rordprobitGibbs_me_M(const arma::vec &, const arma::vec &, const arma::mat &, const arma::mat &, int, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, const int &, int, int, int, arma::mat, const arma::mat &, const arma::mat &, const arma::vec &, const arma::vec &, const arma::vec &)",
+                "parent_name" : "",
+                "usr" : "c:@F@rordprobitGibbs_me_M#&1$@N@arma@S@Col>#d#S0_#&1$@N@arma@S@Mat>#d#S2_#I#S2_#S0_#S2_#d#S2_#S0_#S0_#&1I#I#I#I#S3_#S2_#S2_#S0_#S0_#S0_#"
+            }
+        ],
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ShareFunctions.cpp",
+        "file_last_write" : 1588360022.000000
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/Timing.cpp",
+                "kind" : 6,
+                "line" : 8,
+                "name" : "startMcmcTimer",
+                "parent_name" : "",
+                "usr" : "c:@F@startMcmcTimer#"
+            },
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/Timing.cpp",
+                "kind" : 6,
+                "line" : 13,
+                "name" : "infoMcmcTimer(int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@infoMcmcTimer#I#I#"
+            },
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/Timing.cpp",
+                "kind" : 6,
+                "line" : 22,
+                "name" : "endMcmcTimer",
+                "parent_name" : "",
+                "usr" : "c:@F@endMcmcTimer#"
+            }
+        ],
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/Timing.cpp",
+        "file_last_write" : 1588359518.000000
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/rordprobitGibbs_me_M_multi_merr.cpp",
+                "kind" : 6,
+                "line" : 12,
+                "name" : "rordprobitGibbs_me_M_multi_merr_cpp_loop(const arma::vec &, const arma::mat &, const arma::mat &, int, const arma::mat &, const arma::vec &, const arma::mat &, const arma::mat &, const arma::vec &, double, const arma::mat &, const arma::vec &, const arma::vec &, const int &, int, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@rordprobitGibbs_me_M_multi_merr_cpp_loop#&1$@N@arma@S@Col>#d#&1$@N@arma@S@Mat>#d#S2_#I#S2_#S0_#S2_#S2_#S0_#d#S2_#S0_#S0_#&1I#I#I#I#"
+            }
+        ],
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/rordprobitGibbs_me_M_multi_merr.cpp",
+        "file_last_write" : 1588359632.000000
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/rordprobitGibbs_me_multi_merr.cpp",
+                "kind" : 6,
+                "line" : 11,
+                "name" : "rordprobitGibbs_me_multi_merr_cpp_loop(const arma::mat &, const arma::mat &, int, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, const int &, int, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@rordprobitGibbs_me_multi_merr_cpp_loop#&1$@N@arma@S@Mat>#d#S0_#I#S0_#&1$@N@arma@S@Col>#d#S0_#d#S0_#S2_#S2_#&1I#I#I#I#"
+            }
+        ],
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/rordprobitGibbs_me_multi_merr.cpp",
+        "file_last_write" : 1588359591.000000
+    },
+    {
+        "definitions" : [
+        ],
         "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/runiregGibbs_rcpp_me.cpp",
         "file_last_write" : 1586971029.000000
     }
