@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1588347739480.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C86E8F06",
+    "lastKnownWriteTime" : 1588342251,
+    "last_content_update" : 1588342251,
+    "path" : "~/GitHub/BFMediate/R/rordprobitGibbs_me_M_multi_merr.R",
+    "project_path" : "R/rordprobitGibbs_me_M_multi_merr.R",
+    "properties" : {
+        "cursorPosition" : "9,0",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
