@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1588602854892.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2436403391",
+    "id" : "5FAF74CF",
+    "lastKnownWriteTime" : 1588604065,
+    "last_content_update" : 1588604065606,
+    "path" : "~/GitHub/BFMediate/src/ShareFunctions.cpp",
+    "project_path" : "src/ShareFunctions.cpp",
+    "properties" : {
+        "cursorPosition" : "287,29",
+        "scrollLine" : "279"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "cpp"
+}

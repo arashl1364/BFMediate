@@ -1,14 +1,14 @@
 #include "BFMediate.h"
-// [[Rcpp::depends(RcppArmadillo)]]
-#include <RcppArmadillo.h>
-using namespace arma; // use the Armadillo library for matrix computations
-using namespace Rcpp;
+// // [[Rcpp::depends(RcppArmadillo)]]
+// // #include <bayesm.h> //if you include bayesm.h here, you do not need to define functions before calling them
+// #include <RcppArmadillo.h>
+// using namespace arma; // use the Armadillo library for matrix computations
+// using namespace Rcpp;
 
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 //MAIN FUNCTION---------------------------------------------------------------------------------------
-// [[Rcpp::export]]
 List rordprobitGibbs_me_M_multi_merr_cpp_loop(arma::vec const& dep,  arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad, arma::mat const& A_2, arma::vec const& betabar_2,
                                          double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
                                          int const& Y_ind,
@@ -262,6 +262,38 @@ List rordprobitGibbs_me_M_multi_merr_cpp_loop(arma::vec const& dep,  arma::mat c
     Named("mubeta_2_draw") = mubeta_2_draw,
     Named("varbeta_2_draw") = varbeta_2_draw
   );
+}
+
+
+
+
+
+
+time_t itime;
+char buf[100];
+
+void startMcmcTimer() {
+  itime = time(NULL);
+  Rcout << " MCMC Iteration (est time to end - min) \n";
+}
+
+void infoMcmcTimer(int rep, int R) {
+  time_t ctime = time(NULL);
+  char buf[32];
+
+  double timetoend = difftime(ctime, itime) / 60.0 * (R - rep - 1) / (rep+1);
+  sprintf(buf, " %d (%.1f)\n", rep+1, timetoend);
+  Rcout <<  buf;
+}
+
+void endMcmcTimer() {
+  time_t ctime = time(NULL);
+  char buf[32];
+
+  sprintf(buf, " Total Time Elapsed: %.2f \n", difftime(ctime, itime) / 60.0);
+  Rcout << buf;
+
+  itime = 0;
 }
 
 
