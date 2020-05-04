@@ -256,6 +256,55 @@ List dstarRwMetrop2(arma::vec const& y, arma::vec const& mu, arma::vec const& ol
 
 
 
+
+List dstarRwMetrop3(arma::vec const& y, arma::vec const& mu, arma::vec const& olddstar, double s, arma::mat const& inc_root,
+                    arma::vec const& dstarbar, arma::mat const& rootdi, int ncut, double ssq_y_tilde){
+
+  // function to execute rw metropolis for the dstar
+  // y is n vector with element = 1,...,j
+  // X is n x k matrix of x values
+  // RW increments are N(0,s^2*t(inc.root)%*%inc.root)
+  // prior on dstar is N(dstarbar,Sigma)  Sigma^-1=rootdi*t(rootdi)
+  //  inc.root, rootdi are upper triangular
+  //  this means that we are using the UL decomp of Sigma^-1 for prior
+  // olddstar is the current
+
+  double unif;
+  arma::vec dstardraw;
+
+  arma::vec dstarc = olddstar + s*trans(inc_root)*vec(rnorm(ncut));
+  double oldll = lldstar(olddstar, y, mu, ssq_y_tilde);
+  double cll = lldstar(dstarc, y, mu, ssq_y_tilde);
+  double clpost = cll + lndMvn(dstarc, dstarbar, rootdi);
+  double ldiff = clpost - oldll - lndMvn(olddstar, dstarbar, rootdi);
+  double alpha = exp(ldiff);
+
+  if (alpha>1){
+    alpha = 1.0;
+  }
+
+  if (alpha<1){
+    unif = runif(1)[0]; //runif returns a NumericVector, so using [0] allows for conversion to double by extracting the first element
+  }
+  else{
+    unif = 0;
+  }
+
+  if (unif<=alpha){
+    dstardraw = dstarc;
+  }
+  else{
+    dstardraw = olddstar;
+  }
+
+  return List::create(
+    Named("dstardraw") = dstardraw
+  );
+}
+
+
+
+
 List breg2(arma::mat const& root, arma::mat const& X, arma::vec const& y, arma::vec const& Abetabar) {
 
   // Arash Laghaie 10/20/2018

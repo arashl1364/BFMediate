@@ -7,13 +7,13 @@
     "folds" : "",
     "hash" : "0",
     "id" : "B36E55AC",
-    "lastKnownWriteTime" : 1588628959,
-    "last_content_update" : 1588628959012,
+    "lastKnownWriteTime" : 1588630767,
+    "last_content_update" : 1588630767241,
     "path" : "~/GitHub/BFMediate/src/BFMediate.h",
     "project_path" : "src/BFMediate.h",
     "properties" : {
-        "cursorPosition" : "73,0",
-        "scrollLine" : "52"
+        "cursorPosition" : "100,54",
+        "scrollLine" : "74"
     },
     "read_only" : false,
     "read_only_alternatives" : [

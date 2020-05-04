@@ -13,3 +13,7 @@ rordprobitGibbs_me_multi_merr_cpp_loop <- function(y, X, k, A, betabar, Ad, s, i
     .Call(`_BFMediate_rordprobitGibbs_me_multi_merr_cpp_loop`, y, X, k, A, betabar, Ad, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint)
 }
 
+Mediation_Ordered_Multi_Merr_cpp <- function(X, m_star, y_star, k_M, k_Y, M_ind, Y_ind, A_M, betabar, Ad_M, s_M, inc_root_M, dstarbar_M, betahat, A_Y, beta_2_bar, Ad_Y, s_Y, inc_root_Y, dstarbar_Y, beta_2_hat, R, keep, nprint) {
+    .Call(`_BFMediate_Mediation_Ordered_Multi_Merr_cpp`, X, m_star, y_star, k_M, k_Y, M_ind, Y_ind, A_M, betabar, Ad_M, s_M, inc_root_M, dstarbar_M, betahat, A_Y, beta_2_bar, Ad_Y, s_Y, inc_root_Y, dstarbar_Y, beta_2_hat, R, keep, nprint)
+}
+

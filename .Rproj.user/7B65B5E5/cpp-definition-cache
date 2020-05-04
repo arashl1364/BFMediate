@@ -3,7 +3,7 @@
         "definitions" : [
         ],
         "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/BFMediate.h",
-        "file_last_write" : 1588628959.000000
+        "file_last_write" : 1588630767.000000
     },
     {
         "definitions" : [
@@ -15,10 +15,43 @@
                 "name" : "runiregGibbs_betafix(const arma::vec &, const arma::mat &, const arma::vec &, const arma::mat &, double, double, double, int, int, int, int)",
                 "parent_name" : "",
                 "usr" : "c:@F@runiregGibbs_betafix#&1$@N@arma@S@Col>#d#&1$@N@arma@S@Mat>#d#S0_#S2_#d#d#d#I#I#I#I#"
+            },
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ExtraFunctions.cpp",
+                "kind" : 6,
+                "line" : 89,
+                "name" : "rordprobitGibbs_me(const arma::mat &, const arma::mat &, int, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, const int &, int, int, int, arma::mat, const arma::mat &, const arma::mat &, const arma::vec &, const arma::vec &, const arma::vec &)",
+                "parent_name" : "",
+                "usr" : "c:@F@rordprobitGibbs_me#&1$@N@arma@S@Mat>#d#S0_#I#S0_#&1$@N@arma@S@Col>#d#S0_#d#S0_#S2_#S2_#&1I#I#I#I#S1_#S0_#S0_#S2_#S2_#S2_#"
+            },
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ExtraFunctions.cpp",
+                "kind" : 6,
+                "line" : 235,
+                "name" : "rordprobitGibbs_me_M(const arma::vec &, const arma::vec &, const arma::mat &, const arma::mat &, int, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, const int &, int, int, int, arma::mat, const arma::mat &, const arma::mat &, const arma::vec &, const arma::vec &, const arma::vec &)",
+                "parent_name" : "",
+                "usr" : "c:@F@rordprobitGibbs_me_M#&1$@N@arma@S@Col>#d#S0_#&1$@N@arma@S@Mat>#d#S2_#I#S2_#S0_#S2_#d#S2_#S0_#S0_#&1I#I#I#I#S3_#S2_#S2_#S0_#S0_#S0_#"
             }
         ],
         "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/ExtraFunctions.cpp",
-        "file_last_write" : 1588625139.000000
+        "file_last_write" : 1588630636.000000
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/Mediation_Ordered_Multi_Merr.cpp",
+                "kind" : 6,
+                "line" : 23,
+                "name" : "Mediation_Ordered_Multi_Merr_cpp(const arma::mat &, const arma::mat &, const arma::mat &, int, int, int, int, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, int, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@Mediation_Ordered_Multi_Merr_cpp#&1$@N@arma@S@Mat>#d#S0_#S0_#I#I#I#I#S0_#&1$@N@arma@S@Col>#d#S0_#d#S0_#S2_#S2_#S0_#S2_#S0_#d#S0_#S2_#S2_#I#I#I#"
+            }
+        ],
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/Mediation_Ordered_Multi_Merr.cpp",
+        "file_last_write" : 1588630916.000000
     },
     {
         "definitions" : [
@@ -140,7 +173,16 @@
                 "column" : 6,
                 "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/UtilityFunctions.cpp",
                 "kind" : 6,
-                "line" : 259,
+                "line" : 260,
+                "name" : "dstarRwMetrop3(const arma::vec &, const arma::vec &, const arma::vec &, double, const arma::mat &, const arma::vec &, const arma::mat &, int, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@dstarRwMetrop3#&1$@N@arma@S@Col>#d#S0_#S0_#d#&1$@N@arma@S@Mat>#d#S0_#S2_#I#d#"
+            },
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/UtilityFunctions.cpp",
+                "kind" : 6,
+                "line" : 308,
                 "name" : "breg2(const arma::mat &, const arma::mat &, const arma::vec &, const arma::vec &)",
                 "parent_name" : "",
                 "usr" : "c:@F@breg2#&1$@N@arma@S@Mat>#d#S0_#&1$@N@arma@S@Col>#d#S2_#"
@@ -149,7 +191,7 @@
                 "column" : 8,
                 "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/UtilityFunctions.cpp",
                 "kind" : 6,
-                "line" : 277,
+                "line" : 326,
                 "name" : "norm_rs(double, double)",
                 "parent_name" : "",
                 "usr" : "c:@F@norm_rs#d#d#"
@@ -158,7 +200,7 @@
                 "column" : 8,
                 "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/UtilityFunctions.cpp",
                 "kind" : 6,
-                "line" : 286,
+                "line" : 335,
                 "name" : "half_norm_rs(double, double)",
                 "parent_name" : "",
                 "usr" : "c:@F@half_norm_rs#d#d#"
@@ -167,7 +209,7 @@
                 "column" : 8,
                 "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/UtilityFunctions.cpp",
                 "kind" : 6,
-                "line" : 295,
+                "line" : 344,
                 "name" : "unif_rs(double, double)",
                 "parent_name" : "",
                 "usr" : "c:@F@unif_rs#d#d#"
@@ -176,7 +218,7 @@
                 "column" : 8,
                 "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/UtilityFunctions.cpp",
                 "kind" : 6,
-                "line" : 316,
+                "line" : 365,
                 "name" : "exp_rs(double, double)",
                 "parent_name" : "",
                 "usr" : "c:@F@exp_rs#d#d#"
@@ -185,14 +227,14 @@
                 "column" : 11,
                 "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/UtilityFunctions.cpp",
                 "kind" : 6,
-                "line" : 341,
+                "line" : 390,
                 "name" : "rtnm(arma::vec, arma::vec, arma::vec, arma::vec)",
                 "parent_name" : "",
                 "usr" : "c:@F@rtnm#$@N@arma@S@Col>#d#S0_#S0_#S0_#"
             }
         ],
         "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/UtilityFunctions.cpp",
-        "file_last_write" : 1588629202.000000
+        "file_last_write" : 1588629911.000000
     },
     {
         "definitions" : [

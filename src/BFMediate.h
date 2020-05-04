@@ -32,6 +32,9 @@ List dstarRwMetrop(arma::vec const& y, arma::vec const& mu, arma::vec const& old
 List dstarRwMetrop2(arma::vec const& y, arma::vec const& mu, arma::vec const& olddstar, double s, arma::mat const& inc_root,
                     arma::vec const& dstarbar, double oldll, arma::mat const& rootdi, int ncut, double ssq_y_tilde);
 
+List dstarRwMetrop3(arma::vec const& y, arma::vec const& mu, arma::vec const& olddstar, double s, arma::mat const& inc_root,
+                    arma::vec const& dstarbar, arma::mat const& rootdi, int ncut, double ssq_y_tilde);
+
 List breg2(arma::mat const& root, arma::mat const& X, arma::vec const& y, arma::vec const& Abetabar);
 
 arma::vec rtnm(arma::vec mus, arma::vec sigmas, arma::vec lower, arma::vec upper);
@@ -51,6 +54,19 @@ double exp_rs(double a, double b);
 // Extra functions
 List runiregGibbs_betafix(arma::vec const& y, arma::mat const& X, arma::vec const& betabar, arma::mat const& A, double nu, double ssq,
                           double sigmasq, int R, int keep, int nprint, int betafix);
+
+List rordprobitGibbs_me(arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,
+                        double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
+                        int const& Y_ind,
+                        int R, int keep, int nprint,
+                        arma::mat olddstar, arma::mat const& old_y_tilde, arma::mat const& old_beta_tilde, arma::vec const& old_ssq_y_tilde, arma::vec const& oldbeta, arma::vec const& oldz);
+
+List rordprobitGibbs_me_M(arma::vec const& dep, arma::vec const& beta_2,  arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,
+                          double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
+                          int const& Y_ind,
+                          int R, int keep, int nprint,
+                          arma::mat olddstar, arma::mat const& old_y_tilde, arma::mat const& old_beta_tilde, arma::vec const& old_ssq_y_tilde, arma::vec const& oldbeta, arma::vec const& oldz);
+
 
 //FUNCTION TIMING (contained in TimerFunctions.cpp)---------------------------------------------------------------
 void startMcmcTimer();
@@ -78,6 +94,12 @@ List rordprobitGibbs_me_multi_merr_cpp_loop(arma::mat const& y, arma::mat const&
                                             double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
                                             int const& Y_ind,
                                             int R, int keep, int nprint);
+// Mediation_Ordered_Multi_Merr.cpp
+// [[Rcpp::export]]
+List Mediation_Ordered_Multi_Merr_cpp(arma::mat const& X, arma::mat const& m_star, arma::mat const& y_star, int k_M, int k_Y, int M_ind, int Y_ind,     //data
+                                      arma::mat const& A_M, arma::vec const& betabar, arma::mat const& Ad_M, double s_M, arma::mat const& inc_root_M, arma::vec const& dstarbar_M, arma::vec const& betahat,               //priors_M
+                                      arma::mat const& A_Y, arma::vec const& beta_2_bar, arma::mat const& Ad_Y, double s_Y, arma::mat const& inc_root_Y, arma::vec const& dstarbar_Y, arma::vec const& beta_2_hat,         //priors_Y
+                                      int R, int keep, int nprint);
 
 
 #endif
