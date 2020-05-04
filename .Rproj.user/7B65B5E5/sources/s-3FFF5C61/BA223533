@@ -1,22 +1,24 @@
 {
     "collab_server" : "",
     "contents" : "",
-    "created" : 1588626739454.000,
+    "created" : 1588628024041.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "218893248",
-    "id" : "BD291F6A",
+    "hash" : "0",
+    "id" : "BA223533",
     "lastKnownWriteTime" : 1588625139,
     "last_content_update" : 1588625139,
     "path" : "~/GitHub/BFMediate/src/ExtraFunctions.cpp",
     "project_path" : "src/ExtraFunctions.cpp",
     "properties" : {
+        "cursorPosition" : "5,5",
+        "scrollLine" : "5"
     },
     "read_only" : false,
     "read_only_alternatives" : [
     ],
-    "relative_order" : 4,
+    "relative_order" : 2,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "cpp"

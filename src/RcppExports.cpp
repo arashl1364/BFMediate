@@ -57,10 +57,35 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rordprobitGibbs_me_multi_merr_cpp_loop
+List rordprobitGibbs_me_multi_merr_cpp_loop(arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad, double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat, int const& Y_ind, int R, int keep, int nprint);
+RcppExport SEXP _BFMediate_rordprobitGibbs_me_multi_merr_cpp_loop(SEXP ySEXP, SEXP XSEXP, SEXP kSEXP, SEXP ASEXP, SEXP betabarSEXP, SEXP AdSEXP, SEXP sSEXP, SEXP inc_rootSEXP, SEXP dstarbarSEXP, SEXP betahatSEXP, SEXP Y_indSEXP, SEXP RSEXP, SEXP keepSEXP, SEXP nprintSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat const& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type betabar(betabarSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type Ad(AdSEXP);
+    Rcpp::traits::input_parameter< double >::type s(sSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type inc_root(inc_rootSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type dstarbar(dstarbarSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type betahat(betahatSEXP);
+    Rcpp::traits::input_parameter< int const& >::type Y_ind(Y_indSEXP);
+    Rcpp::traits::input_parameter< int >::type R(RSEXP);
+    Rcpp::traits::input_parameter< int >::type keep(keepSEXP);
+    Rcpp::traits::input_parameter< int >::type nprint(nprintSEXP);
+    rcpp_result_gen = Rcpp::wrap(rordprobitGibbs_me_multi_merr_cpp_loop(y, X, k, A, betabar, Ad, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_BFMediate_runiregGibbs_rcpp_me", (DL_FUNC) &_BFMediate_runiregGibbs_rcpp_me, 14},
     {"_BFMediate_rordprobitGibbs_me_M_multi_merr_cpp_loop", (DL_FUNC) &_BFMediate_rordprobitGibbs_me_M_multi_merr_cpp_loop, 17},
+    {"_BFMediate_rordprobitGibbs_me_multi_merr_cpp_loop", (DL_FUNC) &_BFMediate_rordprobitGibbs_me_multi_merr_cpp_loop, 14},
     {NULL, NULL, 0}
 };
 

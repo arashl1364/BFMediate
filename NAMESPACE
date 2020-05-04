@@ -3,6 +3,6 @@
 export(BFSD)
 export(PartialMed)
 export(rordprobitGibbs_me_M_multi_merr_cpp)
-import(bayesm)
+export(rordprobitGibbs_me_multi_merr_cpp)
 importFrom(Rcpp,sourceCpp)
 useDynLib(BFMediate, .registration = TRUE)

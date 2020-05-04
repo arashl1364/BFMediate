@@ -1,24 +1,24 @@
 {
     "collab_server" : "",
     "contents" : "",
-    "created" : 1588627250694.000,
-    "dirty" : false,
+    "created" : 1588629310731.000,
+    "dirty" : true,
     "encoding" : "UTF-8",
     "folds" : "",
     "hash" : "0",
-    "id" : "884B9392",
+    "id" : "231BB57C",
     "lastKnownWriteTime" : 1588625991,
-    "last_content_update" : 1588625991,
+    "last_content_update" : 1588629337587,
     "path" : "C:/Users/jaspe/Google Drive/Frankfurt PhD Economics/Work/Otter job/Arashtrial/BFMediate_do.R",
     "project_path" : null,
     "properties" : {
-        "cursorPosition" : "66,0",
-        "scrollLine" : "48"
+        "cursorPosition" : "77,57",
+        "scrollLine" : "64"
     },
     "read_only" : false,
     "read_only_alternatives" : [
     ],
-    "relative_order" : 7,
+    "relative_order" : 8,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_source"

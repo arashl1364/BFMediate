@@ -9,3 +9,7 @@ rordprobitGibbs_me_M_multi_merr_cpp_loop <- function(dep, y, X, k, A, betabar, A
     .Call(`_BFMediate_rordprobitGibbs_me_M_multi_merr_cpp_loop`, dep, y, X, k, A, betabar, Ad, A_2, betabar_2, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint)
 }
 
+rordprobitGibbs_me_multi_merr_cpp_loop <- function(y, X, k, A, betabar, Ad, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint) {
+    .Call(`_BFMediate_rordprobitGibbs_me_multi_merr_cpp_loop`, y, X, k, A, betabar, Ad, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint)
+}
+

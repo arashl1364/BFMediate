@@ -1,19 +1,19 @@
 {
     "collab_server" : "",
     "contents" : "",
-    "created" : 1588606282672.000,
+    "created" : 1588628322369.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "1835510202",
-    "id" : "1C6568A4",
-    "lastKnownWriteTime" : 1588627109,
-    "last_content_update" : 1588627109196,
+    "hash" : "0",
+    "id" : "B36E55AC",
+    "lastKnownWriteTime" : 1588628959,
+    "last_content_update" : 1588628959012,
     "path" : "~/GitHub/BFMediate/src/BFMediate.h",
     "project_path" : "src/BFMediate.h",
     "properties" : {
-        "cursorPosition" : "7,0",
-        "scrollLine" : "0"
+        "cursorPosition" : "73,0",
+        "scrollLine" : "52"
     },
     "read_only" : false,
     "read_only_alternatives" : [
