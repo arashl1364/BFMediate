@@ -1,0 +1,714 @@
+// [[Rcpp::depends(RcppArmadillo)]]
+// #include "bayesm.h" //if you include bayesm.h here, you do not need to define functions before calling them
+#include "RcppArmadillo.h"
+using namespace arma; // use the Armadillo library for matrix computations
+using namespace Rcpp;
+
+//EXTRA FUNCTIONS SPECIFIC TO THE MAIN FUNCTION--------------------------------------------
+// [[Rcpp::export]]
+double lndMvn(vec const& x, vec const& mu, mat const& rooti){
+  
+  //Wayne Taylor 9/7/2014
+  
+  // function to evaluate log of MV Normal density with  mean mu, var Sigma
+  // Sigma=t(root)%*%root   (root is upper tri cholesky root)
+  // Sigma^-1=rooti%*%t(rooti)   
+  // rooti is in the inverse of upper triangular chol root of sigma
+  //          note: this is the UL decomp of sigmai not LU!
+  //                Sigma=root'root   root=inv(rooti)
+  
+  vec z = vectorise(trans(rooti)*(x-mu));
+  
+  return((-(x.size()/2.0)*log(2*M_PI) -.5*(trans(z)*z) + sum(log(diagvec(rooti))))[0]);
+}
+
+//[[Rcpp::export]]
+vec rtrunVec(vec const& mu,vec const& sigma, vec const& a, vec const& b){
+  
+  // Keunwoo Kim 06/20/2014
+  
+  //function to draw from univariate truncated norm
+  //a is vector of lower bounds for truncation
+  //b is vector of upper bounds for truncation
+  
+  int n = mu.size();
+  vec FA(n);
+  vec FB(n);
+  vec out(n);
+  for (int i=0; i<n; i++) {
+    FA[i] = R::pnorm((a[i]-mu[i])/sigma[i],0,1,1,0);
+    FB[i] = R::pnorm((b[i]-mu[i])/sigma[i],0,1,1,0);
+    out[i] = mu[i]+sigma[i]*R::qnorm(R::runif(0,1)*(FB[i]-FA[i])+FA[i],0,1,1,0);
+  }
+  
+  return(out);
+}
+
+//[[Rcpp::export]]
+vec breg1(mat const& root, mat const& X, vec const& y, vec const& Abetabar) {
+  
+  // Keunwoo Kim 06/20/2014
+  
+  // Purpose: draw from posterior for linear regression, sigmasq=1.0
+  
+  // Arguments:
+  //  root = chol((X'X+A)^-1)
+  //  Abetabar = A*betabar
+  
+  // Output: draw from posterior
+  
+  // Model: y = Xbeta + e  e ~ N(0,I)
+  
+  // Prior: beta ~ N(betabar,A^-1)
+  
+  mat cov = trans(root)*root;  
+  
+  return (cov*(trans(X)*y+Abetabar) + trans(root)*vec(rnorm(root.n_cols)));
+}
+
+// [[Rcpp::export]]
+List runiregGibbs_betafix(vec const& y, mat const& X, vec const& betabar, mat const& A, double nu, double ssq, 
+                          double sigmasq, int R, int keep, int nprint, int betafix) {
+  
+  // Keunwoo Kim 09/09/2014
+  
+  // Purpose: perform iid draws from posterior of regression model using conjugate prior
+  
+  // Arguments:
+  //  y,X
+  //  betabar,A      prior mean, prior precision
+  //  nu, ssq        prior on sigmasq
+  //  R number of draws
+  //  keep thinning parameter
+  
+  // Output: list of beta, sigmasq
+  
+  // Model: 
+  //  y = Xbeta + e  e ~N(0,sigmasq)
+  //  y is n x 1
+  //  X is n x k
+  //  beta is k x 1 vector of coefficients
+  
+  // Prior: 
+  //  beta ~ N(betabar,sigmasq*A^-1)
+  //  sigmasq ~ (nu*ssq)/chisq_nu
+  // 
+  int mkeep;
+  double s;
+  mat RA, W, IR;
+  vec z, btilde,beta;
+  
+  int nvar = X.n_cols;
+  int nobs = y.size();
+  
+  vec sigmasqdraw(R/keep);
+  mat betadraw(R/keep, nvar);
+  
+  mat XpX = trans(X)*X;
+  vec Xpy = trans(X)*y;
+  
+  vec Abetabar = A*betabar;
+  
+  // if (nprint>0) startMcmcTimer();
+  
+  for (int rep=0; rep<R; rep++){   
+    
+    if(betafix==1) beta <<0<<1;
+    
+    else{
+      //first draw beta | sigmasq
+      IR = solve(trimatu(chol(XpX/sigmasq+A)), eye(nvar,nvar)); //trimatu interprets the matrix as upper triangular and makes solve more efficient
+      // printf("59");     
+      btilde = (IR*trans(IR)) * (Xpy/sigmasq+Abetabar);
+      beta = btilde + IR*vec(rnorm(nvar));  
+    }
+    
+    //now draw sigmasq | beta
+    s = sum(square(y-X*beta));
+    sigmasq = (nu*ssq+s) / rchisq(1,nu+nobs)[0]; //rchisq returns a vectorized object, so using [0] allows for the conversion to double
+    
+    //print time to completion and draw # every nprint'th draw
+    // if (nprint>0) if ((rep+1)%nprint==0) infoMcmcTimer(rep, R);
+    
+    if((rep+1)%keep==0){
+      mkeep = (rep+1)/keep;
+      betadraw(mkeep-1, span::all) = trans(beta);
+      sigmasqdraw[mkeep-1] = sigmasq;
+    }   
+  }  
+  
+  // if (nprint>0) endMcmcTimer();
+  
+  return List::create(
+    Named("betadraw") = betadraw, 
+    Named("sigmasqdraw") = NumericVector(sigmasqdraw.begin(),sigmasqdraw.end()));
+}
+
+//[[Rcpp::export]]
+List breg_me(vec const& y, mat const& X, vec const& betabar, mat const& A) {
+  
+  // Purpose: compute the posterior moments for linear regression, sigmasq=1.0
+  
+  // Output: draw from posterior
+  
+  // Model: y = Xbeta + e  e ~ N(0,I)
+  
+  // Prior:  beta ~ N(betabar,A^-1)
+  
+  int k = betabar.size();
+  mat RA = chol(A);
+  // printf("98");
+  mat W = join_cols(X, RA); //same as rbind(X,RA)     RA is U in Rossi slides
+  vec z = join_cols(y, RA*betabar);  //z is the v matrix in Rossi slides
+  mat IR = solve(trimatu(chol(trans(W)*W)), eye(k,k)); //trimatu interprets the matrix as upper triangular and makes solve more efficient
+  // printf("102");
+  
+  return List::create(
+    Named("mubeta") = (IR*trans(IR))*(trans(W)*z),
+    Named("IR")  = IR);
+} 
+// [[Rcpp::export]]
+NumericVector rtrun(NumericVector const& mu, NumericVector const& sigma, 
+                    NumericVector const& a, NumericVector const& b){
+  
+  // Wayne Taylor 9/7/2014
+  
+  // function to draw from univariate truncated norm
+  // a is vector of lower bounds for truncation
+  // b is vector of upper bounds for truncation
+  
+  NumericVector FA = pnorm((a-mu)/sigma);
+  NumericVector FB = pnorm((b-mu)/sigma);
+  
+  return(mu+sigma*qnorm(runif(mu.size())*(FB-FA)+FA));
+}
+
+//dstartoc is a fuction to transfer dstar to its cut-off value    
+vec dstartoc(vec const& dstar){
+  int ndstar = dstar.size();
+  vec c(ndstar+3);
+  c[0] = -100;
+  c[1] = 0;
+  c(span(2,ndstar+1)) = cumsum(exp(dstar));
+  c[ndstar+2] = 100;
+  
+  return (c);
+} 
+
+// compute conditional likelihood of data given cut-offs
+double lldstar(vec const& dstar, vec const& y, vec const& mu, double ssq_y_tilde){       //y is y*, mu (= z) is y, ssq_y_tilde is the variance of indicator latent variables
+  vec gamma = dstartoc(dstar);
+  
+  double sigma_y_tilde = sqrt(ssq_y_tilde);
+  int ny = y.size();
+  NumericVector gamma1(ny);
+  NumericVector gamma2(ny);
+  for (int i=0; i<ny; i++){
+    gamma1[i] = gamma(y[i]);
+    gamma2[i] = gamma(y[i]-1);
+  }
+  NumericVector temp = pnorm((gamma1-as<NumericVector>(wrap(mu)))/sigma_y_tilde)-pnorm((gamma2-as<NumericVector>(wrap(mu)))/sigma_y_tilde); //pnorm takes Rcpp type NumericVector, NOT arma objects of type vec
+  vec arg = as<vec>(temp);
+  double epsilon = 1.0/(10^-50);
+  for (int j=0; j<ny; j++){
+    if (arg[j]<epsilon){
+      arg[j] = epsilon;
+    }
+  }
+  return (sum(log(arg)));
+}
+
+
+List dstarRwMetrop(vec const& y, vec const& mu, vec const& olddstar, double s, mat const& inc_root, 
+                   vec const& dstarbar, mat const& rootdi, int ncut, double ssq_y_tilde){ 
+  
+  // function to execute rw metropolis for the dstar
+  // y is n vector with element = 1,...,j 
+  // X is n x k matrix of x values 
+  // RW increments are N(0,s^2*t(inc.root)%*%inc.root)
+  // prior on dstar is N(dstarbar,Sigma)  Sigma^-1=rootdi*t(rootdi)
+  //  inc.root, rootdi are upper triangular
+  //  this means that we are using the UL decomp of Sigma^-1 for prior 
+  // olddstar is the current
+  //
+  // int stay = 0;
+  double unif;
+  vec dstardraw;
+  
+  vec dstarc = olddstar + s*trans(inc_root)*vec(rnorm(ncut));
+  double oldll = lldstar(olddstar, y, mu, ssq_y_tilde);
+  double cll = lldstar(dstarc, y, mu, ssq_y_tilde);
+  double clpost = cll + lndMvn(dstarc, dstarbar, rootdi);
+  double ldiff = clpost - oldll - lndMvn(olddstar, dstarbar, rootdi);
+  double alpha = exp(ldiff);
+  
+  if (alpha>1){
+    alpha = 1.0;
+  } 
+  
+  if (alpha<1){
+    unif = runif(1)[0]; //runif returns a NumericVector, so using [0] allows for conversion to double by extracting the first element
+  }
+  else{
+    unif = 0;
+  }
+  
+  if (unif<=alpha){
+    dstardraw = dstarc; 
+    oldll = cll;
+  }
+  else{
+    dstardraw = olddstar;
+    // stay = 1;
+  }
+  
+  return List::create(
+    Named("dstardraw") = dstardraw,
+    Named("oldll") = oldll
+    // Named("stay") = stay
+  );
+}   
+
+   
+//[[Rcpp::export]]
+List breg2(mat const& root, mat const& X, vec const& y, vec const& Abetabar) {
+  
+  // Arash Laghaie 10/20/2018
+  // Equivalent to breg1 and additionally stores the beta moments
+  
+  mat cov = trans(root)*root;  
+  
+  return List::create(
+    Named("beta") = cov*(trans(X)*y+Abetabar) + trans(root)*vec(rnorm(root.n_cols)),
+    Named("mubeta") = cov*(trans(X)*y+Abetabar),  
+    Named("varbeta") = cov   //beta covariance matrix
+  );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// [[Rcpp::export]]
+double norm_rs(double a, double b)
+{
+  double  x;
+  x = Rf_rnorm(0.0, 1.0);
+  while( (x < a) || (x > b) ) x = norm_rand();
+  return x;
+}
+
+// [[Rcpp::export]]
+double half_norm_rs(double a, double b)
+{
+  double   x;
+  x = fabs(norm_rand());
+  while( (x<a) || (x>b) ) x = fabs(norm_rand());
+  return x;
+}
+
+// [[Rcpp::export]]
+double unif_rs(double a, double b)
+{
+  double xstar, logphixstar, x, logu;
+  
+  // Find the argmax (b is always >= 0)
+  // This works because we want to sample from N(0,1)
+  if(a <= 0.0) xstar = 0.0;
+  else xstar = a;
+  logphixstar = R::dnorm(xstar, 0.0, 1.0, 1.0);
+  
+  x = R::runif(a, b);
+  logu = log(R::runif(0.0, 1.0));
+  while( logu > (R::dnorm(x, 0.0, 1.0,1.0) - logphixstar))
+  {
+    x = R::runif(a, b);
+    logu = log(R::runif(0.0, 1.0));
+  }
+  return x;
+}
+
+// [[Rcpp::export]]
+double exp_rs(double a, double b)
+{
+  double  z, u, rate;
+  
+  //  Rprintf("in exp_rs");
+  rate = 1/a;
+  //1/a
+  
+  // Generate a proposal on (0, b-a)
+  z = R::rexp(rate);
+  while(z > (b-a)) z = R::rexp(rate);
+  u = R::runif(0.0, 1.0);
+  
+  while( log(u) > (-0.5*z*z))
+  {
+    z = R::rexp(rate);
+    while(z > (b-a)) z = R::rexp(rate);
+    u = R::runif(0.0,1.0);
+  }
+  return(z+a);
+}
+
+
+// NumericVector rtnm(Rcpp::NumericVector mus, Rcpp::NumericVector sigmas, Rcpp::NumericVector lower, Rcpp::NumericVector upper){
+// [[Rcpp::export]]
+vec rtnm(vec mus, vec sigmas, vec lower, vec upper){
+  // omp_set_num_threads(cores);
+  int nobs = mus.size();
+  vec out(nobs);
+  double logt1 = log(0.150), logt2 = log(2.18), t3 = 0.725;
+  double a,b, z, tmp, lograt;
+  
+  int  change;
+  
+  // #pragma omp parallel for schedule(dynamic)   
+  for(int i=0;i<nobs;i++) {  
+    
+    a = (lower(i) - mus(i))/sigmas(i);
+    b = (upper(i) - mus(i))/sigmas(i);
+    change=0;
+    // First scenario
+    if( (a == R_NegInf) || (b == R_PosInf))
+    {
+      if(a == R_NegInf)
+      {
+        change = 1;
+        a = -b;
+        b = R_PosInf;
+      }
+      
+      // The two possibilities for this scenario
+      if(a <= 0.45) z = norm_rs(a, b);
+      else z = exp_rs(a, b);
+      if(change) z = -z;
+    }
+    // Second scenario
+    else if((a * b) <= 0.0)
+    {
+      // The two possibilities for this scenario
+      if((R::dnorm(a, 0.0, 1.0,1.0) <= logt1) || (R::dnorm(b, 0.0, 1.0, 1.0) <= logt1))
+      {
+        z = norm_rs(a, b);
+      }
+      else z = unif_rs(a,b);
+    }
+    
+    // Third scenario
+    else
+    {
+      if(b < 0)
+      {
+        tmp = b; b = -a; a = -tmp; change = 1;
+      }
+      
+      lograt = R::dnorm(a, 0.0, 1.0, 1.0) - R::dnorm(b, 0.0, 1.0, 1.0);
+      if(lograt <= logt2) z = unif_rs(a,b);
+      else if((lograt > logt1) && (a < t3)) z = half_norm_rs(a,b);
+      else z = exp_rs(a,b);
+      if(change) z = -z;
+    }
+    out(i)=sigmas(i)*z + mus(i);          
+  }
+  
+  return(out);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+//MAIN FUNCTION---------------------------------------------------------------------------------------
+// [[Rcpp::export]]
+List rordprobitGibbs_me_M_multi_merr_cpp_loop(vec const& dep,  mat const& y, mat const& X, int k, mat const& A, vec const& betabar, mat const& Ad, mat const& A_2, vec const& betabar_2, 
+                                         double s, mat const& inc_root, vec const& dstarbar, vec const& betahat, 
+                                         int const& Y_ind,
+                                         int R, int keep, int nprint){ 
+                                         // mat const& cutoff_Y_init, mat const& Y_tilde_init, vec const& beta_tilde_init, vec const& ssq_y_tilde_init, vec const& beta_init, vec const& beta_2_init, vec const& Y_init){
+                                         // vec const& z_init){
+  
+  // Modified by Arash Laghaie 16/10/2018 
+  
+  // "dep" is the dependent variable in the mediation Y 
+  //  z is the continuous latent mediator M 
+  //  y_tilde is the continuous latent mediator with measurement error m_tilde 
+  //  y is the discrete mediator m* 
+  //  beta is beta_1 and beta_2 is beta_2 
+  
+  
+  // Keunwoo Kim 09/09/2014
+  
+  // Purpose: draw from posterior for ordered probit using Gibbs Sampler and metropolis RW
+  
+  // Arguments:
+  //  Data
+  //    X is nobs x nvar, y is nobs vector of 1,2,.,k (ordinal variable)
+  //  Prior
+  //    A is nvar x nvar prior preci matrix
+  //    betabar is nvar x 1 prior mean
+  //    Ad is ndstar x ndstar prior preci matrix of dstar (ncut is number of cut-offs being estimated)
+  //    dstarbar is ndstar x 1 prior mean of dstar
+  //  Mcmc
+  //    R is number of draws
+  //    keep is thinning parameter
+  //    nprint - prints the estimated time remaining for every nprint'th draw
+  //    s is scale parameter of random work Metropolis
+  
+  // Output: list of betadraws and cutdraws
+  
+  // Model: 
+  //    z=Xbeta + e  < 0  e ~N(0,1)
+  //    y=1,..,k, if z~c(c[k], c[k+1])
+  
+  //    cutoffs = c[1],..,c[k+1]
+  //    dstar = dstar[1],dstar[k-2]
+  //    set c[1]=-100, c[2]=0, ...,c[k+1]=100
+  
+  //    c[3]=exp(dstar[1]),c[4]=c[3]+exp(dstar[2]),...,
+  //    c[k]=c[k-1]+exp(datsr[k-2])
+  
+  // Note: 1. length of dstar = length of cutoffs - 3
+  //       2. Be careful in assessing prior parameter, Ad.  .1 is too small for many applications.
+  
+  // Prior: 
+  //  beta ~ N(betabar,A^-1)
+  //  beta_2 ~ N(beta_2_bar, A_2^-1)
+  //  dstar ~ N(dstarbar, Ad^-1)
+  
+  // int stay;
+  int i, mkeep;
+  
+  List metropout;
+  
+  int nvar = X.n_cols;
+  int ncuts = k+1;
+  int ncut = ncuts-3;
+  int ndstar = k-2;
+  int ny = y.n_rows;
+  vec z = zeros(ny);
+  // vec z = Y_init;       // CHANGE HERE AFTER TEST
+  
+  mat zdraw(R/keep,ny); 
+  mat betadraw(R/keep, nvar);
+  mat beta_2_draw(R/keep, nvar+1);
+  mat ssq_y_tilde_draw(R/keep, Y_ind);
+  cube beta_tilde_draw(Y_ind, 2, R/keep);
+  cube cutdraw(Y_ind, ncuts, R/keep);
+  cube dstardraw(Y_ind, ndstar,R/keep);
+  vec cutoff1(ny);
+  vec cutoff2(ny);
+  vec sigma(X.n_rows); sigma.ones();
+  
+  mat mubeta_2_draw(R/keep,nvar+1);
+  cube varbeta_2_draw(nvar+1,nvar+1,R/keep);
+  
+  // compute the inverse of trans(X)*X+A
+  mat ucholinv = solve(trimatu(chol(trans(X)*X+A)), eye(nvar,nvar)); //trimatu interprets the matrix as upper triangular and makes solve more efficient
+  // printf("442");
+  mat XXAinv = ucholinv*trans(ucholinv);
+  
+  mat root = chol(XXAinv);
+  // printf("446");
+  vec Abetabar = trans(A)*betabar;
+  
+  // compute the inverse of Ad
+  ucholinv = solve(trimatu(chol(Ad)), eye(ndstar,ndstar));
+  // printf("451");
+  mat Adinv = ucholinv*trans(ucholinv);
+  
+  mat rootdi = chol(Adinv);
+  // printf("455");
+  // set initial values for MCMC  
+  mat olddstar(Y_ind,ndstar); 
+  olddstar.zeros();
+  // olddstar = dstar_init;
+  vec beta = betahat;
+  // vec beta = beta_init;             //CHANGE HERE AFTER TEST
+  vec beta_2(3);
+  // vec beta_2 = beta_2_init;         //CHANGE HERE AFTER TEST
+  mat cutoffs(Y_ind,ncuts);
+  mat y_tilde(ny,Y_ind);
+  y_tilde.randn();
+  // y_tilde = Y_tilde_init;     // CHANGE HERE AFTER TEST
+  vec ssq_y_tilde(Y_ind);
+  ssq_y_tilde.ones();
+  // ssq_y_tilde = ssq_y_tilde_init;     // CHANGE HERE AFTER TEST
+  mat iota(ny,1);
+  iota.ones();
+  mat iota_z(ny,2);
+  iota_z.col(0) = iota.col(0);
+  iota_z.col(1) = z;
+  mat beta_tilde(Y_ind,2);
+  beta_tilde.col(1).ones();
+  // beta_tilde.col(0) = beta_tilde_init;      // CHANGE HERE AFTER TEST
+  vec betabar_tilde(1);  // we only need this for the regression when estimating the intercept of y_tilde
+  betabar_tilde.zeros();
+  mat A_tilde(1,1);
+  A_tilde(0,0) = .01;
+
+  
+  for(int ind=0; ind<Y_ind; ind++){
+
+    cutoffs(ind,span::all) = trans(dstartoc(trans(olddstar(ind,span::all))));
+
+  }
+  // cutoffs = cutoff_Y_init;      // CHANGE HERE AFTER TEST
+  
+  //moments
+  vec mubeta(nvar+1);
+  mat varbeta(nvar+1,nvar+1);
+  
+  mat XM(ny,nvar+1);
+  XM.col(0).ones();
+  XM.col(1) = z;
+  XM.col(2) = X.col(1);
+  
+  // int first = 0;
+  
+  // start main iteration loop
+  for (int rep=0; rep<R; rep++){
+    
+    ////////////////////////////////////////////////////////////////
+    //draw beta_2 given Y, M, and X
+    XM.col(1) = z;
+    // compute the inverse of trans(X)*X+A
+    mat ucholinv_2 = solve(trimatu(chol(trans(XM)*XM+A_2)), eye(nvar+1,nvar+1)); //trimatu interprets the matrix as upper triangular and makes solve more efficient
+    // printf("505");
+    mat XXAinv_2 = ucholinv_2*trans(ucholinv_2);
+
+    mat root_2 = chol(XXAinv_2);
+    // printf("509");
+    vec Abetabar_2 = trans(A_2)*betabar_2;
+
+    List beta_out = breg2(root_2,XM,dep,Abetabar_2);
+    beta_2 = as<vec>(beta_out["beta"]);
+    mubeta = as<vec>(beta_out["mubeta"]);
+    varbeta = as<mat>(beta_out["varbeta"]);
+
+    vec dep_tilde = dep - beta_2[0] - beta_2[2]*X.col(1);
+    ////////////////////////////////////////////////////////////////
+    
+    //draw beta given z and rest             THIS REMAINS THE SAME P(beta_1|M,X)
+    beta = breg1(root,X,z,Abetabar);
+    
+    // if (first == 0) cutoffs = cutoffs_init;
+    
+    for(int ind=0; ind<Y_ind; ind++){
+
+      //draw gamma
+      metropout = dstarRwMetrop(y(span::all,ind),beta_tilde(ind,0)+z,trans(olddstar(ind,span::all)),s,inc_root,dstarbar, rootdi, ncut, ssq_y_tilde[ind]);
+      olddstar(ind,span::all) = trans(as<vec>(metropout["dstardraw"])); //conversion from Rcpp to Armadillo requires explict declaration of variable type using as<>
+      cutoffs(ind,span::all) = trans(dstartoc(trans(olddstar(ind,span::all))));
+
+      //draw y_tilde's
+      vec cutoff1_tilde(ny);
+      vec cutoff2_tilde(ny);
+      vec temp_sigma_tilde(ny);
+      temp_sigma_tilde.fill(sqrt(ssq_y_tilde[ind]));
+      for (i=0; i<ny; i++){
+        cutoff1_tilde[i] = cutoffs(ind,y(i,ind)-1);  //lower bounds
+        cutoff2_tilde[i] = cutoffs(ind,y(i,ind));    //upper bounds
+      }
+      y_tilde(span::all,ind) = rtrunVec(beta_tilde(ind,0) + z, temp_sigma_tilde, cutoff1_tilde, cutoff2_tilde);
+
+      //draw ssq_y_tilde and beta_tilde (intercepts)
+      if(ind == 0){
+        iota_z.col(1) = z;
+        List tilde_out = runiregGibbs_betafix(y_tilde(span::all,ind), iota_z, betabar_tilde, A_tilde, 3, 1, ssq_y_tilde[ind], 1, 1, 1, 1);//y, X, betabr, A, , nu, ssq, sigmasq, R, keep, nprint, betafix (we fix beta here)
+        beta_tilde(ind, 0) = 0;  //intercept of the first indicator y_tilde is fixed to 0
+        ssq_y_tilde[ind] =  as<double>(tilde_out["sigmasqdraw"]);
+      }
+      else{
+        List tilde_out = runiregGibbs_betafix(y_tilde(span::all,ind)-z, iota, betabar_tilde, A_tilde, 3, 1, ssq_y_tilde[ind], 1, 1, 1, 0);//y, X, betabr, A, , nu, ssq, sigmasq, R, keep, nprint, betafix (we don't fix beta here)
+        beta_tilde(ind, 0) = as<double>(tilde_out["betadraw"]);
+        ssq_y_tilde[ind] =  as<double>(tilde_out["sigmasqdraw"]);
+      }
+    }
+    
+    //draw z given beta, beta_2, dep, cutoffs, y
+    vec p(Y_ind+1);
+    mat q(Y_ind+1,1);
+    q(0,0) = beta_2(1);
+    q(span(1,Y_ind),0) = 1/sqrt(ssq_y_tilde);
+    // compute the inverse of trans(X)*X+A where X is q, A is 1, and betabar is (beta_0 + M*beta_2 + X*beta_3)=X*beta
+    mat ucholinv_tilde = solve(trimatu(chol(trans(q)*q+1)), eye(1,1)); //trimatu interprets the matrix as upper triangular and makes solve more efficient
+    // printf("564");
+    mat XXAinv_tilde = ucholinv_tilde*trans(ucholinv_tilde);
+    mat root_tilde = chol(XXAinv_tilde);
+    // printf("507");
+    vec Abetabar_tilde(1);
+    for (i=0; i<ny; i++){
+      p(0) = dep(i) - beta_2(0) - beta_2(2)*X(i,1);    //Y_i - beta_0 - beta_3*X_i
+      p(span(1,Y_ind)) = (trans(y_tilde.row(i)) - beta_tilde.col(0))/sqrt(ssq_y_tilde);
+      Abetabar_tilde = X.row(i)*beta;  //A=1
+      z(i) = conv_to<double>::from(breg1(root_tilde,q,p,Abetabar_tilde));
+
+    }
+
+    
+    if((rep+1)%keep==0){
+      mkeep = (rep+1)/keep;
+      zdraw(mkeep-1,span::all) = trans(z);
+      cutdraw.slice(mkeep-1) = cutoffs;
+      dstardraw.slice(mkeep-1) = olddstar;
+      betadraw(mkeep-1,span::all) = trans(beta);
+      beta_2_draw(mkeep-1,span::all) = trans(beta_2);
+      beta_tilde_draw.slice(mkeep-1) = beta_tilde;
+      ssq_y_tilde_draw(mkeep-1,span::all) = trans(ssq_y_tilde);
+      mubeta_2_draw(mkeep-1,span::all) = trans(mubeta);
+      varbeta_2_draw.slice(mkeep-1) = varbeta ;
+    }
+  }
+  // double accept = 1-sum(staydraw)/(R/keep);
+  // if (nprint>0) endMcmcTimer();
+  
+  return List::create(
+    Named("M_draw") = zdraw,
+    Named("cutdraw") = cutdraw,
+    Named("dstardraw") = dstardraw,
+    Named("betadraw") = betadraw,
+    Named("beta_2_draw") = beta_2_draw,
+    Named("beta_tilde_draw") = beta_tilde_draw,
+    Named("ssq_y_tilde_draw") = ssq_y_tilde_draw,
+    Named("mubeta_2_draw") = mubeta_2_draw,
+    Named("varbeta_2_draw") = varbeta_2_draw
+  );
+}
+
+
+
+//The functions below are used to print the output from MCMC draws for many of the bayesm functions
+
+
+
+time_t itime;
+char buf[100];
+
+//[[Rcpp::export]]
+void startMcmcTimer() {
+  itime = time(NULL);
+  Rcout << " MCMC Iteration (est time to end - min) \n";
+}
+
+//[[Rcpp::export]]
+void infoMcmcTimer(int rep, int R) {
+  time_t ctime = time(NULL);
+  char buf[32];
+  
+  double timetoend = difftime(ctime, itime) / 60.0 * (R - rep - 1) / (rep+1);
+  sprintf(buf, " %d (%.1f)\n", rep+1, timetoend);
+  Rcout <<  buf;
+}
+
+//[[Rcpp::export]]
+void endMcmcTimer() {
+  time_t ctime = time(NULL);
+  char buf[32];
+  
+  sprintf(buf, " Total Time Elapsed: %.2f \n", difftime(ctime, itime) / 60.0);
+  Rcout << buf;
+  
+  itime = 0;
+}
+
+
+
+
+

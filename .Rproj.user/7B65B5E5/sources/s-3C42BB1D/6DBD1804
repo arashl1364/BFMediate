@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1588626742789.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "195874482",
+    "id" : "6DBD1804",
+    "lastKnownWriteTime" : 1588625575,
+    "last_content_update" : 1588625575,
+    "path" : "~/GitHub/BFMediate/src/UtilityFunctions.cpp",
+    "project_path" : "src/UtilityFunctions.cpp",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "cpp"
+}

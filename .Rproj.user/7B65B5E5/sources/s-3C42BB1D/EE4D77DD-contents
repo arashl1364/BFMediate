@@ -1,8 +1,9 @@
 #include "BFMediate.h"
-// [[Rcpp::depends(RcppArmadillo)]]
-#include <RcppArmadillo.h>
-using namespace arma; // use the Armadillo library for matrix computations
-using namespace Rcpp;
+// // [[Rcpp::depends(RcppArmadillo)]]
+// // #include <bayesm.h> //if you include bayesm.h here, you do not need to define functions before calling them
+// #include <RcppArmadillo.h>
+// using namespace arma; // use the Armadillo library for matrix computations
+// using namespace Rcpp;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -262,5 +263,9 @@ List rordprobitGibbs_me_M_multi_merr_cpp_loop(arma::vec const& dep,  arma::mat c
     Named("varbeta_2_draw") = varbeta_2_draw
   );
 }
+
+
+
+
 
 
