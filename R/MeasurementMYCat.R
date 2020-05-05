@@ -7,7 +7,7 @@
 #' @return
 #' @export
 #'
-Mediation_Ordered_Multi_Merr=function(Data,Prior,Mcmc){
+MeasurementMYCat=function(Data,Prior,Mcmc){
   # Rcpp::sourceCpp('Mediation_Ordered_Multi_Merr.cpp')
   #
   # revision history:
@@ -261,7 +261,7 @@ Mediation_Ordered_Multi_Merr=function(Data,Prior,Mcmc){
   # Modified by Arash Laghaie
   # 12/27/2018
   ###################################################################
-  draws= Mediation_Ordered_Multi_Merr_cpp(X, m_star, y_star, k_M, k_Y,M_ind,Y_ind,
+  draws= MeasurementMYCatCpp(X, m_star, y_star, k_M, k_Y,M_ind,Y_ind,
                                      A_M, betabar, Ad_M, s_M, inc.root_M, dstarbar_M, betahat,
                                      A_Y, beta_2_bar, Ad_Y, s_Y, inc.root_Y, dstarbar_Y, beta_2_hat,
                                      R, keep, nprint)

@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-List Mediation_Ordered_Multi_Merr_cpp(arma::mat const& X, arma::mat const& m_star, arma::mat const& y_star, int k_M, int k_Y, int M_ind, int Y_ind,     //data
+List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_star, arma::mat const& y_star, int k_M, int k_Y, int M_ind, int Y_ind,     //data
                                       arma::mat const& A_M, arma::vec const& betabar, arma::mat const& Ad_M, double s_M, arma::mat const& inc_root_M, arma::vec const& dstarbar_M, arma::vec const& betahat,               //priors_M
                                       arma::mat const& A_Y, arma::vec const& beta_2_bar, arma::mat const& Ad_Y, double s_Y, arma::mat const& inc_root_Y, arma::vec const& dstarbar_Y, arma::vec const& beta_2_hat,         //priors_Y
                                       int R, int keep, int nprint){

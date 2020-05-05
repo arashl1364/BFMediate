@@ -7,7 +7,7 @@
 #' @return
 #' @export
 #'
-rordprobitGibbs_me_M_multi_merr_cpp=function(Data,Prior,Mcmc){
+MeasurementMCat=function(Data,Prior,Mcmc){
   #
   # revision history:
   #   3/07  Hsiu-Wen Liu
@@ -209,7 +209,7 @@ rordprobitGibbs_me_M_multi_merr_cpp=function(Data,Prior,Mcmc){
   # Keunwoo Kim
   # 08/20/2014
   ###################################################################
-  draws=rordprobitGibbs_me_M_multi_merr_cpp_loop(dep,y,X,k,A,betabar,Ad,A_2,betabar_2,
+  draws=MeasurementMCatCpp(dep,y,X,k,A,betabar,Ad,A_2,betabar_2,
                                             s,inc.root,dstarbar,betahat,
                                             M_ind,
                                             R,keep,nprint)

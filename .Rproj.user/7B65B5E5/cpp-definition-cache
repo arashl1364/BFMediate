@@ -3,7 +3,7 @@
         "definitions" : [
         ],
         "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/BFMediate.h",
-        "file_last_write" : 1588630767.000000
+        "file_last_write" : 1588681657.000000
     },
     {
         "definitions" : [
@@ -42,16 +42,46 @@
         "definitions" : [
             {
                 "column" : 6,
-                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/Mediation_Ordered_Multi_Merr.cpp",
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/MeasurementMCatCpp.cpp",
                 "kind" : 6,
-                "line" : 23,
-                "name" : "Mediation_Ordered_Multi_Merr_cpp(const arma::mat &, const arma::mat &, const arma::mat &, int, int, int, int, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, int, int, int)",
+                "line" : 12,
+                "name" : "MeasurementMCatCpp(const arma::vec &, const arma::mat &, const arma::mat &, int, const arma::mat &, const arma::vec &, const arma::mat &, const arma::mat &, const arma::vec &, double, const arma::mat &, const arma::vec &, const arma::vec &, const int &, int, int, int)",
                 "parent_name" : "",
-                "usr" : "c:@F@Mediation_Ordered_Multi_Merr_cpp#&1$@N@arma@S@Mat>#d#S0_#S0_#I#I#I#I#S0_#&1$@N@arma@S@Col>#d#S0_#d#S0_#S2_#S2_#S0_#S2_#S0_#d#S0_#S2_#S2_#I#I#I#"
+                "usr" : "c:@F@MeasurementMCatCpp#&1$@N@arma@S@Col>#d#&1$@N@arma@S@Mat>#d#S2_#I#S2_#S0_#S2_#S2_#S0_#d#S2_#S0_#S0_#&1I#I#I#I#"
             }
         ],
-        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/Mediation_Ordered_Multi_Merr.cpp",
-        "file_last_write" : 1588630916.000000
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/MeasurementMCatCpp.cpp",
+        "file_last_write" : 1588680989.000000
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/MeasurementMYCatCpp.cpp",
+                "kind" : 6,
+                "line" : 23,
+                "name" : "MeasurementMYCatCpp(const arma::mat &, const arma::mat &, const arma::mat &, int, int, int, int, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, int, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@MeasurementMYCatCpp#&1$@N@arma@S@Mat>#d#S0_#S0_#I#I#I#I#S0_#&1$@N@arma@S@Col>#d#S0_#d#S0_#S2_#S2_#S0_#S2_#S0_#d#S0_#S2_#S2_#I#I#I#"
+            }
+        ],
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/MeasurementMYCatCpp.cpp",
+        "file_last_write" : 1588681902.000000
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/MeasurementYCatCpp.cpp",
+                "kind" : 6,
+                "line" : 9,
+                "name" : "MeasurementYCatCpp(const arma::mat &, const arma::mat &, int, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, const int &, int, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@MeasurementYCatCpp#&1$@N@arma@S@Mat>#d#S0_#I#S0_#&1$@N@arma@S@Col>#d#S0_#d#S0_#S2_#S2_#&1I#I#I#I#"
+            }
+        ],
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/MeasurementYCatCpp.cpp",
+        "file_last_write" : 1588681482.000000
     },
     {
         "definitions" : [
@@ -235,42 +265,6 @@
         ],
         "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/UtilityFunctions.cpp",
         "file_last_write" : 1588629911.000000
-    },
-    {
-        "definitions" : [
-        ],
-        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/code.cpp",
-        "file_last_write" : 1588622670.000000
-    },
-    {
-        "definitions" : [
-            {
-                "column" : 6,
-                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/rordprobitGibbs_me_M_multi_merr.cpp",
-                "kind" : 6,
-                "line" : 12,
-                "name" : "rordprobitGibbs_me_M_multi_merr_cpp_loop(const arma::vec &, const arma::mat &, const arma::mat &, int, const arma::mat &, const arma::vec &, const arma::mat &, const arma::mat &, const arma::vec &, double, const arma::mat &, const arma::vec &, const arma::vec &, const int &, int, int, int)",
-                "parent_name" : "",
-                "usr" : "c:@F@rordprobitGibbs_me_M_multi_merr_cpp_loop#&1$@N@arma@S@Col>#d#&1$@N@arma@S@Mat>#d#S2_#I#S2_#S0_#S2_#S2_#S0_#d#S2_#S0_#S0_#&1I#I#I#I#"
-            }
-        ],
-        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/rordprobitGibbs_me_M_multi_merr.cpp",
-        "file_last_write" : 1588627113.000000
-    },
-    {
-        "definitions" : [
-            {
-                "column" : 6,
-                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/rordprobitGibbs_me_multi_merr.cpp",
-                "kind" : 6,
-                "line" : 9,
-                "name" : "rordprobitGibbs_me_multi_merr_cpp_loop(const arma::mat &, const arma::mat &, int, const arma::mat &, const arma::vec &, const arma::mat &, double, const arma::mat &, const arma::vec &, const arma::vec &, const int &, int, int, int)",
-                "parent_name" : "",
-                "usr" : "c:@F@rordprobitGibbs_me_multi_merr_cpp_loop#&1$@N@arma@S@Mat>#d#S0_#I#S0_#&1$@N@arma@S@Col>#d#S0_#d#S0_#S2_#S2_#&1I#I#I#I#"
-            }
-        ],
-        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/rordprobitGibbs_me_multi_merr.cpp",
-        "file_last_write" : 1588629012.000000
     },
     {
         "definitions" : [

@@ -1,13 +1,13 @@
-#' asd
+#' qwerqw
 #'
-#' @param Data asd
-#' @param Prior asd
-#' @param Mcmc asd
+#' @param Data qwerqwer
+#' @param Prior qwerwer
+#' @param Mcmc qwererrr
 #'
 #' @return
 #' @export
 #'
-rordprobitGibbs_me_M_multi_merr_cpp=function(Data,Prior,Mcmc){
+MeasurementYCat=function(Data,Prior,Mcmc){
   #
   # revision history:
   #   3/07  Hsiu-Wen Liu
@@ -53,8 +53,7 @@ rordprobitGibbs_me_M_multi_merr_cpp=function(Data,Prior,Mcmc){
   #
   #
   # ----------------------------------------------------------------------
-
-  # Rcpp::sourceCpp('rordprobitGibbs_me_M_multi_merr.cpp')
+  # Rcpp::sourceCpp('rordprobitGibbs_me_multi_merr.cpp')
   # define functions needed
   #  dstartoc is a fuction to transfer dstar to its cut-off value
 
@@ -77,17 +76,12 @@ rordprobitGibbs_me_M_multi_merr_cpp=function(Data,Prior,Mcmc){
   if(missing(Data)) {pandterm("Requires Data argument -- list of y and X")}
   if(is.null(Data$X)) {pandterm("Requires Data element X")}
   X=Data$X
-  if(is.null(Data$m_star)) {pandterm("Requires Data element m_star")}
-  y=Data$m_star
-  if(is.null(Data$Y)) {pandterm("Requires Data element Y")}
-  dep=Data$Y
-  # if(is.null(Data$beta_2)) {pandterm("Requires Data element beta_2")}
-  # beta_2=Data$beta_2
+  if(is.null(Data$y)) {pandterm("Requires Data element y")}
+  y=Data$y
   if(is.null(Data$k)) {pandterm("Requires Data element k")}
   k=Data$k
-  if(is.null(Data$M_ind)) {pandterm("Requires Data element M_ind")}
-  M_ind=Data$M_ind
-
+  if(is.null(Data$Y_ind)) {pandterm("Requires Data element Y_ind")}
+  Y_ind=Data$Y_ind
 
   nvar=ncol(X)
   nobs=dim(y)[1]
@@ -96,37 +90,31 @@ rordprobitGibbs_me_M_multi_merr_cpp=function(Data,Prior,Mcmc){
   ncut = ncuts-3       # number of cut-offs being estimated c[1]=-100, c[2]=0, c[k+1]=100
 
 
-  cutoff_Y_init = Data$cutoff_M_init
-  Y_tilde_init = Data$M_tilde_init
+  cutoff_Y_init = Data$cutoff_Y_init
+  Y_tilde_init = Data$Y_tilde_init
   ssq_y_tilde_init = Data$ssq_y_tilde_init
-  beta_init = Data$beta_init
   beta_2_init = Data$beta_2_init
-  Y_init = Data$M_init
+  Y_init = Data$Y_init
   beta_tilde_init = Data$beta_tilde_init
 
   #
   # check data for validity
   #
   if(dim(y)[1] != nrow(X) ) {pandterm("y and X not of same row dim")}
-  if(  sum(unique(y[,1]) %in% (1:k) ) < length(unique(y[,1])) )     #Tests only y_star1 but I really don't care! :D
+  if(  sum(unique(y[,1]) %in% (1:k) ) < length(unique(y[,1])) )   #Tests only y_star1 but I really don't care! :D
   {pandterm("some value of y is not vaild")}
 
   #
   # check for Prior
   #
   if(missing(Prior))
-  { betabar=c(rep(0,nvar)); A=.01*diag(nvar); Ad=diag(ndstar); dstarbar=c(rep(0,ndstar));
-  betabar_2=c(rep(0,nvar+1)); A_2=.01*diag(nvar+1);}
+  { betabar=c(rep(0,nvar)); A=.01*diag(nvar); Ad=diag(ndstar); dstarbar=c(rep(0,ndstar))}
   else
   {
     if(is.null(Prior$betabar)) {betabar=c(rep(0,nvar))}
     else {betabar=Prior$betabar}
     if(is.null(Prior$A)) {A=.01*diag(nvar)}
     else {A=Prior$A}
-    if(is.null(Prior$betabar_2)) {betabar=c(rep(0,nvar+1))}
-    else {betabar_2=Prior$betabar_2}
-    if(is.null(Prior$A_2)) {A_2=.01*diag(nvar+1)}
-    else {A_2=Prior$A_2}
     if(is.null(Prior$Ad)) {Ad=diag(ndstar)}
     else {Ad=Prior$Ad}
     if(is.null(Prior$dstarbar)) {dstarbar=c(rep(0,ndstar))}
@@ -140,10 +128,6 @@ rordprobitGibbs_me_M_multi_merr_cpp=function(Data,Prior,Mcmc){
   {pandterm(paste("bad dimensions for A",dim(A)))}
   if(length(betabar) != nvar)
   {pandterm(paste("betabar wrong length, length= ",length(betabar)))}
-  if(ncol(A_2) != nrow(A_2) || ncol(A_2) != nvar+1 || nrow(A_2) != nvar+1)
-  {pandterm(paste("bad dimensions for A_2",dim(A_2)))}
-  if(length(betabar_2) != nvar+1)
-  {pandterm(paste("betabar_2 wrong length, length= ",length(betabar_2)))}
   if(ncol(Ad) != nrow(Ad) || ncol(Ad) != ndstar || nrow(Ad) != ndstar)
   {pandterm(paste("bad dimensions for Ad",dim(Ad)))}
   if(length(dstarbar) != ndstar)
@@ -160,7 +144,7 @@ rordprobitGibbs_me_M_multi_merr_cpp=function(Data,Prior,Mcmc){
     if(is.null(Mcmc$keep)) {keep=1} else {keep=Mcmc$keep}
     if(is.null(Mcmc$nprint)) {nprint=100} else {nprint=Mcmc$nprint}
     if(nprint<0) {pandterm('nprint must be an integer greater than or equal to 0')}
-    if(is.null(Mcmc$s)) {s=2.38/sqrt(ndstar)} else {s=Mcmc$s} #2.38 is the RRscaling
+    if(is.null(Mcmc$s)) {s=2.38/sqrt(ndstar)} else {s=Mcmc$s}  #2.38 is the RRscaling
   }
   #
   # print out problem
@@ -169,8 +153,8 @@ rordprobitGibbs_me_M_multi_merr_cpp=function(Data,Prior,Mcmc){
   cat("Starting Gibbs Sampler for Ordered Probit Model",fill=TRUE)
   cat("   with ",nobs,"observations",fill=TRUE)
   cat(" ", fill=TRUE)
-  cat("Table of m_star values",fill=TRUE)
-  for(i in 1:M_ind) print(table(y[,i]))
+  cat("Table of y values",fill=TRUE)
+  for(i in 1:Y_ind) print(table(y[,i]))
   cat(" ",fill=TRUE)
   cat("Prior Parms: ",fill=TRUE)
   cat("betabar",fill=TRUE)
@@ -178,12 +162,6 @@ rordprobitGibbs_me_M_multi_merr_cpp=function(Data,Prior,Mcmc){
   cat(" ", fill=TRUE)
   cat("A",fill=TRUE)
   print(A)
-  cat(" ", fill=TRUE)
-  cat("betabar_2",fill=TRUE)
-  print(betabar_2)
-  cat(" ", fill=TRUE)
-  cat("A_2",fill=TRUE)
-  print(A_2)
   cat(" ", fill=TRUE)
   cat("dstarbar",fill=TRUE)
   print(dstarbar)
@@ -209,21 +187,19 @@ rordprobitGibbs_me_M_multi_merr_cpp=function(Data,Prior,Mcmc){
   # Keunwoo Kim
   # 08/20/2014
   ###################################################################
-  draws=rordprobitGibbs_me_M_multi_merr_cpp_loop(dep,y,X,k,A,betabar,Ad,A_2,betabar_2,
-                                            s,inc.root,dstarbar,betahat,
-                                            M_ind,
-                                            R,keep,nprint)
-                                            # cutoff_Y_init, Y_tilde_init, beta_tilde_init, ssq_y_tilde_init, beta_init, beta_2_init, Y_init)
-
+  draws=MeasurementYCatCpp(y,X,k,A,betabar,Ad,s,inc.root,dstarbar,betahat,
+                                          Y_ind,
+                                          R,keep,nprint)
+                                          # cutoff_Y_init, Y_tilde_init, beta_tilde_init, ssq_y_tilde_init, beta_2_init, Y_init)
   ###################################################################
 
   draws$cutdraw=draws$cutdraw[,2:k,]
-  attributes(draws$cutdraw)$class="bayesm.mat"
-  attributes(draws$betadraw)$class="bayesm.mat"
-  attributes(draws$dstardraw)$class="bayesm.mat"
-  attributes(draws$cutdraw)$mcpar=c(1,R,keep)
-  attributes(draws$betadraw)$mcpar=c(1,R,keep)
-  attributes(draws$dstardraw)$mcpar=c(1,R,keep)
+  # attributes(draws$cutdraw)$class="bayesm.mat"
+  # attributes(draws$betadraw)$class="bayesm.mat"
+  # attributes(draws$dstardraw)$class="bayesm.mat"
+  # attributes(draws$cutdraw)$mcpar=c(1,R,keep)
+  # attributes(draws$betadraw)$mcpar=c(1,R,keep)
+  # attributes(draws$dstardraw)$mcpar=c(1,R,keep)
 
   return(draws)
 }

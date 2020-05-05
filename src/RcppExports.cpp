@@ -30,9 +30,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rordprobitGibbs_me_M_multi_merr_cpp_loop
-List rordprobitGibbs_me_M_multi_merr_cpp_loop(arma::vec const& dep, arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad, arma::mat const& A_2, arma::vec const& betabar_2, double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat, int const& Y_ind, int R, int keep, int nprint);
-RcppExport SEXP _BFMediate_rordprobitGibbs_me_M_multi_merr_cpp_loop(SEXP depSEXP, SEXP ySEXP, SEXP XSEXP, SEXP kSEXP, SEXP ASEXP, SEXP betabarSEXP, SEXP AdSEXP, SEXP A_2SEXP, SEXP betabar_2SEXP, SEXP sSEXP, SEXP inc_rootSEXP, SEXP dstarbarSEXP, SEXP betahatSEXP, SEXP Y_indSEXP, SEXP RSEXP, SEXP keepSEXP, SEXP nprintSEXP) {
+// MeasurementMCatCpp
+List MeasurementMCatCpp(arma::vec const& dep, arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad, arma::mat const& A_2, arma::vec const& betabar_2, double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat, int const& Y_ind, int R, int keep, int nprint);
+RcppExport SEXP _BFMediate_MeasurementMCatCpp(SEXP depSEXP, SEXP ySEXP, SEXP XSEXP, SEXP kSEXP, SEXP ASEXP, SEXP betabarSEXP, SEXP AdSEXP, SEXP A_2SEXP, SEXP betabar_2SEXP, SEXP sSEXP, SEXP inc_rootSEXP, SEXP dstarbarSEXP, SEXP betahatSEXP, SEXP Y_indSEXP, SEXP RSEXP, SEXP keepSEXP, SEXP nprintSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -53,13 +53,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type R(RSEXP);
     Rcpp::traits::input_parameter< int >::type keep(keepSEXP);
     Rcpp::traits::input_parameter< int >::type nprint(nprintSEXP);
-    rcpp_result_gen = Rcpp::wrap(rordprobitGibbs_me_M_multi_merr_cpp_loop(dep, y, X, k, A, betabar, Ad, A_2, betabar_2, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint));
+    rcpp_result_gen = Rcpp::wrap(MeasurementMCatCpp(dep, y, X, k, A, betabar, Ad, A_2, betabar_2, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint));
     return rcpp_result_gen;
 END_RCPP
 }
-// rordprobitGibbs_me_multi_merr_cpp_loop
-List rordprobitGibbs_me_multi_merr_cpp_loop(arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad, double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat, int const& Y_ind, int R, int keep, int nprint);
-RcppExport SEXP _BFMediate_rordprobitGibbs_me_multi_merr_cpp_loop(SEXP ySEXP, SEXP XSEXP, SEXP kSEXP, SEXP ASEXP, SEXP betabarSEXP, SEXP AdSEXP, SEXP sSEXP, SEXP inc_rootSEXP, SEXP dstarbarSEXP, SEXP betahatSEXP, SEXP Y_indSEXP, SEXP RSEXP, SEXP keepSEXP, SEXP nprintSEXP) {
+// MeasurementYCatCpp
+List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad, double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat, int const& Y_ind, int R, int keep, int nprint);
+RcppExport SEXP _BFMediate_MeasurementYCatCpp(SEXP ySEXP, SEXP XSEXP, SEXP kSEXP, SEXP ASEXP, SEXP betabarSEXP, SEXP AdSEXP, SEXP sSEXP, SEXP inc_rootSEXP, SEXP dstarbarSEXP, SEXP betahatSEXP, SEXP Y_indSEXP, SEXP RSEXP, SEXP keepSEXP, SEXP nprintSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -77,13 +77,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type R(RSEXP);
     Rcpp::traits::input_parameter< int >::type keep(keepSEXP);
     Rcpp::traits::input_parameter< int >::type nprint(nprintSEXP);
-    rcpp_result_gen = Rcpp::wrap(rordprobitGibbs_me_multi_merr_cpp_loop(y, X, k, A, betabar, Ad, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint));
+    rcpp_result_gen = Rcpp::wrap(MeasurementYCatCpp(y, X, k, A, betabar, Ad, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint));
     return rcpp_result_gen;
 END_RCPP
 }
-// Mediation_Ordered_Multi_Merr_cpp
-List Mediation_Ordered_Multi_Merr_cpp(arma::mat const& X, arma::mat const& m_star, arma::mat const& y_star, int k_M, int k_Y, int M_ind, int Y_ind, arma::mat const& A_M, arma::vec const& betabar, arma::mat const& Ad_M, double s_M, arma::mat const& inc_root_M, arma::vec const& dstarbar_M, arma::vec const& betahat, arma::mat const& A_Y, arma::vec const& beta_2_bar, arma::mat const& Ad_Y, double s_Y, arma::mat const& inc_root_Y, arma::vec const& dstarbar_Y, arma::vec const& beta_2_hat, int R, int keep, int nprint);
-RcppExport SEXP _BFMediate_Mediation_Ordered_Multi_Merr_cpp(SEXP XSEXP, SEXP m_starSEXP, SEXP y_starSEXP, SEXP k_MSEXP, SEXP k_YSEXP, SEXP M_indSEXP, SEXP Y_indSEXP, SEXP A_MSEXP, SEXP betabarSEXP, SEXP Ad_MSEXP, SEXP s_MSEXP, SEXP inc_root_MSEXP, SEXP dstarbar_MSEXP, SEXP betahatSEXP, SEXP A_YSEXP, SEXP beta_2_barSEXP, SEXP Ad_YSEXP, SEXP s_YSEXP, SEXP inc_root_YSEXP, SEXP dstarbar_YSEXP, SEXP beta_2_hatSEXP, SEXP RSEXP, SEXP keepSEXP, SEXP nprintSEXP) {
+// MeasurementMYCatCpp
+List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_star, arma::mat const& y_star, int k_M, int k_Y, int M_ind, int Y_ind, arma::mat const& A_M, arma::vec const& betabar, arma::mat const& Ad_M, double s_M, arma::mat const& inc_root_M, arma::vec const& dstarbar_M, arma::vec const& betahat, arma::mat const& A_Y, arma::vec const& beta_2_bar, arma::mat const& Ad_Y, double s_Y, arma::mat const& inc_root_Y, arma::vec const& dstarbar_Y, arma::vec const& beta_2_hat, int R, int keep, int nprint);
+RcppExport SEXP _BFMediate_MeasurementMYCatCpp(SEXP XSEXP, SEXP m_starSEXP, SEXP y_starSEXP, SEXP k_MSEXP, SEXP k_YSEXP, SEXP M_indSEXP, SEXP Y_indSEXP, SEXP A_MSEXP, SEXP betabarSEXP, SEXP Ad_MSEXP, SEXP s_MSEXP, SEXP inc_root_MSEXP, SEXP dstarbar_MSEXP, SEXP betahatSEXP, SEXP A_YSEXP, SEXP beta_2_barSEXP, SEXP Ad_YSEXP, SEXP s_YSEXP, SEXP inc_root_YSEXP, SEXP dstarbar_YSEXP, SEXP beta_2_hatSEXP, SEXP RSEXP, SEXP keepSEXP, SEXP nprintSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -111,16 +111,16 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type R(RSEXP);
     Rcpp::traits::input_parameter< int >::type keep(keepSEXP);
     Rcpp::traits::input_parameter< int >::type nprint(nprintSEXP);
-    rcpp_result_gen = Rcpp::wrap(Mediation_Ordered_Multi_Merr_cpp(X, m_star, y_star, k_M, k_Y, M_ind, Y_ind, A_M, betabar, Ad_M, s_M, inc_root_M, dstarbar_M, betahat, A_Y, beta_2_bar, Ad_Y, s_Y, inc_root_Y, dstarbar_Y, beta_2_hat, R, keep, nprint));
+    rcpp_result_gen = Rcpp::wrap(MeasurementMYCatCpp(X, m_star, y_star, k_M, k_Y, M_ind, Y_ind, A_M, betabar, Ad_M, s_M, inc_root_M, dstarbar_M, betahat, A_Y, beta_2_bar, Ad_Y, s_Y, inc_root_Y, dstarbar_Y, beta_2_hat, R, keep, nprint));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_BFMediate_runiregGibbs_rcpp_me", (DL_FUNC) &_BFMediate_runiregGibbs_rcpp_me, 14},
-    {"_BFMediate_rordprobitGibbs_me_M_multi_merr_cpp_loop", (DL_FUNC) &_BFMediate_rordprobitGibbs_me_M_multi_merr_cpp_loop, 17},
-    {"_BFMediate_rordprobitGibbs_me_multi_merr_cpp_loop", (DL_FUNC) &_BFMediate_rordprobitGibbs_me_multi_merr_cpp_loop, 14},
-    {"_BFMediate_Mediation_Ordered_Multi_Merr_cpp", (DL_FUNC) &_BFMediate_Mediation_Ordered_Multi_Merr_cpp, 24},
+    {"_BFMediate_MeasurementMCatCpp", (DL_FUNC) &_BFMediate_MeasurementMCatCpp, 17},
+    {"_BFMediate_MeasurementYCatCpp", (DL_FUNC) &_BFMediate_MeasurementYCatCpp, 14},
+    {"_BFMediate_MeasurementMYCatCpp", (DL_FUNC) &_BFMediate_MeasurementMYCatCpp, 24},
     {NULL, NULL, 0}
 };
 

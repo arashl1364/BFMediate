@@ -5,15 +5,15 @@ runiregGibbs_rcpp_me <- function(y, X, betabar, A, nu, ssq, sigmasq, R, keep, np
     .Call(`_BFMediate_runiregGibbs_rcpp_me`, y, X, betabar, A, nu, ssq, sigmasq, R, keep, nprint, betafix, sigmafix, betavalue, sigmavalue)
 }
 
-rordprobitGibbs_me_M_multi_merr_cpp_loop <- function(dep, y, X, k, A, betabar, Ad, A_2, betabar_2, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint) {
-    .Call(`_BFMediate_rordprobitGibbs_me_M_multi_merr_cpp_loop`, dep, y, X, k, A, betabar, Ad, A_2, betabar_2, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint)
+MeasurementMCatCpp <- function(dep, y, X, k, A, betabar, Ad, A_2, betabar_2, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint) {
+    .Call(`_BFMediate_MeasurementMCatCpp`, dep, y, X, k, A, betabar, Ad, A_2, betabar_2, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint)
 }
 
-rordprobitGibbs_me_multi_merr_cpp_loop <- function(y, X, k, A, betabar, Ad, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint) {
-    .Call(`_BFMediate_rordprobitGibbs_me_multi_merr_cpp_loop`, y, X, k, A, betabar, Ad, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint)
+MeasurementYCatCpp <- function(y, X, k, A, betabar, Ad, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint) {
+    .Call(`_BFMediate_MeasurementYCatCpp`, y, X, k, A, betabar, Ad, s, inc_root, dstarbar, betahat, Y_ind, R, keep, nprint)
 }
 
-Mediation_Ordered_Multi_Merr_cpp <- function(X, m_star, y_star, k_M, k_Y, M_ind, Y_ind, A_M, betabar, Ad_M, s_M, inc_root_M, dstarbar_M, betahat, A_Y, beta_2_bar, Ad_Y, s_Y, inc_root_Y, dstarbar_Y, beta_2_hat, R, keep, nprint) {
-    .Call(`_BFMediate_Mediation_Ordered_Multi_Merr_cpp`, X, m_star, y_star, k_M, k_Y, M_ind, Y_ind, A_M, betabar, Ad_M, s_M, inc_root_M, dstarbar_M, betahat, A_Y, beta_2_bar, Ad_Y, s_Y, inc_root_Y, dstarbar_Y, beta_2_hat, R, keep, nprint)
+MeasurementMYCatCpp <- function(X, m_star, y_star, k_M, k_Y, M_ind, Y_ind, A_M, betabar, Ad_M, s_M, inc_root_M, dstarbar_M, betahat, A_Y, beta_2_bar, Ad_Y, s_Y, inc_root_Y, dstarbar_Y, beta_2_hat, R, keep, nprint) {
+    .Call(`_BFMediate_MeasurementMYCatCpp`, X, m_star, y_star, k_M, k_Y, M_ind, Y_ind, A_M, betabar, Ad_M, s_M, inc_root_M, dstarbar_M, betahat, A_Y, beta_2_bar, Ad_Y, s_Y, inc_root_Y, dstarbar_Y, beta_2_hat, R, keep, nprint)
 }
 

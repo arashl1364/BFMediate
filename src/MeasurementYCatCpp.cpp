@@ -6,7 +6,7 @@
 // using namespace Rcpp;
 
 //MAIN FUNCTION---------------------------------------------------------------------------------------
-List rordprobitGibbs_me_multi_merr_cpp_loop(arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,
+List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,
                                             double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
                                             int const& Y_ind,
                                             int R, int keep, int nprint){
