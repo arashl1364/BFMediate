@@ -4,7 +4,7 @@
 #' @param Prior asdf
 #' @param Mcmc aasdf
 #'
-#' @return
+#' @return asd
 #' @export
 #'
 MeasurementMYCat=function(Data,Prior,Mcmc){

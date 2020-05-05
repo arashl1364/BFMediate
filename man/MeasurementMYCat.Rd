@@ -14,7 +14,7 @@ MeasurementMYCat(Data, Prior, Mcmc)
 \item{Mcmc}{aasdf}
 }
 \value{
-
+asd
 }
 \description{
 asdfsaf

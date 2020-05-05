@@ -14,7 +14,7 @@ MeasurementMCat(Data, Prior, Mcmc)
 \item{Mcmc}{asd}
 }
 \value{
-
+asd
 }
 \description{
 asd

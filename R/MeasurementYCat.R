@@ -4,7 +4,7 @@
 #' @param Prior qwerwer
 #' @param Mcmc qwererrr
 #'
-#' @return
+#' @return asd
 #' @export
 #'
 MeasurementYCat=function(Data,Prior,Mcmc){

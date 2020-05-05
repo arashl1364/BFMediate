@@ -14,7 +14,7 @@ MeasurementYCat(Data, Prior, Mcmc)
 \item{Mcmc}{qwererrr}
 }
 \value{
-
+asd
 }
 \description{
 qwerqw

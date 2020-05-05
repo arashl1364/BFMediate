@@ -4,7 +4,7 @@
 #' @param Prior asd
 #' @param Mcmc asd
 #'
-#' @return
+#' @return asd
 #' @export
 #'
 MeasurementMCat=function(Data,Prior,Mcmc){
