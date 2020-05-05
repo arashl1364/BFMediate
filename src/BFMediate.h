@@ -88,13 +88,13 @@ List MeasurementMCatCpp(arma::vec const& dep,  arma::mat const& y, arma::mat con
                                               int const& Y_ind,
                                               int R, int keep, int nprint);
 
-// rordprobitGibbs_me_multi_merr.cpp
+// MeasurementYCatCpp.cpp
 // [[Rcpp::export]]
 List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,
                                             double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
                                             int const& Y_ind,
                                             int R, int keep, int nprint);
-// Mediation_Ordered_Multi_Merr.cpp
+// MeasurementMYCatCpp.cpp
 // [[Rcpp::export]]
 List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_star, arma::mat const& y_star, int k_M, int k_Y, int M_ind, int Y_ind,     //data
                                       arma::mat const& A_M, arma::vec const& betabar, arma::mat const& Ad_M, double s_M, arma::mat const& inc_root_M, arma::vec const& dstarbar_M, arma::vec const& betahat,               //priors_M
