@@ -2,8 +2,14 @@
     {
         "definitions" : [
         ],
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/inst/include/stan_meta_header.hpp",
+        "file_last_write" : 1588702850.000000
+    },
+    {
+        "definitions" : [
+        ],
         "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/BFMediate.h",
-        "file_last_write" : 1588681657.000000
+        "file_last_write" : 1590090424.000000
     },
     {
         "definitions" : [
@@ -82,6 +88,21 @@
         ],
         "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/MeasurementYCatCpp.cpp",
         "file_last_write" : 1588681482.000000
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/RuniregGibbsMultiCpp.cpp",
+                "kind" : 6,
+                "line" : 5,
+                "name" : "RuniregGibbsMultiCpp(const arma::mat &, const arma::mat &, const arma::vec &, const arma::vec &, const arma::mat &, double, double, arma::vec, int, int, int, bool, bool, arma::mat, arma::vec)",
+                "parent_name" : "",
+                "usr" : "c:@F@RuniregGibbsMultiCpp#&1$@N@arma@S@Mat>#d#S0_#&1$@N@arma@S@Col>#d#S2_#S0_#d#d#S3_#I#I#I#b#b#S1_#S3_#"
+            }
+        ],
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/RuniregGibbsMultiCpp.cpp",
+        "file_last_write" : 1590090583.000000
     },
     {
         "definitions" : [
@@ -280,5 +301,17 @@
         ],
         "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/runiregGibbs_rcpp_me.cpp",
         "file_last_write" : 1588623798.000000
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/stanExports_Measurement_Multi.cc",
+        "file_last_write" : 1588702850.000000
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "C:/Users/jaspe/Documents/GitHub/BFMediate/src/stanExports_Measurement_Multi.h",
+        "file_last_write" : 1589272535.000000
     }
 ]
