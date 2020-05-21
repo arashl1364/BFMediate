@@ -14,11 +14,11 @@ BFSD = function(Data,post,prior,model,burnin,M){
 
   #computes the Bayes Factor using Savage Dicky approxmiation
   if(missing(prior)){
-    A = .01;          #A is the precision of beta_3
+    A = 1;          #A is the prior variance of beta_3
   }
   else
   {
-    if(is.null(prior$A)) {A = .01}
+    if(is.null(prior$A)) {A = 1}
     else {A = prior$A}
   }
 
@@ -49,7 +49,7 @@ BFSD = function(Data,post,prior,model,burnin,M){
     lik = (outermax + log(1 + sum(exp(outer - outermax))))  #the outer sum in the log-scale
     lik = -log((R-burnin)) + lik
 
-    lik = lik - dnorm(x = 0, mean = 0, sd = sqrt(1/A), log = T)
+    lik = lik - dnorm(x = 0, mean = 0, sd = sqrt(A), log = T)
     lik = -lik #only to adjust to the function output
   }
 
@@ -70,7 +70,7 @@ BFSD = function(Data,post,prior,model,burnin,M){
   #   lik = (outermax + log(1 + sum(exp(outer - outermax))))  #the outer sum in the log-scale
   #   lik = -log((R-burnin)) + lik
   #
-  #   lik = lik - dnorm(x = 0, mean = 0, sd = sqrt(1/A), log = T)
+  #   lik = lik - dnorm(x = 0, mean = 0, sd = sqrt(A), log = T)
   #   lik = -lik #only to adjust to the function output
   # }
 
@@ -91,7 +91,7 @@ BFSD = function(Data,post,prior,model,burnin,M){
     lik = (outermax + log(1 + sum(exp(outer - outermax))))  #the outer sum in the log-scale
     lik = -log((R-burnin)) + lik
 
-    lik = lik - dnorm(x = 0, mean = 0, sd = sqrt(1/A), log = T)
+    lik = lik - dnorm(x = 0, mean = 0, sd = sqrt(A), log = T)
     lik = -lik #only to adjust to the function output
   }
 
@@ -111,7 +111,7 @@ BFSD = function(Data,post,prior,model,burnin,M){
   #   lik = (outermax + log(1 + sum(exp(outer - outermax))))  #the outer sum in the log-scale
   #   lik = -log((R-burnin)) + lik
   #
-  #   lik = lik - dnorm(x = 0, mean = 0, sd = sqrt(1/A), log = T)
+  #   lik = lik - dnorm(x = 0, mean = 0, sd = sqrt(A), log = T)
   #   lik = -lik #only to adjust to the function output
   # }
 

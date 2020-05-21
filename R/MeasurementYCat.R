@@ -108,13 +108,13 @@ MeasurementYCat=function(Data,Prior,Mcmc){
   # check for Prior
   #
   if(missing(Prior))
-  { betabar=c(rep(0,nvar)); A=.01*diag(nvar); Ad=diag(ndstar); dstarbar=c(rep(0,ndstar))}
+  { betabar=c(rep(0,nvar)); A=diag(1/rep(100,2)); Ad=diag(ndstar); dstarbar=c(rep(0,ndstar))}
   else
   {
     if(is.null(Prior$betabar)) {betabar=c(rep(0,nvar))}
     else {betabar=Prior$betabar}
-    if(is.null(Prior$A)) {A=.01*diag(nvar)}
-    else {A=Prior$A}
+    if(is.null(Prior$A_Y)) {A=diag(1/rep(100,2))}
+    else {A=1/diag(1/Prior$A_Y)}
     if(is.null(Prior$Ad)) {Ad=diag(ndstar)}
     else {Ad=Prior$Ad}
     if(is.null(Prior$dstarbar)) {dstarbar=c(rep(0,ndstar))}

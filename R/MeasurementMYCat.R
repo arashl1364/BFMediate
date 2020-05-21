@@ -137,14 +137,14 @@ MeasurementMYCat=function(Data,Prior,Mcmc){
   # check for Prior
   #
   if(missing(Prior))
-  { betabar=c(rep(0,nvar_M)); A_M=.01*diag(nvar_M); Ad_M=diag(ndstar_M); dstarbar_M=c(rep(0,ndstar_M))
-  beta_2_bar=c(rep(0,nvar_Y)); A_Y=.01*diag(nvar_Y); Ad_Y=diag(ndstar_Y); dstarbar_Y=c(rep(0,ndstar_Y))}
+  { betabar=c(rep(0,nvar_M)); A_M=diag(1/rep(100,2)); Ad_M=diag(ndstar_M); dstarbar_M=c(rep(0,ndstar_M))
+  beta_2_bar=c(rep(0,nvar_Y)); A_Y=diag(1/c(100,100,1)); Ad_Y=diag(ndstar_Y); dstarbar_Y=c(rep(0,ndstar_Y))}
   else
   {
     if(is.null(Prior$betabar)) {betabar=c(rep(0,nvar_M))}
     else {betabar=Prior$betabar}
-    if(is.null(Prior$A_M)) {A_M=.01*diag(nvar_M)}
-    else {A_M=Prior$A_M}
+    if(is.null(Prior$A_M)) {A_M=diag(1/rep(100,2))}
+    else {A_M=diag(1/Prior$A_M)}                     #A_M prior variance of beta_1 vector
     if(is.null(Prior$Ad_M)) {Ad_M=diag(ndstar_M)}
     else {Ad_M=Prior$Ad_M}
     if(is.null(Prior$dstarbar_M)) {dstarbar_M=c(rep(0,ndstar_M))}
@@ -152,8 +152,8 @@ MeasurementMYCat=function(Data,Prior,Mcmc){
 
     if(is.null(Prior$beta_2_bar)) {beta_2_bar=c(rep(0,nvar_Y))}
     else {beta_2_bar=Prior$beta_2_bar}
-    if(is.null(Prior$A_Y)) {A_Y=.01*diag(nvar_Y)}
-    else {A_Y=Prior$A_Y}
+    if(is.null(Prior$A_Y)) {A_Y=diag(1/c(100,100,1))}   #A_Y prior variance of beta_2 vector
+    else {A_Y=diag(1/Prior$A_Y)}
     if(is.null(Prior$Ad_Y)) {Ad_Y=diag(ndstar_Y)}
     else {Ad_Y=Prior$Ad_Y}
     if(is.null(Prior$dstarbar_Y)) {dstarbar_Y=c(rep(0,ndstar_Y))}
