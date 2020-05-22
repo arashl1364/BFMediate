@@ -17,9 +17,9 @@ Measurement_Cont = function(Data, BF){
     if(is.null(BF$burnin)) {burnin = 3000}
     else {burnin = BF$burnin}
     if(is.null(BF$A_M)) {A_M = rep(10,2)}
-    else {A_M = BF$A_M}
-    if(is.null(BF$A_Y)) {A_Y = rep(10,3)}
-    else {A_Y = BF$A_Y}
+    else {A_M = sqrt(BF$A_M)}
+    if(is.null(BF$A_Y)) {A_Y = c(10,10,1)}
+    else {A_Y = sqrt(BF$A_Y)}
   }
 
   X = Data$X
