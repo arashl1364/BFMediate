@@ -116,6 +116,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// RuniregGibbsMultiCpp
+List RuniregGibbsMultiCpp(arma::mat const& y, arma::mat const& M, arma::vec const& X, arma::vec const& betabar, arma::mat const& A, double nu, double ssq, arma::vec sigmasq, int R, int keep, int nprint, bool betafix, bool sigmafix, arma::mat betavalue, arma::vec sigmavalue);
+RcppExport SEXP _BFMediate_RuniregGibbsMultiCpp(SEXP ySEXP, SEXP MSEXP, SEXP XSEXP, SEXP betabarSEXP, SEXP ASEXP, SEXP nuSEXP, SEXP ssqSEXP, SEXP sigmasqSEXP, SEXP RSEXP, SEXP keepSEXP, SEXP nprintSEXP, SEXP betafixSEXP, SEXP sigmafixSEXP, SEXP betavalueSEXP, SEXP sigmavalueSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat const& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type M(MSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type betabar(betabarSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type ssq(ssqSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type sigmasq(sigmasqSEXP);
+    Rcpp::traits::input_parameter< int >::type R(RSEXP);
+    Rcpp::traits::input_parameter< int >::type keep(keepSEXP);
+    Rcpp::traits::input_parameter< int >::type nprint(nprintSEXP);
+    Rcpp::traits::input_parameter< bool >::type betafix(betafixSEXP);
+    Rcpp::traits::input_parameter< bool >::type sigmafix(sigmafixSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type betavalue(betavalueSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type sigmavalue(sigmavalueSEXP);
+    rcpp_result_gen = Rcpp::wrap(RuniregGibbsMultiCpp(y, M, X, betabar, A, nu, ssq, sigmasq, R, keep, nprint, betafix, sigmafix, betavalue, sigmavalue));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_stan_fit4Measurement_Multi_mod();
 
@@ -124,6 +149,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BFMediate_MeasurementMCatCpp", (DL_FUNC) &_BFMediate_MeasurementMCatCpp, 17},
     {"_BFMediate_MeasurementYCatCpp", (DL_FUNC) &_BFMediate_MeasurementYCatCpp, 14},
     {"_BFMediate_MeasurementMYCatCpp", (DL_FUNC) &_BFMediate_MeasurementMYCatCpp, 24},
+    {"_BFMediate_RuniregGibbsMultiCpp", (DL_FUNC) &_BFMediate_RuniregGibbsMultiCpp, 15},
     {"_rcpp_module_boot_stan_fit4Measurement_Multi_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4Measurement_Multi_mod, 0},
     {NULL, NULL, 0}
 };

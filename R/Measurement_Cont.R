@@ -35,7 +35,7 @@ Measurement_Cont = function(Data, BF){
   y_ind =  dim(y_star)[2];
 
 
-stanfit = sampling(object = stanmodels$Measurement_Multi,
+stanfit = rstan::sampling(object = stanmodels$Measurement_Multi,
                data = list(n=N,M_ind = m_ind, Y_ind = y_ind,A_M=A_M, A_Y=A_Y, X = X, m_star=t(m_star),y_star=t(y_star)),
                pars = c("beta_1","beta_2","beta_3","ssq_M","ssq_Y","ssq_m_star","ssq_y_star","beta_0_Y","beta_0_M","lambda","tau","M","Y"),
                chains = 1,iter = R, warmup = burnin)

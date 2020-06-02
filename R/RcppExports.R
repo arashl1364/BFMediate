@@ -17,3 +17,7 @@ MeasurementMYCatCpp <- function(X, m_star, y_star, k_M, k_Y, M_ind, Y_ind, A_M, 
     .Call(`_BFMediate_MeasurementMYCatCpp`, X, m_star, y_star, k_M, k_Y, M_ind, Y_ind, A_M, betabar, Ad_M, s_M, inc_root_M, dstarbar_M, betahat, A_Y, beta_2_bar, Ad_Y, s_Y, inc_root_Y, dstarbar_Y, beta_2_hat, R, keep, nprint)
 }
 
+RuniregGibbsMultiCpp <- function(y, M, X, betabar, A, nu, ssq, sigmasq, R, keep, nprint, betafix, sigmafix, betavalue, sigmavalue) {
+    .Call(`_BFMediate_RuniregGibbsMultiCpp`, y, M, X, betabar, A, nu, ssq, sigmasq, R, keep, nprint, betafix, sigmafix, betavalue, sigmavalue)
+}
+

@@ -1,7 +1,7 @@
 RuniregGibbsMulti=
   function(Data,Prior,Mcmc)
   {
-    Rcpp::sourceCpp('runiregGibbs_rcpp_multi.cpp')
+    # Rcpp::sourceCpp('runiregGibbs_rcpp_multi.cpp')
     #
     # revision history:
     #          P. Rossi 1/17/05
