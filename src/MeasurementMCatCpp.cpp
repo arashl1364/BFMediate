@@ -5,16 +5,57 @@
 // using namespace arma; // use the Armadillo library for matrix computations
 // using namespace Rcpp;
 
+// List runiregG(vec const& y, mat const& X, mat const& XpX, vec const& Xpy, double sigmasq, mat const& A,
+//                 vec const& Abetabar, double nu, double ssq) {
+//
+//   // Keunwoo Kim 09/16/2014
+//
+//   // Purpose:
+//   //  perform one Gibbs iteration for Univ Regression Model
+//   //  only does one iteration so can be used in rhierLinearModel
+//
+//   // Model:
+//   //  y = Xbeta + e  e ~N(0,sigmasq)
+//   //  y is n x 1
+//   //  X is n x k
+//   //  beta is k x 1 vector of coefficients
+//
+//   // Prior:
+//   //  beta ~ N(betabar,A^-1)
+//   //  sigmasq ~ (nu*ssq)/chisq_nu
+//
+//   unireg out_struct;
+//
+//   int n = y.size();
+//   int k = XpX.n_cols;
+//
+//   //first draw beta | sigmasq
+//   mat IR = solve(trimatu(chol(XpX/sigmasq+A)), eye(k,k)); //trimatu interprets the matrix as upper triangular and makes solve more efficient
+//   vec btilde = (IR*trans(IR)) * (Xpy/sigmasq + Abetabar);
+//   vec beta = btilde + IR*vec(rnorm(k));
+//
+//   //now draw sigmasq | beta
+//   double s = sum(square(y-X*beta));
+//   sigmasq = (s + nu*ssq)/rchisq(1,nu+n)[0]; //rchisq returns a vectorized object, so using [0] allows for the conversion to double
+//
+//   return List::create(
+//     Named("beta") = beta,
+//     Named("sigmasq") = sigmasq,
+//     Named("mubeta") = btilde,
+//     Named("varbeta") = IR*trans(IR));
+// }
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 //MAIN FUNCTION---------------------------------------------------------------------------------------
 List MeasurementMCatCpp(arma::vec const& dep,  arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad, arma::mat const& A_2, arma::vec const& betabar_2,
-                                         double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
-                                         int const& Y_ind,
-                                         int R, int keep, int nprint){
-                                         // mat const& cutoff_Y_init, mat const& Y_tilde_init, vec const& beta_tilde_init, vec const& ssq_y_tilde_init, vec const& beta_init, vec const& beta_2_init, vec const& Y_init){
-                                         // vec const& z_init){
+                        double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
+                        int const& Y_ind,
+                        int R, int keep, int nprint){
+  // mat const& cutoff_Y_init, mat const& Y_tilde_init, vec const& beta_tilde_init, vec const& ssq_y_tilde_init, vec const& beta_init, vec const& beta_2_init, vec const& Y_init){
+  // vec const& z_init){
 
   // Modified by Arash Laghaie 16/10/2018
 
@@ -90,6 +131,7 @@ List MeasurementMCatCpp(arma::vec const& dep,  arma::mat const& y, arma::mat con
 
   arma::mat mubeta_2_draw(R/keep,nvar+1);
   arma::cube varbeta_2_draw(nvar+1,nvar+1,R/keep);
+  arma::vec ssq_y_draw(R/keep);
 
   // compute the inverse of trans(X)*X+A
   arma::mat ucholinv = solve(trimatu(chol(trans(X)*X+A)), eye(nvar,nvar)); //trimatu interprets the matrix as upper triangular and makes solve more efficient
@@ -134,7 +176,7 @@ List MeasurementMCatCpp(arma::vec const& dep,  arma::mat const& y, arma::mat con
   betabar_tilde.zeros();
   arma::mat A_tilde(1,1);
   A_tilde(0,0) = .01;
-
+  double ssq_y = 1;
 
   for(int ind=0; ind<Y_ind; ind++){
 
@@ -157,26 +199,38 @@ List MeasurementMCatCpp(arma::vec const& dep,  arma::mat const& y, arma::mat con
   // start main iteration loop
   for (int rep=0; rep<R; rep++){
 
-    ////////////////////////////////////////////////////////////////
-    //draw beta_2 given Y, M, and X
+    // ////////////////////////////////////////////////////////////////
+    // //draw beta_2 given Y, M, and X    (Conjugate regression with ssq_y=1)
+    // XM.col(1) = z;
+    // // compute the inverse of trans(X)*X+A
+    // arma::mat ucholinv_2 = solve(trimatu(chol(trans(XM)*XM+A_2)), eye(nvar+1,nvar+1)); //trimatu interprets the matrix as upper triangular and makes solve more efficient
+    // // printf("505");
+    // arma::mat XXAinv_2 = ucholinv_2*trans(ucholinv_2);
+    //
+    // arma::mat root_2 = chol(XXAinv_2);
+    // // printf("509");
+    // arma::vec Abetabar_2 = trans(A_2)*betabar_2;
+    //
+    // List beta_out = breg2(root_2,XM,dep,Abetabar_2);
+    // beta_2 = as<vec>(beta_out["beta"]);
+    // mubeta = as<vec>(beta_out["mubeta"]);
+    // varbeta = as<mat>(beta_out["varbeta"]);
+    //
+    // arma::vec dep_tilde = dep - beta_2[0] - beta_2[2]*X.col(1);
+    // ////////////////////////////////////////////////////////////////
+    //draw beta_2 given Y, M, and X    (Gibbs step)
     XM.col(1) = z;
-    // compute the inverse of trans(X)*X+A
-    arma::mat ucholinv_2 = solve(trimatu(chol(trans(XM)*XM+A_2)), eye(nvar+1,nvar+1)); //trimatu interprets the matrix as upper triangular and makes solve more efficient
-    // printf("505");
-    arma::mat XXAinv_2 = ucholinv_2*trans(ucholinv_2);
-
-    arma::mat root_2 = chol(XXAinv_2);
-    // printf("509");
+    arma::mat XpX = trans(XM)*XM;
+    arma::vec Xpy = trans(XM)*dep;
     arma::vec Abetabar_2 = trans(A_2)*betabar_2;
 
-    List beta_out = breg2(root_2,XM,dep,Abetabar_2);
+    List beta_out = runiregG(dep, XM, XpX, Xpy, ssq_y, A_2, Abetabar_2, 3, 1);   //last 2 arguments are nu and ssq
+
     beta_2 = as<vec>(beta_out["beta"]);
+    ssq_y =  as<double>(beta_out["sigmasq"]);
     mubeta = as<vec>(beta_out["mubeta"]);
     varbeta = as<mat>(beta_out["varbeta"]);
-
-    arma::vec dep_tilde = dep - beta_2[0] - beta_2[2]*X.col(1);
     ////////////////////////////////////////////////////////////////
-
     //draw beta given z and rest             THIS REMAINS THE SAME P(beta_1|M,X)
     beta = breg1(root,X,z,Abetabar);
 
@@ -217,18 +271,16 @@ List MeasurementMCatCpp(arma::vec const& dep,  arma::mat const& y, arma::mat con
     //draw z given beta, beta_2, dep, cutoffs, y
     arma::vec p(Y_ind+1);
     arma::mat q(Y_ind+1,1);
-    q(0,0) = beta_2(1);
+    q(0,0) = beta_2(1)/sqrt(ssq_y);    //in MeasurementMYCat  ssq_y=1
     q(span(1,Y_ind),0) = 1/sqrt(ssq_y_tilde);
     // compute the inverse of trans(X)*X+A where X is q, A is 1, and betabar is (beta_0 + M*beta_2 + X*beta_3)=X*beta
     arma::mat ucholinv_tilde = solve(trimatu(chol(trans(q)*q+1)), eye(1,1)); //trimatu interprets the matrix as upper triangular and makes solve more efficient
-    // printf("564");
     arma::mat XXAinv_tilde = ucholinv_tilde*trans(ucholinv_tilde);
     arma::mat root_tilde = chol(XXAinv_tilde);
-    // printf("507");
     arma::vec Abetabar_tilde(1);
     for (i=0; i<ny; i++){
-      p(0) = dep(i) - beta_2(0) - beta_2(2)*X(i,1);    //Y_i - beta_0 - beta_3*X_i
-      p(span(1,Y_ind)) = (trans(y_tilde.row(i)) - beta_tilde.col(0))/sqrt(ssq_y_tilde);
+      p(0) = (dep(i) - beta_2(0) - beta_2(2)*X(i,1))/sqrt(ssq_y);    //Y_i - beta_0 - beta_3*X_i    (likelihood1: Y|M,beta_2,beta_3,ssq_y) , in MeasurementMYCat  ssq_y=1
+      p(span(1,Y_ind)) = (trans(y_tilde.row(i)) - beta_tilde.col(0))/sqrt(ssq_y_tilde);  //(likelihood2: m_tilde|M,beta_tilde,ssq_y_tilde) note: y_tilde and ssq_y are actually m_tilde and ssq_m
       Abetabar_tilde = X.row(i)*beta;  //A=1
       z(i) = conv_to<double>::from(breg1(root_tilde,q,p,Abetabar_tilde));
 
@@ -246,6 +298,7 @@ List MeasurementMCatCpp(arma::vec const& dep,  arma::mat const& y, arma::mat con
       ssq_y_tilde_draw(mkeep-1,span::all) = trans(ssq_y_tilde);
       mubeta_2_draw(mkeep-1,span::all) = trans(mubeta);
       varbeta_2_draw.slice(mkeep-1) = varbeta ;
+      ssq_y_draw(mkeep-1) = ssq_y;
     }
   }
   // double accept = 1-sum(staydraw)/(R/keep);
@@ -255,12 +308,13 @@ List MeasurementMCatCpp(arma::vec const& dep,  arma::mat const& y, arma::mat con
     Named("M_draw") = zdraw,
     Named("cutdraw") = cutdraw,
     Named("dstardraw") = dstardraw,
-    Named("betadraw") = betadraw,
+    Named("beta_1_draw") = betadraw,
     Named("beta_2_draw") = beta_2_draw,
     Named("beta_tilde_draw") = beta_tilde_draw,
     Named("ssq_y_tilde_draw") = ssq_y_tilde_draw,
     Named("mubeta_2_draw") = mubeta_2_draw,
-    Named("varbeta_2_draw") = varbeta_2_draw
+    Named("varbeta_2_draw") = varbeta_2_draw,
+    Named("ssq_y_draw") = ssq_y_draw
   );
 }
 

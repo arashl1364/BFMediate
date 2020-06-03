@@ -108,13 +108,15 @@ MeasurementYCat=function(Data,Prior,Mcmc){
   # check for Prior
   #
   if(missing(Prior))
-  { betabar=c(rep(0,nvar)); A=diag(1/rep(100,2)); Ad=diag(ndstar); dstarbar=c(rep(0,ndstar))}
+  { betabar=c(rep(0,nvar)); A=diag(1/c(100,100,1)); A_M=diag(1/rep(100,2)); Ad=diag(ndstar); dstarbar=c(rep(0,ndstar))} #NOTE: A_Y is called A here
   else
   {
     if(is.null(Prior$betabar)) {betabar=c(rep(0,nvar))}
     else {betabar=Prior$betabar}
-    if(is.null(Prior$A_Y)) {A=diag(1/rep(100,2))}
-    else {A=1/diag(1/Prior$A_Y)}
+    if(is.null(Prior$A_M)) {A_M=diag(1/rep(100,2))}
+    else {A_M=diag(1/Prior$A_M)}
+    if(is.null(Prior$A_Y)) {A=diag(1/c(100,100,1))}
+    else {A=diag(1/Prior$A_Y)}
     if(is.null(Prior$Ad)) {Ad=diag(ndstar)}
     else {Ad=Prior$Ad}
     if(is.null(Prior$dstarbar)) {dstarbar=c(rep(0,ndstar))}
@@ -192,8 +194,15 @@ MeasurementYCat=function(Data,Prior,Mcmc){
                                           R,keep,nprint)
                                           # cutoff_Y_init, Y_tilde_init, beta_tilde_init, ssq_y_tilde_init, beta_2_init, Y_init)
   ###################################################################
+  # draw beta_1, ssq_M | M,X    #This step is independent of the multiple indicator model as we have both M and X
+  #
+  out<-runiregGibbs_me(Data = list(y=as.matrix(X[,2]),X=cbind(rep(1,nobs),X[,3])),Prior=list(ssq=1,A = A_M),Mcmc = list(R=R))
+  beta_1_draw = out$betadraw; ssq_M_draw = out$sigmasqdraw;
+  ###################################################################
 
   draws$cutdraw=draws$cutdraw[,2:k,]
+  draws$beta_1_draw = beta_1_draw
+  draws$ssq_M_draw = ssq_M_draw
   # attributes(draws$cutdraw)$class="bayesm.mat"
   # attributes(draws$betadraw)$class="bayesm.mat"
   # attributes(draws$dstardraw)$class="bayesm.mat"

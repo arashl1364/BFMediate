@@ -449,5 +449,41 @@ arma::vec rtnm(arma::vec mus, arma::vec sigmas, arma::vec lower, arma::vec upper
 }
 
 
+List runiregG(arma::vec const& y, arma::mat const& X, arma::mat const& XpX, arma::vec const& Xpy, double sigmasq, arma::mat const& A,
+              arma::vec const& Abetabar, double nu, double ssq) {
 
+  // Keunwoo Kim 09/16/2014
+
+  // Purpose:
+  //  perform one Gibbs iteration for Univ Regression Model
+  //  only does one iteration so can be used in MeasurementMCatCpp
+
+  // Model:
+  //  y = Xbeta + e  e ~N(0,sigmasq)
+  //  y is n x 1
+  //  X is n x k
+  //  beta is k x 1 vector of coefficients
+
+  // Prior:
+  //  beta ~ N(betabar,A^-1)
+  //  sigmasq ~ (nu*ssq)/chisq_nu
+
+  int n = y.size();
+  int k = XpX.n_cols;
+
+  //first draw beta | sigmasq
+  arma::mat IR = solve(trimatu(chol(XpX/sigmasq+A)), eye(k,k)); //trimatu interprets the matrix as upper triangular and makes solve more efficient
+  arma::vec btilde = (IR*trans(IR)) * (Xpy/sigmasq + Abetabar);
+  arma::vec beta = btilde + IR*vec(rnorm(k));
+
+  //now draw sigmasq | beta
+  double s = sum(square(y-X*beta));
+  sigmasq = (s + nu*ssq)/rchisq(1,nu+n)[0]; //rchisq returns a vectorized object, so using [0] allows for the conversion to double
+
+  return List::create(
+    Named("beta") = beta,
+    Named("sigmasq") = sigmasq,
+    Named("mubeta") = btilde,
+    Named("varbeta") = IR*trans(IR));
+}
 

@@ -41,6 +41,8 @@ arma::vec rtnm(arma::vec mus, arma::vec sigmas, arma::vec lower, arma::vec upper
 
 List breg2(arma::mat const& root, arma::mat const& X, arma::vec const& y, arma::vec const& Abetabar);
 
+List runiregG(arma::vec const& y, arma::mat const& X, arma::mat const& XpX, arma::vec const& Xpy, double sigmasq, arma::mat const& A,
+              arma::vec const& Abetabar, double nu, double ssq);
 // others
 double norm_rs(double a, double b);
 
@@ -61,11 +63,16 @@ List rordprobitGibbs_me(arma::mat const& y, arma::mat const& X, int k, arma::mat
                         int R, int keep, int nprint,
                         arma::mat olddstar, arma::mat const& old_y_tilde, arma::mat const& old_beta_tilde, arma::vec const& old_ssq_y_tilde, arma::vec const& oldbeta, arma::vec const& oldz);
 
-List rordprobitGibbs_me_M(arma::vec const& dep, arma::vec const& beta_2,  arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,
-                          double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
-                          int const& Y_ind,
-                          int R, int keep, int nprint,
-                          arma::mat olddstar, arma::mat const& old_y_tilde, arma::mat const& old_beta_tilde, arma::vec const& old_ssq_y_tilde, arma::vec const& oldbeta, arma::vec const& oldz);
+List MeasurementMCatUnitCpp(arma::vec const& dep,  arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad, arma::mat const& A_2, arma::vec const& betabar_2,
+                            double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
+                            int const& Y_ind,
+                            int R, int keep, int nprint);
+
+// List rordprobitGibbs_me_M(arma::vec const& dep, arma::vec const& beta_2,  arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,
+//                           double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
+//                           int const& Y_ind,
+//                           int R, int keep, int nprint,
+//                           arma::mat olddstar, arma::mat const& old_y_tilde, arma::mat const& old_beta_tilde, arma::vec const& old_ssq_y_tilde, arma::vec const& oldbeta, arma::vec const& oldz);
 
 
 //FUNCTION TIMING (contained in TimerFunctions.cpp)---------------------------------------------------------------
@@ -81,12 +88,19 @@ List runiregGibbs_rcpp_me(arma::vec const& y, arma::mat const& X, arma::vec cons
 
 
 
+// //  MeasurementMCatUnitCpp.cpp
+// // [[Rcpp::export]]
+// List MeasurementMCatUnitCpp(arma::vec const& dep,  arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad, arma::mat const& A_2, arma::vec const& betabar_2,
+//                                               double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
+//                                               int const& Y_ind,
+//                                               int R, int keep, int nprint);
+
 //  MeasurementMCatCpp.cpp
 // [[Rcpp::export]]
 List MeasurementMCatCpp(arma::vec const& dep,  arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad, arma::mat const& A_2, arma::vec const& betabar_2,
-                                              double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
-                                              int const& Y_ind,
-                                              int R, int keep, int nprint);
+                            double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
+                            int const& Y_ind,
+                            int R, int keep, int nprint);
 
 // MeasurementYCatCpp.cpp
 // [[Rcpp::export]]
@@ -104,6 +118,7 @@ List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_star, arma::mat 
 // [[Rcpp::export]]
 List RuniregGibbsMultiCpp(arma::mat const& y, arma::mat const& M, arma::vec const& X, arma::vec const& betabar, arma::mat const& A, double nu, double ssq,
                              arma::vec sigmasq, int R, int keep, int nprint, bool betafix, bool sigmafix, arma::mat betavalue, arma::vec sigmavalue);
+
 
 
 #endif

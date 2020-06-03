@@ -106,15 +106,19 @@ List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_star, arma::mat 
   for(int rep=0; rep<R; rep++){
 
 
-    List out_Y = rordprobitGibbs_me(y_star, XM, k_Y, A_Y, beta_2_bar, Ad_Y,
+    List out_Y =  rordprobitGibbs_me(y_star, XM, k_Y, A_Y, beta_2_bar, Ad_Y,
                                     s_Y, inc_root_Y, dstarbar_Y, beta_2_hat, Y_ind,
                                     1, 1, 1,
                                     olddstar_Y, old_y_tilde, old_beta_y_tilde, old_ssq_y_tilde, oldbeta_2, oldz_Y); //, cutoff_Y_init);
 
-    List out_M = rordprobitGibbs_me_M(oldz_Y, oldbeta_2, m_star, X, k_M, A_M, betabar, Ad_M,
-                                      s_M, inc_root_M, dstarbar_M, betahat,M_ind,
-                                      1, 1, 1,
-                                      olddstar_M, old_m_tilde, old_beta_m_tilde, old_ssq_m_tilde, oldbeta, oldz_M); //, cutoff_M_init);
+    List out_M =  MeasurementMCatUnitCpp(oldz_Y, oldbeta_2, m_star, X, k_M, A_M, betabar, Ad_M,
+                                            s_M, inc_root_M, dstarbar_M, betahat,M_ind,
+                                            1, 1, 1,
+                                            olddstar_M, old_m_tilde, old_beta_m_tilde, old_ssq_m_tilde, oldbeta, oldz_M); //, cutoff_M_init);
+      // rordprobitGibbs_me_M(oldz_Y, oldbeta_2, m_star, X, k_M, A_M, betabar, Ad_M,
+      //                                 s_M, inc_root_M, dstarbar_M, betahat,M_ind,
+      //                                 1, 1, 1,
+      //                                 olddstar_M, old_m_tilde, old_beta_m_tilde, old_ssq_m_tilde, oldbeta, oldz_M); //, cutoff_M_init);
 
     //updating parameters
 
