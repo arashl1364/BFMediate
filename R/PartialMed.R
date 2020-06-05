@@ -7,12 +7,31 @@
 #' @return something
 #' @export
 #'
-PartialMed=function(Data, pars, R){
-  #sampler of a partial mediation setting
-  #Data: X(Nxk),Y(Nx1),m_star(Nx1)
-  #Parameters:  M, beta_1, beta_2, ssq_M, ssq_m_star, ssq_y
+#Description PartialMed estimates a partial mediation model using series of Gibbs Samplers
+#Arguments:
+# Data  list(X, M, Y)
+# pars list(A_M,A_Y)
+# R
+#Details:
+# Data = list(X, M, Y)
+# X(N x 1) treatment variable vector
+# M(N x 1) mediator vector
+# Y(N x 1) dependent variable vector
+# pars = list(A_M,A_Y) [optional]
+# A_M vector of coefficients' prior variances of eq.1 (def: rep(100,2))
+# A_Y vector of coefficients' prior variances of eq.2 (def: c(100,100,1))
+# R number of MCMC iterations (def:10000)
+#Value:
+# beta_1(R X 2)  matrix of eq.1 coefficients' posterior draws
+# beta_2(R X 3)  matrix of eq.2 coefficients' posterior draws
+# ssq_M(R X 1) vector of eq.1 error variance posterior draws
+# ssq_Y(R X 1) vector of eq.2 error variance posterior draws
+# mu_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
+# var_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
 
-  #initialization and memory allocation
+PartialMed=function(Data, pars, R=10000){
+
+    #initialization and memory allocation
 
   #Data
   X=as.matrix(Data$X); Y=Data$Y; M=Data$M;
@@ -54,11 +73,11 @@ PartialMed=function(Data, pars, R){
     #
     out<-runiregGibbs_me(Data = list(y=M,X=cbind(rep(1,N),X)),Prior=list(ssq=1,A = as.matrix(diag(A_M,k))),Mcmc = list(R=R))
     beta_1_draw = out$betadraw; ssq_M_draw = out$sigmasqdraw;
-    ##Moments
-    mu_beta_1_draw = out$mubeta
-    IR_beta_1_draw = out$IR
-    nu_ssq_M_draw = out$nu
-    S_ssq_M_draw = out$S
+    # ##Moments
+    # mu_beta_1_draw = out$mubeta
+    # IR_beta_1_draw = out$IR      #covariance matrix of beta_1
+    # nu_ssq_M_draw = out$nu
+    # S_ssq_M_draw = out$S
     #
     #
     # draw beta_2, ssq_y | Y,M,X
@@ -67,85 +86,28 @@ PartialMed=function(Data, pars, R){
     beta_2_draw = out$betadraw; ssq_y_draw = out$sigmasqdraw;
     ##Moments
     mu_beta_2_draw = out$mubeta
-    IR_beta_2_draw = out$IR
-    nu_ssq_y_draw = out$nu
-    S_ssq_y_draw = out$S
+    IR_beta_2_draw = out$IR    #covariance matrix of beta draws
+    # nu_ssq_y_draw = out$nu
+    # S_ssq_y_draw = out$S
 
-
-    #       print time to completion and draw # every 100th draw
-    #
-    # if(i%%100 == 0)
-    # {ctime=proc.time()[3]
-    # timetoend=((ctime-itime)/i)*(R-i)
-    # cat(" ",i," (",round(timetoend/60,1),")",fill=TRUE)
-    # fsh()
-    # }
-
-  # for(i in 1:R){
-  #
-  #   # draw beta_1, ssq_M | M,X
-  #   #
-  #   out<-runiregGibbs_me(Data = list(y=M,X=cbind(rep(1,N),X)),Prior=list(ssq=1), Mcmc = list(sigmasq=ssq_M,R=1))
-  #   beta_1=out$betadraw; ssq_M=out$sigmasqdraw;
-  #   ##Moments
-  #   mu_beta_1=out$mubeta
-  #   IR_beta_1 = out$IR
-  #   nu_ssq_M = out$nu
-  #   S_ssq_M = out$S
-  #   #
-  #   #
-  #   # draw beta_2, ssq_y | y,M,X
-  #   #
-  #   out<-runiregGibbs_me(Data = list(y=y,X=cbind(rep(1,N),M,X)),Prior=list(ssq=1), Mcmc = list(sigmasq=ssq_y,R=1))
-  #   beta_2=out$betadraw; ssq_y=out$sigmasqdraw;
-  #   ##Moments
-  #   mu_beta_2 = out$mubeta
-  #   IR_beta_2 = out$IR
-  #   nu_ssq_y = out$nu
-  #   S_ssq_y = out$S
-  #   #
-  #
-  #   beta_1_draw[i,]=beta_1
-  #   beta_2_draw[i,]=beta_2
-  #   ssq_M_draw[i]=ssq_M
-  #   ssq_y_draw[i]=ssq_y
-  #
-  #   #storing moments
-  #   mu_beta_1_draw[i,] = mu_beta_1
-  #   IR_beta_1_draw[,,i] = IR_beta_1
-  #   nu_ssq_M_draw[i] = nu_ssq_M
-  #   S_ssq_M_draw[i] = S_ssq_M
-  #
-  #   mu_beta_2_draw[i,] = mu_beta_2
-  #   IR_beta_2_draw[,,i] = IR_beta_2
-  #   nu_ssq_y_draw[i] = nu_ssq_y
-  #   S_ssq_y_draw[i] = S_ssq_y
-  #
-  #   #       print time to completion and draw # every 100th draw
-  #   #
-  #   if(i%%100 == 0)
-  #   {ctime=proc.time()[3]
-  #   timetoend=((ctime-itime)/i)*(R-i)
-  #   cat(" ",i," (",round(timetoend/60,1),")",fill=TRUE)
-  #   #fsh()
-  #   }
-  # }
   ctime = proc.time()[3]
   cat('  Total Time Elapsed: ',round((ctime-itime)/60,2),'\n')
 
-  attributes(beta_1_draw)$class=c("bayesm.mat","mcmc")
-  attributes(beta_1_draw)$mcpar=c(1,R,1)
-  attributes(beta_2_draw)$class=c("bayesm.mat","mcmc")
-  attributes(beta_2_draw)$mcpar=c(1,R,1)
-  attributes(ssq_M_draw)$class=c("bayesm.var","bayesm.mat","mcmc")
-  attributes(ssq_M_draw)$mcpar=c(1,R,1)
-  attributes(ssq_y_draw)$class=c("bayesm.var","bayesm.mat","mcmc")
-  attributes(ssq_y_draw)$mcpar=c(1,R,1)
-
+  # attributes(beta_1_draw)$class=c("bayesm.mat","mcmc")
+  # attributes(beta_1_draw)$mcpar=c(1,R,1)
+  # attributes(beta_2_draw)$class=c("bayesm.mat","mcmc")
+  # attributes(beta_2_draw)$mcpar=c(1,R,1)
+  # attributes(ssq_M_draw)$class=c("bayesm.var","bayesm.mat","mcmc")
+  # attributes(ssq_M_draw)$mcpar=c(1,R,1)
+  # attributes(ssq_y_draw)$class=c("bayesm.var","bayesm.mat","mcmc")
+  # attributes(ssq_y_draw)$mcpar=c(1,R,1)
 
   return(list(beta_1=beta_1_draw,beta_2=beta_2_draw, ssq_M=ssq_M_draw ,ssq_y=ssq_y_draw,
-              mu_beta_1=mu_beta_1_draw, IR_beta_1=IR_beta_1_draw, nu_ssq_M=nu_ssq_M_draw,S_ssq_M=S_ssq_M_draw,
-              mu_beta_2=mu_beta_2_draw, IR_beta_2=IR_beta_2_draw, nu_ssq_y=nu_ssq_y_draw, S_ssq_y=S_ssq_y_draw))
+              mu_draw=mu_beta_2_draw[,3], var_draw=IR_beta_2_draw[3,3,]))    #MCMC moments of the direct effect
+
+  # return(list(beta_1=beta_1_draw,beta_2=beta_2_draw, ssq_M=ssq_M_draw ,ssq_y=ssq_y_draw,
+  #             mu_beta_1=mu_beta_1_draw, IR_beta_1=IR_beta_1_draw, nu_ssq_M=nu_ssq_M_draw,S_ssq_M=S_ssq_M_draw,
+  #             mu_beta_2=mu_beta_2_draw, IR_beta_2=IR_beta_2_draw, nu_ssq_y=nu_ssq_y_draw, S_ssq_y=S_ssq_y_draw))
 }
 
 

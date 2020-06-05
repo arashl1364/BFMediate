@@ -7,7 +7,43 @@
 #' @return asd
 #' @export
 #'
-MeasurementMCat=function(Data,Prior,Mcmc){
+### Description MeasurementMCat estimates a partial mediation model with multiple categorical indicator for the mediator
+# and observed dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
+### Arguments:
+# Data  list(X, m_star, Y)
+# Prior list(A_M,A_Y)
+# R
+### Details:
+## Model:
+# M = beta_0M + Xbeta_1 + U_M   (eq.1)
+# Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y  (eq.2)
+# indicator equations:
+# m*_1 = M + U_m*_1
+# ˜m_1 = OrdProbit(m*_1,C_m_1)
+# m*_2 = lambda_01 + M + U_m*_2
+# ˜m_2 = OrdProbit(m*_2,C_m_2)
+# ...
+# m*_k = lambda_0k-1 + M + U_m*_k
+# ˜m_k = OrdProbit(m*_k,C_m_k)
+## Data = list(X, m_star, Y)
+# X(N x 1) treatment variable vector
+# m_star(N x M_ind) mediator indicators' matrix
+# Y(N x 1) dependent variable vector
+# Prior = list(A_M,A_Y) [optional]
+# A_M vector of coefficients' prior variances of eq.1 (def: rep(100,2))
+# A_Y vector of coefficients' prior variances of eq.2 (def: c(100,100,1))
+# R number of MCMC iterations (def:10000)
+### Value:
+# beta_1(R X 2)  matrix of eq.1 coefficients' draws
+# beta_2(R X 3)  matrix of eq.2 coefficients' draws
+# lambda (M_ind X 2 X R) array of indicator coefficients' draws.
+# Each slice is one draw, where rows represent the indicator equation and columns are the coefficients
+# All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively
+# ssq_m_star(R X M_ind) Matrix of indicator equations' coefficients' error variance draws
+# ssq_Y(R X 1) vector of eq.2 error variance draws
+# mu_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
+# var_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
+MeasurementMCat=function(Data,Prior,R=10000){  #function(Data,Prior,Mcmc){
   #
   # revision history:
   #   3/07  Hsiu-Wen Liu
@@ -96,13 +132,13 @@ MeasurementMCat=function(Data,Prior,Mcmc){
   ncut = ncuts-3       # number of cut-offs being estimated c[1]=-100, c[2]=0, c[k+1]=100
 
 
-  cutoff_Y_init = Data$cutoff_M_init
-  Y_tilde_init = Data$M_tilde_init
-  ssq_y_tilde_init = Data$ssq_y_tilde_init
-  beta_init = Data$beta_init
-  beta_2_init = Data$beta_2_init
-  Y_init = Data$M_init
-  beta_tilde_init = Data$beta_tilde_init
+  # cutoff_Y_init = Data$cutoff_M_init
+  # Y_tilde_init = Data$M_tilde_init
+  # ssq_y_tilde_init = Data$ssq_y_tilde_init
+  # beta_init = Data$beta_init
+  # beta_2_init = Data$beta_2_init
+  # Y_init = Data$M_init
+  # beta_tilde_init = Data$beta_tilde_init
 
   #
   # check data for validity
@@ -152,16 +188,19 @@ MeasurementMCat=function(Data,Prior,Mcmc){
   #
   # check MCMC argument
   #
-  if(missing(Mcmc)) {pandterm("requires Mcmc argument")}
-  else
-  {
-    if(is.null(Mcmc$R))
-    {pandterm("requires Mcmc element R")} else {R=Mcmc$R}
-    if(is.null(Mcmc$keep)) {keep=1} else {keep=Mcmc$keep}
-    if(is.null(Mcmc$nprint)) {nprint=100} else {nprint=Mcmc$nprint}
-    if(nprint<0) {pandterm('nprint must be an integer greater than or equal to 0')}
-    if(is.null(Mcmc$s)) {s=2.38/sqrt(ndstar)} else {s=Mcmc$s} #2.38 is the RRscaling
-  }
+  keep = 1
+  nprint = 100
+  s = 2.38/sqrt(ndstar)
+  # if(missing(Mcmc)) {pandterm("requires Mcmc argument")}
+  # else
+  # {
+  #   if(is.null(Mcmc$R))
+  #   {pandterm("requires Mcmc element R")} else {R=Mcmc$R}
+  #   if(is.null(Mcmc$keep)) {keep=1} else {keep=Mcmc$keep}
+  #   if(is.null(Mcmc$nprint)) {nprint=100} else {nprint=Mcmc$nprint}
+  #   if(nprint<0) {pandterm('nprint must be an integer greater than or equal to 0')}
+  #   if(is.null(Mcmc$s)) {s=2.38/sqrt(ndstar)} else {s=Mcmc$s} #2.38 is the RRscaling
+  # }
   #
   # print out problem
   #
@@ -217,13 +256,13 @@ MeasurementMCat=function(Data,Prior,Mcmc){
 
   ###################################################################
 
-  draws$cutdraw=draws$cutdraw[,2:k,]
-  attributes(draws$cutdraw)$class="bayesm.mat"
-  attributes(draws$betadraw)$class="bayesm.mat"
-  attributes(draws$dstardraw)$class="bayesm.mat"
-  attributes(draws$cutdraw)$mcpar=c(1,R,keep)
-  attributes(draws$betadraw)$mcpar=c(1,R,keep)
-  attributes(draws$dstardraw)$mcpar=c(1,R,keep)
+  draws$cutoff_M=draws$cutoff_M[,2:k,]
+  # attributes(draws$cutdraw)$class="bayesm.mat"
+  # attributes(draws$betadraw)$class="bayesm.mat"
+  # attributes(draws$dstardraw)$class="bayesm.mat"
+  # attributes(draws$cutdraw)$mcpar=c(1,R,keep)
+  # attributes(draws$betadraw)$mcpar=c(1,R,keep)
+  # attributes(draws$dstardraw)$mcpar=c(1,R,keep)
 
   return(draws)
 }

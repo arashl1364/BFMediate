@@ -37,10 +37,10 @@ List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_star, arma::mat 
   int ndstar_M = k_M-2;
 
   arma::mat betadraw(R/keep, nvar_M);
-  arma::cube cutdraw_M(M_ind, ncuts_M, R/keep);
+  arma::cube cutoff_M(M_ind, ncuts_M, R/keep);
   arma::cube dstardraw_M(M_ind, ndstar_M,R/keep);
   arma::mat ssq_m_tilde_draw(R/keep, M_ind);
-  arma::cube beta_m_tilde_draw(M_ind, 2, R/keep);
+  arma::cube lambdadraw(M_ind, 2, R/keep);
   arma::mat Mdraw(R/keep, ny);
 
 
@@ -50,15 +50,15 @@ List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_star, arma::mat 
   int ndstar_Y = k_Y-2;
 
   arma::mat beta_2_draw(R/keep, nvar_Y);
-  arma::cube cutdraw_Y(Y_ind, ncuts_Y, R/keep);
+  arma::cube cutoff_Y(Y_ind, ncuts_Y, R/keep);
   arma::cube dstardraw_Y(Y_ind, ndstar_Y,R/keep);
   arma::mat ssq_y_tilde_draw(R/keep, Y_ind);
-  arma::cube beta_y_tilde_draw(Y_ind, 2, R/keep);
+  arma::cube taudraw(Y_ind, 2, R/keep);
   arma::mat Ydraw(R/keep, ny);
 
 
-  arma::mat mubeta_2_draw(R/keep, nvar_Y);
-  arma::cube varbeta_2_draw(nvar_Y, nvar_Y, R/keep);
+  arma::vec mubeta_2_draw(R/keep);   //(R/keep, nvar_Y);
+  arma::vec varbeta_2_draw(R/keep);  //(nvar_Y, nvar_Y, R/keep);
 
 
   // set Initial values
@@ -81,8 +81,8 @@ List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_star, arma::mat 
   arma::vec old_ssq_m_tilde(M_ind);
   old_ssq_m_tilde.ones();
   // old_ssq_m_tilde = ssq_m_tilde_init;     // CHANGE HERE AFTER TEST
-  arma::mat old_beta_m_tilde(M_ind,2);
-  old_beta_m_tilde.col(1).ones();
+  arma::mat old_lambda(M_ind,2);
+  old_lambda.col(1).ones();
   // old_beta_m_tilde.col(0) = beta_m_tilde_init;      // CHANGE HERE AFTER TEST
 
 
@@ -99,26 +99,22 @@ List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_star, arma::mat 
   arma::vec old_ssq_y_tilde(Y_ind);
   old_ssq_y_tilde.ones();
   // old_ssq_y_tilde = ssq_y_tilde_init;     // CHANGE HERE AFTER TEST
-  arma::mat old_beta_y_tilde(Y_ind,2);
-  old_beta_y_tilde.col(1).ones();
+  arma::mat old_tau(Y_ind,2);
+  old_tau.col(1).ones();
   // old_beta_y_tilde.col(0) = beta_y_tilde_init;      // CHANGE HERE AFTER TEST
 
   for(int rep=0; rep<R; rep++){
 
 
-    List out_Y =  rordprobitGibbs_me(y_star, XM, k_Y, A_Y, beta_2_bar, Ad_Y,
+    List out_Y =  YSampler(y_star, XM, k_Y, A_Y, beta_2_bar, Ad_Y,
                                     s_Y, inc_root_Y, dstarbar_Y, beta_2_hat, Y_ind,
                                     1, 1, 1,
-                                    olddstar_Y, old_y_tilde, old_beta_y_tilde, old_ssq_y_tilde, oldbeta_2, oldz_Y); //, cutoff_Y_init);
+                                    olddstar_Y, old_y_tilde, old_tau, old_ssq_y_tilde, oldbeta_2, oldz_Y); //, cutoff_Y_init);
 
-    List out_M =  MeasurementMCatUnitCpp(oldz_Y, oldbeta_2, m_star, X, k_M, A_M, betabar, Ad_M,
-                                            s_M, inc_root_M, dstarbar_M, betahat,M_ind,
-                                            1, 1, 1,
-                                            olddstar_M, old_m_tilde, old_beta_m_tilde, old_ssq_m_tilde, oldbeta, oldz_M); //, cutoff_M_init);
-      // rordprobitGibbs_me_M(oldz_Y, oldbeta_2, m_star, X, k_M, A_M, betabar, Ad_M,
-      //                                 s_M, inc_root_M, dstarbar_M, betahat,M_ind,
-      //                                 1, 1, 1,
-      //                                 olddstar_M, old_m_tilde, old_beta_m_tilde, old_ssq_m_tilde, oldbeta, oldz_M); //, cutoff_M_init);
+    List out_M =  MSampler(oldz_Y, oldbeta_2, m_star, X, k_M, A_M, betabar, Ad_M,
+                                      s_M, inc_root_M, dstarbar_M, betahat,M_ind,
+                                      1, 1, 1,
+                                      olddstar_M, old_m_tilde, old_lambda, old_ssq_m_tilde, oldbeta, oldz_M); //, cutoff_M_init);
 
     //updating parameters
 
@@ -128,54 +124,56 @@ List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_star, arma::mat 
     oldbeta = as<arma::vec>(out_M["betadraw"]);
     olddstar_M = as<arma::mat>(out_M["dstardraw"]);
     old_m_tilde = as<arma::mat>(out_M["y_tilde_draw"]);
-    old_beta_m_tilde = as<arma::mat>(out_M["beta_tilde_draw"]);
+    old_lambda = as<arma::mat>(out_M["beta_tilde_draw"]);
     old_ssq_m_tilde = as<arma::vec>(out_M["ssq_y_tilde_draw"]);
     //
     oldz_Y = as<arma::vec>(out_Y["zdraw"]);
     oldbeta_2 = as<arma::vec>(out_Y["betadraw"]);
     olddstar_Y = as<arma::mat>(out_Y["dstardraw"]);
     old_y_tilde = as<arma::mat>(out_Y["y_tilde_draw"]);
-    old_beta_y_tilde = as<arma::mat>(out_Y["beta_tilde_draw"]);
+    old_tau = as<arma::mat>(out_Y["beta_tilde_draw"]);
     old_ssq_y_tilde = as<arma::vec>(out_Y["ssq_y_tilde_draw"]);
     /////////////////////////////////////////////
 
     if((rep+1)%keep==0){
       mkeep = (rep+1)/keep;
-      cutdraw_M.slice(mkeep-1) = as<arma::mat>(out_M["cutdraw"]);
+      cutoff_M.slice(mkeep-1) = as<arma::mat>(out_M["cutdraw"]);
       dstardraw_M.slice(mkeep-1) = as<arma::mat>(out_M["dstardraw"]);
       betadraw(mkeep-1,span::all) = trans(as<arma::vec>(out_M["betadraw"]));
-      beta_m_tilde_draw.slice(mkeep-1) = as<arma::mat>(out_M["beta_tilde_draw"]);
+      lambdadraw.slice(mkeep-1) = as<arma::mat>(out_M["beta_tilde_draw"]);
       ssq_m_tilde_draw(mkeep-1,span::all) = trans(as<arma::vec>(out_M["ssq_y_tilde_draw"]));
       Mdraw(mkeep-1,span::all) = trans(as<arma::vec>(out_M["zdraw"]));
 
-      cutdraw_Y.slice(mkeep-1) = as<arma::mat>(out_Y["cutdraw"]);
+      cutoff_Y.slice(mkeep-1) = as<arma::mat>(out_Y["cutdraw"]);
       dstardraw_Y.slice(mkeep-1) = as<arma::mat>(out_Y["dstardraw"]);
       beta_2_draw(mkeep-1,span::all) = trans(as<arma::vec>(out_Y["betadraw"]));
-      beta_y_tilde_draw.slice(mkeep-1) = as<arma::mat>(out_Y["beta_tilde_draw"]);
+      taudraw.slice(mkeep-1) = as<arma::mat>(out_Y["beta_tilde_draw"]);
       ssq_y_tilde_draw(mkeep-1,span::all) = trans(as<arma::vec>(out_Y["ssq_y_tilde_draw"]));
       Ydraw(mkeep-1,span::all) = trans(as<arma::vec>(out_Y["zdraw"]));
 
-      mubeta_2_draw(mkeep-1,span::all) = trans(as<arma::vec>(out_Y["mubeta"]));
-      varbeta_2_draw.slice(mkeep-1) = as<arma::mat>(out_Y["varbeta"]);
+      vec mubeta = as<arma::vec>(out_Y["mubeta"]);
+      mubeta_2_draw(mkeep-1) = mubeta(nvar_Y-1);  //trans(as<arma::vec>(out_Y["mubeta"]));
+      mat varbeta = as<arma::mat>(out_Y["varbeta"]);
+      varbeta_2_draw(mkeep-1) = varbeta(nvar_Y-1, nvar_Y-1); //as<arma::mat>(out_Y["varbeta"]);
     }
 
   }
 
   return List::create(
-    Named("cutdraw_M") = cutdraw_M,
-    Named("dstardraw_M") = dstardraw_M,
+    Named("cutoff_M") = cutoff_M,
+    // Named("dstardraw_M") = dstardraw_M,
     Named("betadraw") = betadraw,
-    Named("beta_m_tilde_draw") = beta_m_tilde_draw,
-    Named("ssq_m_tilde_draw") = ssq_m_tilde_draw,
+    Named("lambdadraw") = lambdadraw,
+    Named("ssq_m_star_draw") = ssq_m_tilde_draw,
     Named("Mdraw") = Mdraw,
-    Named("cutdraw_Y") = cutdraw_Y,
-    Named("dstardraw_Y") = dstardraw_Y,
+    Named("cutoff_Y") = cutoff_Y,
+    // Named("dstardraw_Y") = dstardraw_Y,
     Named("beta_2_draw") = beta_2_draw,
-    Named("beta_y_tilde_draw") = beta_y_tilde_draw,
-    Named("ssq_y_tilde_draw") = ssq_y_tilde_draw,
+    Named("taudraw") = taudraw,
+    Named("ssq_y_star_draw") = ssq_y_tilde_draw,
     Named("Ydraw") = Ydraw,
-    Named("mubeta_2_draw") = mubeta_2_draw,
-    Named("varbeta_2_draw") = varbeta_2_draw
+    Named("mu_draw") = mubeta_2_draw,
+    Named("var_draw") = varbeta_2_draw
   );
 
 

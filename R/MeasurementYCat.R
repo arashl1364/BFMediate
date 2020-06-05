@@ -7,7 +7,43 @@
 #' @return asd
 #' @export
 #'
-MeasurementYCat=function(Data,Prior,Mcmc){
+### Description MeasurementYCat estimates a partial mediation model with multiple categorical indicator for the dependent variable
+# and observed mediator using a mixture of Metropolis-Hastings and Gibbs sampling
+### Arguments:
+# Data  list(X, M, y_star)
+# Prior list(A_M,A_Y)
+# R
+### Details:
+## Model:
+# M = beta_0M + Xbeta_1 + U_M   (eq.1)
+# Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y  (eq.2)
+# indicator equations:
+# y*_1 = M + U_y*_1
+# ˜y_1 = OrdProbit(y*_1,C_y_1)
+# y*_2 = tau_01 + M + U_y*_2
+# ˜y_2 = OrdProbit(y*_2,C_y_2)
+# ...
+# y*_l = tau_0l-1 + M + U_y*_l
+# ˜y_l = OrdProbit(y*_l,C_y_l)
+## Data = list(X, M, y_star)
+# X(N x 1) treatment variable vector
+# M(N x 1) mediator vector
+# y_star(N x Y_ind) dependent variable indicators' matrix
+# Prior = list(A_M,A_Y) [optional]
+# A_M vector of coefficients' prior variances of eq.1 (def: rep(100,2))
+# A_Y vector of coefficients' prior variances of eq.2 (def: c(100,100,1))
+# R number of MCMC iterations (def:10000)
+### Value:
+# beta_1(R X 2)  matrix of eq.1 coefficients' draws
+# beta_2(R X 3)  matrix of eq.2 coefficients' draws
+# tau (Y_ind X 2 X R) array of indicator coefficients' draws.
+# Each slice is one draw, where rows represent the indicator equation and columns are the coefficients
+# All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively
+# ssq_y_star(R X Y_ind) Matrix of indicator equations' coefficients' error variance draws
+# ssq_M(R X 1) vector of eq.1 error variance draws
+# mu_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
+# var_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
+MeasurementYCat=function(Data,Prior,R=10000){  #,Mcmc){
   #
   # revision history:
   #   3/07  Hsiu-Wen Liu
@@ -90,12 +126,12 @@ MeasurementYCat=function(Data,Prior,Mcmc){
   ncut = ncuts-3       # number of cut-offs being estimated c[1]=-100, c[2]=0, c[k+1]=100
 
 
-  cutoff_Y_init = Data$cutoff_Y_init
-  Y_tilde_init = Data$Y_tilde_init
-  ssq_y_tilde_init = Data$ssq_y_tilde_init
-  beta_2_init = Data$beta_2_init
-  Y_init = Data$Y_init
-  beta_tilde_init = Data$beta_tilde_init
+  # cutoff_Y_init = Data$cutoff_Y_init
+  # Y_tilde_init = Data$Y_tilde_init
+  # ssq_y_tilde_init = Data$ssq_y_tilde_init
+  # beta_2_init = Data$beta_2_init
+  # Y_init = Data$Y_init
+  # beta_tilde_init = Data$beta_tilde_init
 
   #
   # check data for validity
@@ -138,16 +174,19 @@ MeasurementYCat=function(Data,Prior,Mcmc){
   #
   # check MCMC argument
   #
-  if(missing(Mcmc)) {pandterm("requires Mcmc argument")}
-  else
-  {
-    if(is.null(Mcmc$R))
-    {pandterm("requires Mcmc element R")} else {R=Mcmc$R}
-    if(is.null(Mcmc$keep)) {keep=1} else {keep=Mcmc$keep}
-    if(is.null(Mcmc$nprint)) {nprint=100} else {nprint=Mcmc$nprint}
-    if(nprint<0) {pandterm('nprint must be an integer greater than or equal to 0')}
-    if(is.null(Mcmc$s)) {s=2.38/sqrt(ndstar)} else {s=Mcmc$s}  #2.38 is the RRscaling
-  }
+  keep = 1
+  nprint = 100
+  s = 2.38/sqrt(ndstar)
+  # if(missing(Mcmc)) {pandterm("requires Mcmc argument")}
+  # else
+  # {
+  #   if(is.null(Mcmc$R))
+  #   {pandterm("requires Mcmc element R")} else {R=Mcmc$R}
+  #   if(is.null(Mcmc$keep)) {keep=1} else {keep=Mcmc$keep}
+  #   if(is.null(Mcmc$nprint)) {nprint=100} else {nprint=Mcmc$nprint}
+  #   if(nprint<0) {pandterm('nprint must be an integer greater than or equal to 0')}
+  #   if(is.null(Mcmc$s)) {s=2.38/sqrt(ndstar)} else {s=Mcmc$s}  #2.38 is the RRscaling
+  # }
   #
   # print out problem
   #
@@ -200,9 +239,9 @@ MeasurementYCat=function(Data,Prior,Mcmc){
   beta_1_draw = out$betadraw; ssq_M_draw = out$sigmasqdraw;
   ###################################################################
 
-  draws$cutdraw=draws$cutdraw[,2:k,]
-  draws$beta_1_draw = beta_1_draw
-  draws$ssq_M_draw = ssq_M_draw
+  draws$cutoff_M=draws$cutoff_M[,2:k,]
+  draws$beta_1 = beta_1_draw
+  draws$ssq_M = ssq_M_draw
   # attributes(draws$cutdraw)$class="bayesm.mat"
   # attributes(draws$betadraw)$class="bayesm.mat"
   # attributes(draws$dstardraw)$class="bayesm.mat"

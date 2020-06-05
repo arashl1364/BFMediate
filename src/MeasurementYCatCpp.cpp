@@ -55,7 +55,7 @@ List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat
 
   List metropout;
 
-  int nvar = X.n_cols;
+  int nvar = X.n_cols;   //X has 3 columns (1,M,X)
   int ncuts = k+1;
   int ncut = ncuts-3;
   int ndstar = k-2;
@@ -66,15 +66,15 @@ List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat
   arma::mat zdraw(R/keep,ny);
   arma::mat betadraw(R/keep, nvar);
   arma::mat ssq_y_tilde_draw(R/keep, Y_ind);
-  arma::cube beta_tilde_draw(Y_ind, 2, R/keep);
+  arma::cube taudraw(Y_ind, 2, R/keep);
   arma::cube cutdraw(Y_ind, ncuts, R/keep);
   arma::cube dstardraw(Y_ind, ndstar,R/keep);
   arma::vec cutoff1(ny);
   arma::vec cutoff2(ny);
   arma::vec sigma(X.n_rows); sigma.ones();
 
-  arma::mat mubetadraw(R/keep,nvar);
-  arma::cube varbetadraw(nvar,nvar,R/keep);
+  arma::vec mubeta_2_draw(R);    //(R/keep,nvar);
+  arma::vec varbeta_2_draw(R);   //(nvar,nvar,R/keep);
 
   // compute the inverse of trans(X)*X+A
   arma::mat ucholinv = solve(trimatu(chol(trans(X)*X+A)), eye(nvar,nvar)); //trimatu interprets the matrix as upper triangular and makes solve more efficient
@@ -106,8 +106,8 @@ List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat
   arma::mat iota_z(ny,2);
   iota_z.col(0) = iota.col(0);
   iota_z.col(1) = z;
-  arma::mat beta_tilde(Y_ind,2);
-  beta_tilde.col(1).ones();
+  arma::mat tau(Y_ind,2);
+  tau.col(1).ones();
   // beta_tilde.col(0) = beta_tilde_init;      // CHANGE HERE AFTER TEST
   arma::vec betabar_tilde(1);  // we only need this for the regression when estimating the intercept of y_tilde
   betabar_tilde.zeros();
@@ -117,7 +117,7 @@ List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat
   for(int ind=0; ind<Y_ind; ind++){
 
     cutoffs(ind,span::all) = trans(dstartoc(trans(olddstar(ind,span::all))));
-    oldll[ind] = lldstar(trans(olddstar(ind,span::all)), y(span::all,ind), beta_tilde(ind,0)+z, ssq_y_tilde[ind]);
+    oldll[ind] = lldstar(trans(olddstar(ind,span::all)), y(span::all,ind), tau(ind,0)+z, ssq_y_tilde[ind]);
 
   }
   // cutoffs = cutoff_Y_init;      // CHANGE HERE AFTER TEST
@@ -135,7 +135,7 @@ List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat
     for(int ind=0; ind<Y_ind; ind++){
 
       //draw gamma
-      metropout = dstarRwMetrop2(y(span::all,ind),beta_tilde(ind,0)+z,trans(olddstar(ind,span::all)),s,inc_root,dstarbar,oldll[ind],rootdi, ncut, ssq_y_tilde[ind]);
+      metropout = dstarRwMetrop2(y(span::all,ind),tau(ind,0)+z,trans(olddstar(ind,span::all)),s,inc_root,dstarbar,oldll[ind],rootdi, ncut, ssq_y_tilde[ind]);
       olddstar(ind,span::all) = trans(as<arma::vec>(metropout["dstardraw"])); //conversion from Rcpp to Armadillo requires explict declaration of variable type using as<>
       oldll[ind] =  as<double>(metropout["oldll"]);
       cutoffs(ind,span::all) = trans(dstartoc(trans(olddstar(ind,span::all))));
@@ -149,18 +149,18 @@ List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat
         cutoff1_tilde[i] = cutoffs(ind,y(i,ind)-1);  //lower bounds
         cutoff2_tilde[i] = cutoffs(ind,y(i,ind));    //upper bounds
       }
-      y_tilde(span::all,ind) = rtrunVec(beta_tilde(ind,0) + z, temp_sigma_tilde, cutoff1_tilde, cutoff2_tilde);
+      y_tilde(span::all,ind) = rtrunVec(tau(ind,0) + z, temp_sigma_tilde, cutoff1_tilde, cutoff2_tilde);
 
-      //draw ssq_y_tilde and beta_tilde (intercepts)
+      //draw ssq_y_tilde and tau (intercepts)
       if(ind == 0){
         iota_z.col(1) = z;
         List tilde_out = runiregGibbs_betafix(y_tilde(span::all,ind), iota_z, betabar_tilde, A_tilde, 3, 1, ssq_y_tilde[ind], 1, 1, 1, 1);//y, X, betabr, A, , nu, ssq, sigmasq, R, keep, nprint, betafix (we fix beta here)
-        beta_tilde(ind, 0) = 0;  //intercept of the first indicator y_tilde is fixed to 0
+        tau(ind, 0) = 0;  //intercept of the first indicator y_tilde is fixed to 0
         ssq_y_tilde[ind] =  as<double>(tilde_out["sigmasqdraw"]);
       }
       else{
         List tilde_out = runiregGibbs_betafix(y_tilde(span::all,ind)-z, iota, betabar_tilde, A_tilde, 3, 1, ssq_y_tilde[ind], 1, 1, 1, 0);//y, X, betabr, A, , nu, ssq, sigmasq, R, keep, nprint, betafix (we don't fix beta here)
-        beta_tilde(ind, 0) = as<double>(tilde_out["betadraw"]);
+        tau(ind, 0) = as<double>(tilde_out["betadraw"]);
         ssq_y_tilde[ind] =  as<double>(tilde_out["sigmasqdraw"]);
       }
     }
@@ -181,7 +181,7 @@ List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat
     arma::mat root_tilde = chol(XXAinv_tilde);
     arma::vec Abetabar_tilde(1);
     for (i=0; i<ny; i++){
-      p = (trans(y_tilde.row(i)) - beta_tilde.col(0))/sqrt(ssq_y_tilde);
+      p = (trans(y_tilde.row(i)) - tau.col(0))/sqrt(ssq_y_tilde);
       Abetabar_tilde = X.row(i)*beta;  //A=1
       z(i) = conv_to<double>::from(breg1(root_tilde,q,p,Abetabar_tilde));
 
@@ -196,10 +196,10 @@ List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat
       cutdraw.slice(mkeep-1) = cutoffs;
       dstardraw.slice(mkeep-1) = olddstar;
       betadraw(mkeep-1,span::all) = trans(beta);
-      beta_tilde_draw.slice(mkeep-1) = beta_tilde;
+      taudraw.slice(mkeep-1) = tau;
       ssq_y_tilde_draw(mkeep-1,span::all) = trans(ssq_y_tilde);
-      mubetadraw(mkeep-1,span::all) = trans(mubeta);
-      varbetadraw.slice(mkeep-1) = varbeta;
+      mubeta_2_draw(mkeep-1) = mubeta(nvar-1);
+      varbeta_2_draw(mkeep-1) = varbeta(nvar-1,nvar-1);
 
     }
   }
@@ -208,13 +208,13 @@ List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat
 
   return List::create(
     Named("Y_draw") = zdraw,
-    Named("cutdraw") = cutdraw,
-    Named("dstardraw") = dstardraw,
-    Named("beta_2_draw") = betadraw,
-    Named("beta_tilde_draw") = beta_tilde_draw,
+    Named("cutoff_Y") = cutdraw,
+    // Named("dstardraw") = dstardraw,
+    Named("beta_2") = betadraw,
+    Named("tau") = taudraw,
     Named("ssq_y_tilde_draw") = ssq_y_tilde_draw,
-    Named("mubeta_2_draw") = mubetadraw,
-    Named("varbeta_2_draw") = varbetadraw
+    Named("mu_draw") = mubeta_2_draw,
+    Named("var_draw") = varbeta_2_draw
   );
 }
 

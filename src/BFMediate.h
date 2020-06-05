@@ -57,16 +57,18 @@ double exp_rs(double a, double b);
 List runiregGibbs_betafix(arma::vec const& y, arma::mat const& X, arma::vec const& betabar, arma::mat const& A, double nu, double ssq,
                           double sigmasq, int R, int keep, int nprint, int betafix);
 
-List rordprobitGibbs_me(arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,
+// List rordprobitGibbs_me
+List YSampler(arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,
                         double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
                         int const& Y_ind,
                         int R, int keep, int nprint,
                         arma::mat olddstar, arma::mat const& old_y_tilde, arma::mat const& old_beta_tilde, arma::vec const& old_ssq_y_tilde, arma::vec const& oldbeta, arma::vec const& oldz);
 
-List MeasurementMCatUnitCpp(arma::vec const& dep,  arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad, arma::mat const& A_2, arma::vec const& betabar_2,
-                            double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
-                            int const& Y_ind,
-                            int R, int keep, int nprint);
+List MSampler(arma::vec const& dep, arma::vec const& beta_2,  arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,
+                          double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
+                          int const& Y_ind,
+                          int R, int keep, int nprint,
+                          arma::mat olddstar, arma::mat const& old_y_tilde, arma::mat const& old_beta_tilde, arma::vec const& old_ssq_y_tilde, arma::vec const& oldbeta, arma::vec const& oldz);
 
 // List rordprobitGibbs_me_M(arma::vec const& dep, arma::vec const& beta_2,  arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,
 //                           double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
