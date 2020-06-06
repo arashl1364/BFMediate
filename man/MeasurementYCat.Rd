@@ -4,7 +4,7 @@
 \alias{MeasurementYCat}
 \title{qwerqw}
 \usage{
-MeasurementYCat(Data, Prior, Mcmc)
+MeasurementYCat(Data, Prior, R = 10000)
 }
 \arguments{
 \item{Data}{qwerqwer}

@@ -12,7 +12,7 @@
 # and the dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
 
 ### Arguments:
-# Data  list(X, m_star, y_star)
+# Data  list(X, m_tilde, y_tilde)
 # Prior list(A_M,A_Y)
 # R
 
@@ -36,10 +36,10 @@
 # y*_l = tau_0l-1 + M + U_y*_l
 # ˜y_l = OrdProbit(y*_l,C_y_l)
 
-## Data = list(X, m_star, y_star)
+## Data = list(X, m_tilde, y_tilde)
 # X(N x 1) treatment variable vector
-# m_star(N x M_ind) mediator indicators' matrix
-# y_star(N x Y_ind) dependent variable indicators' matrix
+# m_tilde(N x M_ind) mediator indicators' matrix
+# y_tilde(N x Y_ind) dependent variable indicators' matrix
 # Prior = list(A_M,A_Y) [optional]
 # A_M vector of coefficients' prior variances of eq.1 (def: rep(100,2))
 # A_Y vector of coefficients' prior variances of eq.2 (def: c(100,100,1))
@@ -53,7 +53,7 @@
 # Each slice is one draw, where rows represent the indicator equation and columns are the coefficients
 # All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively
 # ssq_m_star(R X M_ind) Matrix of mediator indicator equations' coefficients' error variance draws
-# ssq_y_star(R X Y_ind) Matrix of dependent variable indicator equation's coefficients' error variance draws
+# ssq_y_star(R X Y_ind) Matrix of dependent variable indicator equations' coefficients' error variance draws
 # mu_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
 # var_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
 
@@ -69,7 +69,7 @@ MeasurementMYCat=function(Data,Prior,R=10000){    #,Mcmc){
   #   and metropolis RW
   #
   # Arguments:
-  #   Data - list of X,y_star,k_Y
+  #   Data - list of X,y_tilde,k_Y
   #     X is nobs x nvar_Y, y_star is nobs vector of 1,2,.,k_Y (ordinal variable)
   #   Prior - list of A_Y, beta_2_bar
   #     A_Y is nvar_Y x nvar_Y prior preci matrix
@@ -112,9 +112,9 @@ MeasurementMYCat=function(Data,Prior,R=10000){    #,Mcmc){
 
   # compute conditional likelihood of data given cut-offs
   #
-  lldstar=function(dstar_Y,y_star,mu){
+  lldstar=function(dstar_Y,y_tilde,mu){
     gamma=dstartoc(dstar_Y)
-    arg = pnorm(gamma[y_star+1]-mu)-pnorm(gamma[y_star]-mu)
+    arg = pnorm(gamma[y_tilde+1]-mu)-pnorm(gamma[y_tilde]-mu)
     epsilon=1.0e-50
     arg=ifelse(arg < epsilon,epsilon,arg)
     return(sum(log(arg)))
@@ -124,15 +124,15 @@ MeasurementMYCat=function(Data,Prior,R=10000){    #,Mcmc){
   #
   # check arguments
   #
-  if(missing(Data)) {pandterm("Requires Data argument -- list of y_star and X")}
+  if(missing(Data)) {pandterm("Requires Data argument -- list of y_tilde and X")}
   if(is.null(Data$X)) {pandterm("Requires Data element X")}
   X=Data$X
-  if(is.null(Data$y_star)) {pandterm("Requires Data element y_star")}
-  y_star=Data$y_star
+  if(is.null(Data$y_tilde)) {pandterm("Requires Data element y_tilde")}
+  y_tilde=Data$y_tilde
   if(is.null(Data$k_Y)) {pandterm("Requires Data element k_Y")}
   k_Y=Data$k_Y
-  if(is.null(Data$m_star)) {pandterm("Requires Data element m_star")}
-  m_star=Data$m_star
+  if(is.null(Data$m_tilde)) {pandterm("Requires Data element m_tilde")}
+  m_tilde=Data$m_tilde
   if(is.null(Data$k_M)) {pandterm("Requires Data element k_M")}
   k_M=Data$k_M
   if(is.null(Data$M_ind)) {pandterm("Requires Data element M_ind")}
@@ -163,7 +163,7 @@ MeasurementMYCat=function(Data,Prior,R=10000){    #,Mcmc){
 
 
   nvar_Y=ncol(X)+1
-  nobs=dim(y_star)[1]
+  nobs=dim(y_tilde)[1]
   ndstar_Y = k_Y-2         # number of dstar_Y being estimated
   ncuts_Y = k_Y+1          # number of cut-offs (including zero and two ends)
   ncut_Y = ncuts_Y-3       # number of cut-offs being estimated c[1]=-100, c[2]=0, c[k_Y+1]=100
@@ -176,12 +176,12 @@ MeasurementMYCat=function(Data,Prior,R=10000){    #,Mcmc){
   #
   # check data for validity
   #
-  if(dim(y_star)[1] != nrow(X) ) {pandterm("y_star and X not of same row dim")}
-  if(  sum(unique(y_star[,1]) %in% (1:k_Y) ) < length(unique(y_star[,1])) )     #Tests only y_star1 but I really don't care! :D
-  {pandterm("some value of y_star is not vaild")}
-  if(dim(m_star)[1] != nrow(X) ) {pandterm("m_star and X not of same row dim")}
-  if(  sum(unique(m_star[,1]) %in% (1:k_M) ) < length(unique(m_star[,1])) )     #Tests only m_star1 but I really don't care! :D
-  {pandterm("some value of m_star is not vaild")}
+  if(dim(y_tilde)[1] != nrow(X) ) {pandterm("y_tilde and X not of same row dim")}
+  if(  sum(unique(y_tilde[,1]) %in% (1:k_Y) ) < length(unique(y_tilde[,1])) )     #Tests only y_star1 but I really don't care! :D
+  {pandterm("some value of y_tilde is not vaild")}
+  if(dim(m_tilde)[1] != nrow(X) ) {pandterm("m_tilde and X not of same row dim")}
+  if(  sum(unique(m_tilde[,1]) %in% (1:k_M) ) < length(unique(m_tilde[,1])) )     #Tests only m_star1 but I really don't care! :D
+  {pandterm("some value of m_tilde is not vaild")}
 
   #
   # check for Prior
@@ -256,10 +256,10 @@ MeasurementMYCat=function(Data,Prior,R=10000){    #,Mcmc){
   cat("Starting Gibbs Sampler for Ordered Probit Model",fill=TRUE)
   cat("   with ",nobs,"observations",fill=TRUE)
   cat(" ", fill=TRUE)
-  cat("Table of y_star values",fill=TRUE)
-  for(i in 1:Y_ind) print(table(y_star[,i]))
-  cat("Table of m_star values",fill=TRUE)
-  for(i in 1:M_ind) print(table(m_star[,i]))
+  cat("Table of y_tilde values",fill=TRUE)
+  for(i in 1:Y_ind) print(table(y_tilde[,i]))
+  cat("Table of m_tilde values",fill=TRUE)
+  for(i in 1:M_ind) print(table(m_tilde[,i]))
   cat(" ",fill=TRUE)
   cat("Prior Parms: ",fill=TRUE)
   cat("betabar",fill=TRUE)
@@ -289,23 +289,23 @@ MeasurementMYCat=function(Data,Prior,R=10000){    #,Mcmc){
   # use (-Hessian+Ad_M)^(-1) evaluated at betahat as the basis of the
   # covariance matrix for the random walk Metropolis increments
 
-  betahat = chol2inv(chol(crossprod(X,X)))%*% crossprod(X,rowMeans(m_star))
+  betahat = chol2inv(chol(crossprod(X,X)))%*% crossprod(X,rowMeans(m_tilde))
   dstarini = c(cumsum(c( rep(0.1, ndstar_M))))     # set initial value for dstar_M
   dstarout = optim(dstarini, lldstar, method = "BFGS", hessian=T,
                    control = list(fnscale = -1,maxit=500,
-                                  reltol = 1e-06, trace=0), mu=X%*%betahat, y=rowMeans(m_star))
+                                  reltol = 1e-06, trace=0), mu=X%*%betahat, y=rowMeans(m_tilde))
   inc.root_M=chol(chol2inv(chol((-dstarout$hessian+Ad_M))))  # chol((H+Ad_Y)^-1)
 
 
   # use (-Hessian+Ad_Y)^(-1) evaluated at beta_2_hat as the basis of the
   # covariance matrix for the random walk Metropolis increments
 
-  Xmstar=cbind(X[,1],rowMeans(m_star),X[,2])
-  beta_2_hat = chol2inv(chol(crossprod(Xmstar,Xmstar)))%*% crossprod(Xmstar,rowMeans(y_star))
+  Xmstar=cbind(X[,1],rowMeans(m_tilde),X[,2])
+  beta_2_hat = chol2inv(chol(crossprod(Xmstar,Xmstar)))%*% crossprod(Xmstar,rowMeans(y_tilde))
   dstarini = c(cumsum(c( rep(0.1, ndstar_Y))))     # set initial value for dstar_Y
   dstarout = optim(dstarini, lldstar, method = "BFGS", hessian=T,
                    control = list(fnscale = -1,maxit=500,
-                                  reltol = 1e-06, trace=0), mu=Xmstar%*%beta_2_hat, y=rowMeans(y_star))
+                                  reltol = 1e-06, trace=0), mu=Xmstar%*%beta_2_hat, y=rowMeans(y_tilde))
   inc.root_Y=chol(chol2inv(chol((-dstarout$hessian+Ad_Y))))  # chol((H+Ad_Y)^-1)
 
   ###################################################################
@@ -315,7 +315,7 @@ MeasurementMYCat=function(Data,Prior,R=10000){    #,Mcmc){
   # Modified by Arash Laghaie
   # 12/27/2018
   ###################################################################
-  draws= MeasurementMYCatCpp(X, m_star, y_star, k_M, k_Y,M_ind,Y_ind,
+  draws= MeasurementMYCatCpp(X, m_tilde, y_tilde, k_M, k_Y,M_ind,Y_ind,
                                      A_M, betabar, Ad_M, s_M, inc.root_M, dstarbar_M, betahat,
                                      A_Y, beta_2_bar, Ad_Y, s_Y, inc.root_Y, dstarbar_Y, beta_2_hat,
                                      R, keep, nprint)

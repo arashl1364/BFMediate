@@ -4,7 +4,7 @@
 \alias{MeasurementMYCat}
 \title{asdfsaf}
 \usage{
-MeasurementMYCat(Data, Prior, Mcmc)
+MeasurementMYCat(Data, Prior, R = 10000)
 }
 \arguments{
 \item{Data}{asdf}

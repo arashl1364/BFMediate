@@ -4,18 +4,18 @@
 \alias{BFSD}
 \title{BFSD}
 \usage{
-BFSD(Data, post, prior, model, burnin, M)
+BFSD(post, prior = 1, burnin)
 }
 \arguments{
-\item{Data}{Data}
-
 \item{post}{Posterior}
 
 \item{prior}{Prior}
 
-\item{model}{Model}
-
 \item{burnin}{Burnin}
+
+\item{Data}{Data}
+
+\item{model}{Model}
 
 \item{M}{MMMMM}
 }

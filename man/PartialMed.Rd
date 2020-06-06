@@ -4,7 +4,7 @@
 \alias{PartialMed}
 \title{Partial Mediation}
 \usage{
-PartialMed(Data, pars, R)
+PartialMed(Data, pars, R = 10000)
 }
 \arguments{
 \item{Data}{Data}

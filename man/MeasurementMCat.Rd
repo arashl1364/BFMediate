@@ -4,7 +4,7 @@
 \alias{MeasurementMCat}
 \title{asd}
 \usage{
-MeasurementMCat(Data, Prior, Mcmc)
+MeasurementMCat(Data, Prior, R = 10000)
 }
 \arguments{
 \item{Data}{asd}

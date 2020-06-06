@@ -9,7 +9,7 @@
 #'
 Measurement_Cont = function(Data, BF){
   if(missing(BF))
-  { R = 5000; burnin = 3000; A_M = rep(10,2); A_Y = rep(10,3);}
+  { R = 5000; burnin = 3000; A_M = rep(10,2); A_Y = c(10,10,1);}
   else
   {
     if(is.null(BF$R)) {R = 5000}

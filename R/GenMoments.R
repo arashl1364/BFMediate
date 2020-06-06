@@ -35,7 +35,7 @@ GenMoments=function(Data, post, pars, R){
   ##Posterior draws
   lambda = post$lambda
   tau = post$tau
-  Mdraw = ydraw = matrix(double(R*N),ncol = N)
+  # Mdraw = ydraw = matrix(double(R*N),ncol = N)
   beta_0_M = post$beta_0_M
   beta_0_Y = post$beta_0_Y
   beta_1 = post$beta_1;
