@@ -2,7 +2,7 @@
 
 
 
-//EXTRA FUNCTIONS SPECIFIC TO THE MAIN FUNCTION--------------------------------------------
+// Function used in MeasurementMYCat.cpp
 List runiregGibbs_betafix(arma::vec const& y, arma::mat const& X, arma::vec const& betabar, arma::mat const& A, double nu, double ssq,
                           double sigmasq, int R, int keep, int nprint, int betafix) {
 
@@ -54,7 +54,6 @@ List runiregGibbs_betafix(arma::vec const& y, arma::mat const& X, arma::vec cons
     else{
       //first draw beta | sigmasq
       IR = solve(trimatu(chol(XpX/sigmasq+A)), eye(nvar,nvar)); //trimatu interprets the matrix as upper triangular and makes solve more efficient
-      // printf("59");
       btilde = (IR*trans(IR)) * (Xpy/sigmasq+Abetabar);
       beta = btilde + IR*vec(rnorm(nvar));
     }
@@ -81,22 +80,14 @@ List runiregGibbs_betafix(arma::vec const& y, arma::mat const& X, arma::vec cons
 }
 
 
-
-
-
-
-// Function used in Mediation_Ordered_Multi_Merr.cpp
+//in YSampler X is the matrix of (constant, X, M), y is the observed y_tilde, z is the latent Y and y_tilde is the latent y_star
 List YSampler(arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,
                         double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
                         int const& Y_ind,
                         int R, int keep, int nprint,
                         arma::mat olddstar, arma::mat const& old_y_tilde, arma::mat const& old_beta_tilde, arma::vec const& old_ssq_y_tilde, arma::vec const& oldbeta, arma::vec const& oldz){
-  // mat const& cutoff_Y_init){
 
-
-
-
-  int i; //j, mkeep;
+  int i;
 
   List metropout;
 
@@ -152,8 +143,6 @@ List YSampler(arma::mat const& y, arma::mat const& X, int k, arma::mat const& A,
   A_tilde(0,0) = .01;
 
   for(int ind=0; ind<Y_ind; ind++) cutoffs(ind,span::all) = trans(dstartoc(trans(olddstar(ind,span::all))));
-
-  // cutoffs = cutoff_Y_init;      // CHANGE HERE AFTER TEST
 
   //beta moments for bayes factor
   arma::vec mubeta(nvar);
@@ -232,16 +221,14 @@ List YSampler(arma::mat const& y, arma::mat const& X, int k, arma::mat const& A,
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+//in YSampler X is the matrix of (constant, X), y is the observed m_tilde, z is the latent M and y_tilde is the latent m_star
 List MSampler(arma::vec const& dep, arma::vec const& beta_2,  arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,
                           double s, arma::mat const& inc_root, arma::vec const& dstarbar, arma::vec const& betahat,
                           int const& Y_ind,
                           int R, int keep, int nprint,
                           arma::mat olddstar, arma::mat const& old_y_tilde, arma::mat const& old_beta_tilde, arma::vec const& old_ssq_y_tilde, arma::vec const& oldbeta, arma::vec const& oldz){
-  // mat const& cutoff_M_init){
 
-
-  int i;  //, mkeep;
+  int i;
 
   List metropout;
 
@@ -293,8 +280,6 @@ List MSampler(arma::vec const& dep, arma::vec const& beta_2,  arma::mat const& y
   A_tilde(0,0) = .01;
 
   for(int ind=0; ind<Y_ind; ind++) cutoffs(ind,span::all) = trans(dstartoc(trans(olddstar(ind,span::all))));
-
-  // cutoffs = cutoff_M_init;      // CHANGE HERE AFTER TEST
 
   // start main iteration loop
   for (int rep=0; rep<R; rep++){

@@ -1,39 +1,21 @@
 #include "BFMediate.h"
 
-// // [[Rcpp::depends(RcppArmadillo)]]
-// // #include "bayesm.h" //if you include bayesm.h here, you do not need to define functions before calling them
-// #include "RcppArmadillo.h"
-// // #include "rordprobitGibbs_me.cpp"
-// // #include "rordprobitGibbs_me_M.cpp"
-// // #include "rordprobitGibbs_me_MY.cpp"
-// using namespace arma; // use the Armadillo library for matrix computations
-// using namespace Rcpp;
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////            MAIN FUNCTION                  /////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_star, arma::mat const& y_star, int k_M, int k_Y, int M_ind, int Y_ind,     //data
+///////////////////////////////////////////////////////////////////
+///////////////            MAIN FUNCTION          /////////////////
+///////////////////////////////////////////////////////////////////
+// ssq_m_star and ssq_y_star are called ssq_m_tilde and ssq_y_tilde
+List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_tilde, arma::mat const& y_tilde, int k_M, int k_Y, int M_ind, int Y_ind,     //data
                                       arma::mat const& A_M, arma::vec const& betabar, arma::mat const& Ad_M, double s_M, arma::mat const& inc_root_M, arma::vec const& dstarbar_M, arma::vec const& betahat,               //priors_M
                                       arma::mat const& A_Y, arma::vec const& beta_2_bar, arma::mat const& Ad_Y, double s_Y, arma::mat const& inc_root_Y, arma::vec const& dstarbar_Y, arma::vec const& beta_2_hat,         //priors_Y
                                       int R, int keep, int nprint){
-                                      // mat const& cutoff_M_init, mat const& M_tilde_init, vec const& beta_m_tilde_init, vec const& ssq_m_tilde_init, vec const& beta_init, vec const& M_init,                 //inital values_M
-                                      // mat const& cutoff_Y_init, mat const& Y_tilde_init, vec const& beta_y_tilde_init, vec const& ssq_y_tilde_init, vec const& beta_2_init, vec const& Y_init){            //inital values_Y
 
 
   int mkeep;
-  int ny = y_star.n_rows;
+  int ny = y_tilde.n_rows;
 
   int nvar_M = X.n_cols;
   int ncuts_M = k_M+1;
-  // int ncut = ncuts-3;
   int ndstar_M = k_M-2;
 
   arma::mat betadraw(R/keep, nvar_M);
@@ -46,7 +28,6 @@ List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_star, arma::mat 
 
   int nvar_Y = X.n_cols+1;
   int ncuts_Y = k_Y+1;
-  // int ncut = ncuts-3;
   int ndstar_Y = k_Y-2;
 
   arma::mat beta_2_draw(R/keep, nvar_Y);
@@ -66,59 +47,45 @@ List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_star, arma::mat 
   arma::mat XM(ny,nvar_Y);
   XM.col(0).ones();
   XM.col(1) = M;
-  // XM.col(1) = M_init;       ///////// !!! CHANGE here after testing !!! ///////////
   XM.col(2) = X.col(1);
 
   arma::mat olddstar_M(M_ind,ndstar_M);
   olddstar_M.zeros();
   arma::vec oldbeta = betahat;
-  // vec oldbeta = beta_init;        ///////// !!! CHANGE here after testing !!! ///////////
   arma::vec oldz_M = M;
-  // vec oldz_M = M_init;         ///////// !!! CHANGE here after testing !!! ///////////
   arma::mat old_m_tilde(ny, M_ind);
   old_m_tilde.randn();
-  // old_m_tilde = M_tilde_init;        ///////// !!! CHANGE here after testing !!! ///////////
   arma::vec old_ssq_m_tilde(M_ind);
   old_ssq_m_tilde.ones();
-  // old_ssq_m_tilde = ssq_m_tilde_init;     // CHANGE HERE AFTER TEST
   arma::mat old_lambda(M_ind,2);
   old_lambda.col(1).ones();
-  // old_beta_m_tilde.col(0) = beta_m_tilde_init;      // CHANGE HERE AFTER TEST
 
 
   arma::mat olddstar_Y(Y_ind,ndstar_Y);
   olddstar_Y.zeros();
-  // olddstar_Y = dstar_Y_init;
   arma::vec oldbeta_2 = beta_2_hat;
-  // vec oldbeta_2 = beta_2_init;   ///////// !!! CHANGE here after testing !!! ///////////
   arma::vec oldz_Y = randu<vec>(ny);
-  // vec oldz_Y = Y_init;              ///////// !!! CHANGE here after testing !!! ///////////
   arma::mat old_y_tilde(ny, Y_ind);
   old_y_tilde.randn();
-  // old_y_tilde = Y_tilde_init;        ///////// !!! CHANGE here after testing !!! ///////////
   arma::vec old_ssq_y_tilde(Y_ind);
   old_ssq_y_tilde.ones();
-  // old_ssq_y_tilde = ssq_y_tilde_init;     // CHANGE HERE AFTER TEST
   arma::mat old_tau(Y_ind,2);
   old_tau.col(1).ones();
-  // old_beta_y_tilde.col(0) = beta_y_tilde_init;      // CHANGE HERE AFTER TEST
 
   for(int rep=0; rep<R; rep++){
 
 
-    List out_Y =  YSampler(y_star, XM, k_Y, A_Y, beta_2_bar, Ad_Y,
+    List out_Y =  YSampler(y_tilde, XM, k_Y, A_Y, beta_2_bar, Ad_Y,
                                     s_Y, inc_root_Y, dstarbar_Y, beta_2_hat, Y_ind,
                                     1, 1, 1,
                                     olddstar_Y, old_y_tilde, old_tau, old_ssq_y_tilde, oldbeta_2, oldz_Y); //, cutoff_Y_init);
 
-    List out_M =  MSampler(oldz_Y, oldbeta_2, m_star, X, k_M, A_M, betabar, Ad_M,
+    List out_M =  MSampler(oldz_Y, oldbeta_2, m_tilde, X, k_M, A_M, betabar, Ad_M,
                                       s_M, inc_root_M, dstarbar_M, betahat,M_ind,
                                       1, 1, 1,
                                       olddstar_M, old_m_tilde, old_lambda, old_ssq_m_tilde, oldbeta, oldz_M); //, cutoff_M_init);
 
     //updating parameters
-
-    //////// FIXING parameters //////////
     XM.col(1) = as<arma::vec>(out_M["zdraw"]);
     oldz_M = as<arma::vec>(out_M["zdraw"]);
     oldbeta = as<arma::vec>(out_M["betadraw"]);
