@@ -2,20 +2,67 @@
 % Please edit documentation in R/MeasurementMYCat.R
 \name{MeasurementMYCat}
 \alias{MeasurementMYCat}
-\title{asdfsaf}
+\title{MeasurementMYCat}
 \usage{
-MeasurementMYCat(Data, Prior, R = 10000)
+\code{MeasurementMYCat(Data,Prior,R)}
 }
 \arguments{
-\item{Data}{asdf}
+\item{Data}{list(X, m_tilde, y_tilde)}
 
-\item{Prior}{asdf}
+\item{Prior}{list(A_M,A_Y)}
 
-\item{Mcmc}{aasdf}
+\item{R}{number of MCMC iterations, default = 10000}
 }
 \value{
-asd
+\tabular{ll}{
+\code{beta_1(R X 2) } \tab  matrix of eq.1 coefficients' draws \cr
+\code{beta_2(R X 3) } \tab  matrix of eq.2 coefficients' draws \cr
+\code{lambda (M_ind X 2 X R) } \tab array of mediator indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively. \cr
+\code{ssq_m_star(R X M_ind)} \tab  Matrix of mediator indicator equations' coefficients' error variance draws \cr
+\code{ssq_y_star(R X Y_ind) } \tab  Matrix of dependent variable indicator equations' coefficients' error variance draws \cr
+\code{mu_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
+\code{var_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
+}
 }
 \description{
-asdfsaf
+Estimates a partial mediation model with multiple categorical indicator for the mediator and the dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
+}
+\details{
+\subsection{Model}
+\tabular{ll}{
+M = beta_0M + Xbeta_1 + U_M  \tab \emph{[eq.1]} \cr
+Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab \emph{[eq.2]} \cr
+}
+Indicator equations:
+\tabular{lcl}{
+m*_1    \tab = \tab M + U_m*_1 \cr
+˜m_1   \tab = \tab  OrdProbit(m*_1,C_m_1) \cr
+ m*_2     \tab = \tab lambda_01 + M + U_m*_2 \cr
+ ˜m_2  \tab = \tab OrdProbit(m*_2,C_m_2) \cr
+ ... \tab  \tab  \cr
+m*_k   \tab =  \tab lambda_0k-1 + M + U_m*_k \cr
+˜m_k   \tab = \tab OrdProbit(m*_k,C_m_k) \cr
+y*_1   \tab = \tab M + U_y*_1 \cr
+ ˜y_1  \tab = \tab  OrdProbit(y*_1,C_y_1) \cr
+ y*_2    \tab = \tab tau_01 + M + U_y*_2 \cr
+ ˜y_2  \tab = \tab OrdProbit(y*_2,C_y_2) \cr
+ ... \tab  \tab  \cr
+  y*_l   \tab =  \tab tau_0l-1 + M + U_y*_l \cr
+ ˜y_l  \tab = \tab OrdProbit(y*_l,C_y_l) \cr
+}
+
+
+\subsection{Argument Details}
+\code{Data = list(X, m_tilde, y_tilde)}
+\tabular{ll}{
+\code{X(N x 1) } \tab treatment variable vector \cr
+\code{m_tilde(N x M_ind) } \tab ediator indicators' matrix  \cr
+\code{y_tilde(N x Y_ind) } \tab dependent variable indicators' matrix \cr
+}
+
+\code{Prior = list(A_M,A_Y)} \emph{[optional]}
+\tabular{ll}{
+\code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
+\code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr
+}
 }

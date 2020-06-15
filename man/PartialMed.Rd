@@ -2,20 +2,43 @@
 % Please edit documentation in R/PartialMed.R
 \name{PartialMed}
 \alias{PartialMed}
-\title{Partial Mediation}
+\title{PartialMed}
 \usage{
-PartialMed(Data, pars, R = 10000)
+\code{PartialMed(Data, pars, R)}
 }
 \arguments{
-\item{Data}{Data}
+\item{Data}{list(X, M, Y)}
 
-\item{pars}{Parameters}
+\item{pars}{list(A_M,A_Y)}
 
-\item{R}{Dunno what is it}
+\item{R}{number of MCMC iterations, default = 10000}
 }
 \value{
-something
+a list containing
+\tabular{ll}{
+\code{beta_1(R X 2) } \tab  matrix of eq.1 coefficients' posterior draws \cr
+\code{beta_2(R X 3) } \tab  matrix of eq.2 coefficients' posterior draws \cr
+\code{ssq_M(R X 1) } \tab  vector of eq.1 error variance posterior draws \cr
+\code{ssq_Y(R X 1) } \tab  vector of eq.2 error variance posterior draws \cr
+\code{mu_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
+\code{var_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
+}
 }
 \description{
-Partial Mediation
+Estimates a partial mediation model using series of Gibbs Samplers
+}
+\details{
+\subsection{Argument Details}
+\code{Data = list(X, M, Y)}
+\tabular{ll}{
+\code{X(N x 1) } \tab treatment variable vector \cr
+\code{M(N x 1) } \tab mediator vector \cr
+\code{Y(N x 1) } \tab dependent variable vector \cr
+}
+
+\code{pars = list(A_M,A_Y)} \emph{[optional]}
+\tabular{ll}{
+\code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
+\code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr
+}
 }

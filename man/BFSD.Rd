@@ -4,24 +4,18 @@
 \alias{BFSD}
 \title{BFSD}
 \usage{
-BFSD(post, prior = 1, burnin)
+\code{BFSD(post,prior,burnin)}
 }
 \arguments{
-\item{post}{Posterior}
+\item{post}{output from PartialMed or any of measurement models}
 
-\item{prior}{Prior}
+\item{prior}{prior variance of the direct effect}
 
-\item{burnin}{Burnin}
-
-\item{Data}{Data}
-
-\item{model}{Model}
-
-\item{M}{MMMMM}
+\item{burnin}{number of MCMC draws before the posterior is converged, default = R/5}
 }
 \value{
-HAHAHAHA
+log(BF_01), which is the evidence in favor of the full mediation model (see Laghaie and Otter (2020) for guidelines on how to interpret BF_01)
 }
 \description{
-BFSD
+Computes Bayes factors for the partial mediation model using Savage-Dickey approximation
 }

@@ -1,10 +1,38 @@
-#' Partial Mediation
+#' PartialMed
 #'
-#' @param Data Data
-#' @param pars Parameters
-#' @param R Dunno what is it
+#' @description
+#' Estimates a partial mediation model using series of Gibbs Samplers
 #'
-#' @return something
+#' @usage \code{PartialMed(Data, pars, R)}
+
+#'
+#' @param Data list(X, M, Y)
+#' @param pars list(A_M,A_Y)
+#' @param R number of MCMC iterations, default = 10000
+#'
+#' @details
+#' \subsection{Argument Details}
+#' \code{Data = list(X, M, Y)}
+#' \tabular{ll}{
+#' \code{X(N x 1) } \tab treatment variable vector \cr
+#' \code{M(N x 1) } \tab mediator vector \cr
+#' \code{Y(N x 1) } \tab dependent variable vector \cr
+#' }
+#'
+#' \code{pars = list(A_M,A_Y)} \emph{[optional]}
+#' \tabular{ll}{
+#' \code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
+#' \code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr
+#' }
+#' @return a list containing
+#' \tabular{ll}{
+#' \code{beta_1(R X 2) } \tab  matrix of eq.1 coefficients' posterior draws \cr
+#' \code{beta_2(R X 3) } \tab  matrix of eq.2 coefficients' posterior draws \cr
+#' \code{ssq_M(R X 1) } \tab  vector of eq.1 error variance posterior draws \cr
+#' \code{ssq_Y(R X 1) } \tab  vector of eq.2 error variance posterior draws \cr
+#' \code{mu_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
+#' \code{var_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
+#' }
 #' @export
 #'
 #Description PartialMed estimates a partial mediation model using series of Gibbs Samplers
@@ -28,7 +56,6 @@
 # ssq_Y(R X 1) vector of eq.2 error variance posterior draws
 # mu_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
 # var_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
-
 PartialMed=function(Data, pars, R=10000){
 
     #initialization and memory allocation
