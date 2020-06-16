@@ -59,6 +59,15 @@
 #' }
 #' @export
 #'
+### Description MeasurementCont estimates a partial mediation model with multiple categorical indicators for the mediator
+# and the dependent variable using Hamiltonian Monte Carlo (HMC) with Stan
+
+### Arguments:
+# Data  list(X, m_star, y_star)
+# Prior list(A_M,A_Y)
+# R
+# burnin number of MCMC draws before the posterior is converged
+
 ### Details:
 ## Model:
 # M = beta_0M + Xbeta_1 + U_M   (eq.1)
@@ -91,8 +100,8 @@
 # All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively
 # ssq_m_star(R X M_ind) Matrix of mediator indicator equations' coefficients' error variance draws
 # ssq_y_star(R X Y_ind) Matrix of dependent variable indicator equation's coefficients' error variance draws
-# mu_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
-# var_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
+# mu_draw(R X 1) vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
+# var_draw(R X 1) vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
 MeasurementCont = function(Data, Prior, R, burnin){
   if(missing(Prior))
   { A_M = rep(10,2); A_Y = c(10,10,1);}
