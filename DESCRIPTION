@@ -5,6 +5,7 @@ Version: 0.1.0
 Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: The focus is on measuring evidence for (full) mediation using Bayes factors. The package covers models with measurement error and discretization in the mediator (M) and/or the dependent variable. For further details, see the paper, Measuring Evidence for Mediation in the Presence of Measurement Error by Laghaie and Otter (2020).
+Roxygen: list(markdown = TRUE)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

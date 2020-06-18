@@ -4,7 +4,7 @@
 \alias{BFSD}
 \title{Computes Bayes factors for the partial mediation model using Savage-Dickey approximation}
 \usage{
-\code{BFSD(post,prior,burnin)}
+BFSD(post,prior,burnin)
 }
 \arguments{
 \item{post}{output from PartialMed or any of measurement models}

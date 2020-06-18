@@ -3,7 +3,7 @@
 #' @description
 #' Estimates a partial mediation model using series of Gibbs Samplers
 #'
-#' @usage \code{PartialMed(Data, pars, R)}
+#' @usage PartialMed(Data, pars, R)
 
 #'
 #' @param Data list(X, M, Y)
@@ -11,19 +11,23 @@
 #' @param R number of MCMC iterations, default = 10000
 #'
 #' @details
-#' \subsection{Argument Details}
+#' *Argument Details*
+#'
 #' \code{Data = list(X, M, Y)}
+#'
 #' \tabular{ll}{
 #' \code{X(N x 1) } \tab treatment variable vector \cr
 #' \code{M(N x 1) } \tab mediator vector \cr
 #' \code{Y(N x 1) } \tab dependent variable vector \cr
 #' }
 #'
-#' \code{pars = list(A_M,A_Y)} \emph{[optional]}
+#' \code{pars = list(A_M,A_Y)} *[optional]*
+#'
 #' \tabular{ll}{
 #' \code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
 #' \code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr
 #' }
+#'
 #' @return a list containing
 #' \tabular{ll}{
 #' \code{beta_1(R X 2) } \tab  matrix of eq.1 coefficients' posterior draws \cr

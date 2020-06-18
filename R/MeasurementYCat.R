@@ -3,19 +3,22 @@
 #' @description
 #' Estimates a partial mediation model with multiple categorical indicator for the dependent variable
 #'
-#' @usage \code{MeasurementYCat(Data,Prior,R)}
+#' @usage MeasurementYCat(Data,Prior,R)
 #'
 #' @param Data list(X, M, y_star)
 #' @param Prior list(A_M,A_Y)
 #' @param R number of MCMC iterations, default = 10000
 #'
 #' @details
-#' \subsection{Model}
+#' *Model*
+#'
 #' \tabular{ll}{
-#' M = beta_0M + Xbeta_1 + U_M  \tab \emph{[eq.1]} \cr
-#' Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab \emph{[eq.2]} \cr
+#' M = beta_0M + Xbeta_1 + U_M  \tab [eq.1] \cr
+#' Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab [eq.2] \cr
 #' }
+#'
 #' Indicator equations:
+#'
 #' \tabular{lcl}{
 #' y*_1   \tab = \tab M + U_y*_1 \cr
 #'  ˜y_1  \tab = \tab  OrdProbit(y*_1,C_y_1) \cr
@@ -27,15 +30,18 @@
 #' }
 #'
 #'
-#' \subsection{Argument Details}
+#' *Argument Details*
+#'
 #' \code{Data = list(X, M, y_star)}
+#'
 #' \tabular{ll}{
 #' \code{X(N x 1) } \tab treatment variable vector \cr
 #' \code{M(N x 1) } \tab mediator vector  \cr
 #' \code{y_star(N x Y_ind) } \tab dependent variable indicators' matrix \cr
 #' }
 #'
-#' \code{Prior = list(A_M,A_Y)} \emph{[optional]}
+#' \code{Prior = list(A_M,A_Y)} *[optional]*
+#'
 #' \tabular{ll}{
 #' \code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
 #' \code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr

@@ -3,7 +3,7 @@
 #' @description
 #' Computes Bayes factors for the partial mediation model using Savage-Dickey approximation
 #'
-#' @usage \code{BFSD(post,prior,burnin)}
+#' @usage BFSD(post,prior,burnin)
 #'
 #' @param post  output from PartialMed or any of measurement models
 #' @param prior  prior variance of the direct effect

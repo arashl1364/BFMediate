@@ -4,7 +4,7 @@
 \alias{MeasurementMCat}
 \title{Estimates a partial mediation model with multiple categorical indicator for the mediator and observed dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling}
 \usage{
-\code{MeasurementMCat(Data,Prior,R)}
+MeasurementMCat(Data,Prior,R)
 }
 \arguments{
 \item{Data}{list(X, m_star, Y)}
@@ -28,32 +28,36 @@
 Estimates a partial mediation model with multiple categorical indicator for the mediator and observed dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
 }
 \details{
-\subsection{Model}
+\emph{Model}
 \tabular{ll}{
-M = beta_0M + Xbeta_1 + U_M  \tab \emph{[eq.1]} \cr
-Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab \emph{[eq.2]} \cr
+M = beta_0M + Xbeta_1 + U_M  \tab \emph{\link{eq.1}} \cr
+Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab \emph{\link{eq.2}} \cr
 }
+
 Indicator equations:
+
 \tabular{lcl}{
- m*_1   \tab = \tab M + U_m*_1 \cr
- ˜m_1 \tab = \tab  OrdProbit(m*_1,C_m_1) \cr
- m*_2   \tab = \tab lambda_01 + M + U_m*_2 \cr
-  ˜m_2   \tab = \tab OrdProbit(m*_2,C_m_2) \cr
- ... \tab  \tab  \cr
-  m*_k  \tab =  \tab lambda_0k-1 + M + U_m*_k \cr
- ˜m_k \tab = \tab  OrdProbit(m*_k,C_m_k) \cr
+m*_1   \tab = \tab M + U_m*_1 \cr
+˜m_1 \tab = \tab  OrdProbit(m*_1,C_m_1) \cr
+m*_2   \tab = \tab lambda_01 + M + U_m*_2 \cr
+˜m_2   \tab = \tab OrdProbit(m*_2,C_m_2) \cr
+... \tab  \tab  \cr
+m*_k  \tab =  \tab lambda_0k-1 + M + U_m*_k \cr
+˜m_k \tab = \tab  OrdProbit(m*_k,C_m_k) \cr
 }
 
+\emph{Argument Details}
 
-\subsection{Argument Details}
 \code{Data = list(X, m_star, Y)}
+
 \tabular{ll}{
 \code{X(N x 1) } \tab treatment variable vector \cr
 \code{m_star(N x M_ind) } \tab mediator indicators' matrix \cr
 \code{Y(N x 1) } \tab dependent variable vector \cr
 }
 
-\code{Prior = list(A_M,A_Y)} \emph{[optional]}
+\code{Prior = list(A_M,A_Y)} \emph{\link{optional}}
+
 \tabular{ll}{
 \code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
 \code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr

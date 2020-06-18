@@ -4,7 +4,7 @@
 \alias{BFMediate}
 \title{Etimates different mediation models and computes Bayes factors to test full mediation in them}
 \usage{
-\code{BFMediate(Data, Model, Prior, R, burnin)}
+BFMediate(Data, Model, Prior, R, burnin)
 }
 \arguments{
 \item{Data}{list(X, M, Y) for "Simple", list(X, m_star, y_star) for "Cont", list(X, m_tilde, Y) for "MCat", list(X, M, y_tilde) for "YCat", and list(X, m_tilde, y_tilde) for "MYCat"}
@@ -18,27 +18,34 @@
 \item{burnin}{number of MCMC draws before the posterior is converged}
 }
 \value{
-\code{BK = list(eq1, eq2, Indirect_se, FullMed)} [only for "Simple"!]
+\code{BK = list(eq1, eq2, Indirect_se, FullMed)} (only for "Simple"!)
+
 \tabular{ll}{
 eq1 \tab the summary of the eq.1 regression \cr
 eq2 \tab the summary of the eq.2 regression \cr
 Indirect_se \tab the standard error of the indirect effect a la Sobel(1982) \cr
 FullMed \tab the significance test result for the direct effect \cr
 }
+
 \code{PH = list(Indirect_mean, Indirect_CI, Direct_CI)}
+
 \tabular{ll}{
 Indirect_mean \tab  the bootstrapped mean of the indirect effect \cr
 Indirect_CI \tab  the bootstrapped 95\% confidence interval of the indirect effect \cr
 Direct_CI \tab  the bootstrapped 95\% confidence interval of the direct effect \cr
 }
-\code{list(evidence, Indirect_CI, Direct_CI, BF,...)} [For all the models]
+
+\code{list(evidence, Indirect_CI, Direct_CI, BF,...)} (For all the models)
+
 \tabular{ll}{
-evidence is the interpretation of the BF in terms of evidence in favor of full mediation according to Kass and Raftery (1995) \cr
-Indirect_CI is the Bayesian 95% HDI (confidence interval) of the indirect effect \cr
-Direct_CI is the Bayesian 95% HDI (confidence interval) of the direct effect \cr
-BF is the Bayes factor(BF_01) of the corresponding model (see Laghaie and Otter (2020))
+\code{evidence} \tab interpretation of the BF in terms of evidence in favor of full mediation according to Kass and Raftery (1995) \cr
+\code{Indirect_CI} \tab the Bayesian 95\% HDI (confidence interval) of the indirect effect \cr
+\code{Direct_CI} \tab the Bayesian 95\% HDI (confidence interval) of the direct effect \cr
+\code{BF} \tab the Bayes factor(BF_01) of the corresponding model (see Laghaie and Otter (2020))
 }
+
 For the rest of the values, see
+
 \tabular{l}{
 \link[BFMediate]{PartialMed} fpr "Simple" \cr
 \link[BFMediate]{MeasurementCont} for "Cont" \cr
@@ -51,7 +58,8 @@ For the rest of the values, see
 Etimates different mediation models and computes Bayes factors to test full mediation in them
 }
 \details{
-\subsection{Model}
+\emph{Model}
+
 \tabular{l}{
 For Data arguments and Models, see \cr
 \link[BFMediate]{PartialMed} fpr "Simple" \cr
@@ -61,7 +69,8 @@ For Data arguments and Models, see \cr
 \link[BFMediate]{MeasurementMYCat} for "MYCat" \cr
 }
 
-\code{Prior = list(A_M,A_Y) }  \emph{[optional]}
+\code{Prior = list(A_M,A_Y) }  \emph{\link{optional}}
+
 \tabular{ll}{
 \code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
 \code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr

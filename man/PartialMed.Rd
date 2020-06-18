@@ -4,7 +4,7 @@
 \alias{PartialMed}
 \title{Estimates a partial mediation model using series of Gibbs Samplers}
 \usage{
-\code{PartialMed(Data, pars, R)}
+PartialMed(Data, pars, R)
 }
 \arguments{
 \item{Data}{list(X, M, Y)}
@@ -28,15 +28,18 @@ a list containing
 Estimates a partial mediation model using series of Gibbs Samplers
 }
 \details{
-\subsection{Argument Details}
+\emph{Argument Details}
+
 \code{Data = list(X, M, Y)}
+
 \tabular{ll}{
 \code{X(N x 1) } \tab treatment variable vector \cr
 \code{M(N x 1) } \tab mediator vector \cr
 \code{Y(N x 1) } \tab dependent variable vector \cr
 }
 
-\code{pars = list(A_M,A_Y)} \emph{[optional]}
+\code{pars = list(A_M,A_Y)} \emph{\link{optional}}
+
 \tabular{ll}{
 \code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
 \code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr

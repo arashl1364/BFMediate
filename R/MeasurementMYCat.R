@@ -3,19 +3,21 @@
 #' @description
 #' Estimates a partial mediation model with multiple categorical indicator for the mediator and the dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
 #'
-#' @usage \code{MeasurementMYCat(Data,Prior,R)}
+#' @usage MeasurementMYCat(Data,Prior,R)
 #'
 #' @param Data list(X, m_tilde, y_tilde)
 #' @param Prior list(A_M,A_Y)
 #' @param R number of MCMC iterations, default = 10000
 #'
 #' @details
-#' \subsection{Model}
+#' *Model*
 #' \tabular{ll}{
-#' M = beta_0M + Xbeta_1 + U_M  \tab \emph{[eq.1]} \cr
-#' Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab \emph{[eq.2]} \cr
+#' M = beta_0M + Xbeta_1 + U_M  \tab [eq.1] \cr
+#' Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab [eq.2] \cr
 #' }
+#'
 #' Indicator equations:
+#'
 #' \tabular{lcl}{
 #' m*_1    \tab = \tab M + U_m*_1 \cr
 #' ˜m_1   \tab = \tab  OrdProbit(m*_1,C_m_1) \cr
@@ -34,15 +36,18 @@
 #' }
 #'
 #'
-#' \subsection{Argument Details}
+#' *Argument Details*
+#'
 #' \code{Data = list(X, m_tilde, y_tilde)}
+#'
 #' \tabular{ll}{
 #' \code{X(N x 1) } \tab treatment variable vector \cr
 #' \code{m_tilde(N x M_ind) } \tab ediator indicators' matrix  \cr
 #' \code{y_tilde(N x Y_ind) } \tab dependent variable indicators' matrix \cr
 #' }
 #'
-#' \code{Prior = list(A_M,A_Y)} \emph{[optional]}
+#' \code{Prior = list(A_M,A_Y)} *[optional]*
+#'
 #' \tabular{ll}{
 #' \code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
 #' \code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr
