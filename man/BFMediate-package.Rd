@@ -4,9 +4,8 @@
 \name{BFMediate-package}
 \alias{BFMediate}
 \alias{BFMediate-package}
-\title{BFMediate: What the Package Does (Title Case)}
+\title{BFMediate: Mediation Analysis Using a Combination of Bayesian Estimation Methods, Latent Variable Models, and Bayes Factors}
 \description{
-More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+The focus is on measuring evidence for (full) mediation using Bayes factors. The package covers models with measurement error and discretization in the mediator (M) and/or the dependent variable. For further details, see the paper, Measuring Evidence for Mediation in the Presence of Measurement Error by Laghaie and Otter (2020).
 }
 \keyword{internal}

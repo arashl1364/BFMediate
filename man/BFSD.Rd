@@ -2,7 +2,7 @@
 % Please edit documentation in R/BFSD.R
 \name{BFSD}
 \alias{BFSD}
-\title{BFSD}
+\title{Computes Bayes factors for the partial mediation model using Savage-Dickey approximation}
 \usage{
 \code{BFSD(post,prior,burnin)}
 }

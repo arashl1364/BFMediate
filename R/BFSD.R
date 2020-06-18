@@ -1,4 +1,4 @@
-#' BFSD
+#' Computes Bayes factors for the partial mediation model using Savage-Dickey approximation
 #'
 #' @description
 #' Computes Bayes factors for the partial mediation model using Savage-Dickey approximation
