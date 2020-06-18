@@ -1,4 +1,4 @@
-#' MeasurementYCat
+#' Estimates a partial mediation model with multiple categorical indicator for the dependent variable
 #'
 #' @description
 #' Estimates a partial mediation model with multiple categorical indicator for the dependent variable

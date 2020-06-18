@@ -2,7 +2,7 @@
 % Please edit documentation in R/MeasurementCont.R
 \name{MeasurementCont}
 \alias{MeasurementCont}
-\title{MeasurementCont}
+\title{Estimates a partial mediation model with multiple categorical indicators for the mediator and the dependent variable using Hamiltonian Monte Carlo (HMC) with Stan}
 \usage{
 \code{MeasurementCont(Data, Prior, R, burnin)}
 }
@@ -25,7 +25,7 @@
 }
 }
 \description{
-No description yet
+Estimates a partial mediation model with multiple categorical indicators for the mediator and the dependent variable using Hamiltonian Monte Carlo (HMC) with Stan
 }
 \details{
 \subsection{Model}

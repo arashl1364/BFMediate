@@ -1,6 +1,6 @@
-#' MeasurementCont
+#' Estimates a partial mediation model with multiple categorical indicators for the mediator and the dependent variable using Hamiltonian Monte Carlo (HMC) with Stan
 #'
-#' @description No description yet
+#' @description Estimates a partial mediation model with multiple categorical indicators for the mediator and the dependent variable using Hamiltonian Monte Carlo (HMC) with Stan
 #'
 #' @usage \code{MeasurementCont(Data, Prior, R, burnin)}
 #'

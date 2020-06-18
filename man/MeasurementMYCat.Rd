@@ -2,7 +2,7 @@
 % Please edit documentation in R/MeasurementMYCat.R
 \name{MeasurementMYCat}
 \alias{MeasurementMYCat}
-\title{MeasurementMYCat}
+\title{Estimates a partial mediation model with multiple categorical indicator for the mediator and the dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling}
 \usage{
 \code{MeasurementMYCat(Data,Prior,R)}
 }

@@ -1,13 +1,3 @@
-#' Title
-#'
-#' @param Data asdf
-#' @param post asdf
-#' @param pars asdf
-#' @param R asdf
-#'
-#' @return asdf
-#' @export
-#'
 GenMoments=function(Data, post, pars, R){
   #Moment generator (and augmentation of M) of a latent mediation effect when there is a measurement error
   #and direct effect. Get the stan posterior as input and gives M and moments as output for BF computation

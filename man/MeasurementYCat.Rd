@@ -2,7 +2,7 @@
 % Please edit documentation in R/MeasurementYCat.R
 \name{MeasurementYCat}
 \alias{MeasurementYCat}
-\title{MeasurementYCat}
+\title{Estimates a partial mediation model with multiple categorical indicator for the dependent variable}
 \usage{
 \code{MeasurementYCat(Data,Prior,R)}
 }

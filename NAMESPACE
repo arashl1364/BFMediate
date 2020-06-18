@@ -2,7 +2,6 @@
 
 export(BFMediate)
 export(BFSD)
-export(GenMoments)
 export(MeasurementCont)
 export(MeasurementMCat)
 export(MeasurementMYCat)

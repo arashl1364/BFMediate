@@ -1,4 +1,4 @@
-#' PartialMed
+#' Estimates a partial mediation model using series of Gibbs Samplers
 #'
 #' @description
 #' Estimates a partial mediation model using series of Gibbs Samplers

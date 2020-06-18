@@ -1,4 +1,4 @@
-#' MeasurementMCat
+#' Estimates a partial mediation model with multiple categorical indicator for the mediator and observed dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
 #'
 #' @description
 #' Estimates a partial mediation model with multiple categorical indicator for the mediator and observed dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling

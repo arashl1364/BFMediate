@@ -2,7 +2,7 @@
 % Please edit documentation in R/MeasurementMCat.R
 \name{MeasurementMCat}
 \alias{MeasurementMCat}
-\title{MeasurementMCat}
+\title{Estimates a partial mediation model with multiple categorical indicator for the mediator and observed dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling}
 \usage{
 \code{MeasurementMCat(Data,Prior,R)}
 }

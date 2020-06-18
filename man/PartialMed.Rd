@@ -2,7 +2,7 @@
 % Please edit documentation in R/PartialMed.R
 \name{PartialMed}
 \alias{PartialMed}
-\title{PartialMed}
+\title{Estimates a partial mediation model using series of Gibbs Samplers}
 \usage{
 \code{PartialMed(Data, pars, R)}
 }
