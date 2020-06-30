@@ -2,7 +2,7 @@
 % Please edit documentation in R/BFSD.R
 \name{BFSD}
 \alias{BFSD}
-\title{Bayes factor for full mediation}
+\title{Computes Bayes factors for the partial mediation model using Savage-Dickey approximation}
 \usage{
 BFSD(post,prior,burnin)
 }
@@ -18,16 +18,4 @@ log(BF_01), which is the evidence in favor of the full mediation model (see Lagh
 }
 \description{
 Computes Bayes factors for the partial mediation model using Savage-Dickey approximation
-}
-\examples{
-# Estimation
-A_M = c(100,100);    # Prior variance for beta_0M, beta_1
-A_Y = c(100,100,1)   # Prior variance for beta_0Y, beta_2, beta_3
-R = 2000
-out = PartialMed(Data=Data, pars = list(A_M=A_M, A_Y=A_Y), R = R)
-#Computing Bayes factor
-BFPartialMed = exp(BFSD(post = out , prior = A_Y[3], burnin = R/5))
-}
-\seealso{
-For simulating data from simple mediation model see \link[BFMediate]{PartialMed}
 }

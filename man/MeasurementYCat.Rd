@@ -2,7 +2,7 @@
 % Please edit documentation in R/MeasurementYCat.R
 \name{MeasurementYCat}
 \alias{MeasurementYCat}
-\title{Sampler for Partial Mediation Model with Multiple Categorical Indicator for the DV}
+\title{Estimates a partial mediation model with multiple categorical indicator for the dependent variable}
 \usage{
 MeasurementYCat(Data,Prior,R)
 }
@@ -63,53 +63,4 @@ y*_l   \tab =  \tab tau_0l-1 + M + U_y*_l \cr
 \code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
 \code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr
 }
-}
-\examples{
-SimMeasurementYCat = function(X, beta_1, beta_2, sigma_M, cutoff_Y, Y_ind, beta_y_tilde, ssq_y_tilde){
-
-  nobs = dim(X)[1]
-  y_star = y_tilde = matrix(double(nobs*Y_ind), ncol = Y_ind)
-
-  M = beta_1[1] + beta_1[2] * X + rnorm(nobs) * sigma_M   #cbind(rep(1,nobs),X)\%*\%beta_1 + rnorm(nobs)
-  Y = beta_2[1] + beta_2[2] * M + beta_2[3] * X + rnorm(nobs)
-                                                 #cbind(rep(1,nobs),cbind(M,X))\%*\%beta_2 + rnorm(nobs)
-
-  for(i in 1: Y_ind){
-    y_tilde[,i] = beta_y_tilde[i] + Y + sqrt(ssq_y_tilde[i])*rnorm(nobs);
-    y_star[,i] = cut(y_tilde[,i], br = cutoff_Y[i,], right=TRUE, include.lowest = TRUE, labels = FALSE)
-  }
-
-  return(list(Y = Y, M = M, y_star = y_star, X = X,
-              beta_1 = beta_1,
-              k_Y=dim(cutoff_Y)[2]-1, beta_2 = beta_2, beta_y_tilde = beta_y_tilde, ssq_y_tilde = ssq_y_tilde,
-                    y_tilde = y_tilde, cutoff_Y = cutoff_Y, Y_ind=Y_ind))
-}
-
-Y_ind = 2
-Ycut = 8
-nobs = 5000
-X=as.matrix(runif(nobs,min=0, max=1))
-beta_1 = c(.5,1)
-beta_2 = c(1, 4, 2)
-sigma_M = 1^.5
-ssq_y_tilde = c(.5,.7)
-beta_y_tilde = c(0,-.5)   #first intercept should always be 0
-cutoff_Y =  matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
-                     -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Ycut, byrow = T)
-DataYCat = SimMeasurementYCat(X, beta_1, beta_2, sigma_M, cutoff_Y, Y_ind, beta_y_tilde, ssq_y_tilde)
-
-#estimation
-A_M = c(100,100); #Prior variance for beta_0M, beta_1
-A_Y = c(100,100,100) #Prior variance for beta_0Y, beta_2, beta_3
-Prior = list(A_M = A_M, A_Y = A_Y)
-Ycut = max(as.matrix(DataYCat$y_star)[,1]) +1
-Data = list(X=cbind(rep(1,length(DataYCat$X)),DataYCat$M,DataYCat$X), y = as.matrix(DataYCat$y_star),
-           k=Ycut-1, Y_ind=dim(as.matrix(DataYCat$y_star))[2])
-# Mcmc=list(R=10000)
-out = MeasurementYCat(Data=Data, Prior=prior, R=10000) #Mcmc=Mcmc)
-
-#results
-colMeans(out$beta_1)
-colMeans(out$beta_2)
-apply(out$cutoff_Y,c(1,2),FUN = mean)
 }
