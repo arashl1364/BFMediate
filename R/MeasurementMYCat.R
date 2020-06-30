@@ -1,5 +1,4 @@
-#' Estimates a partial mediation model with multiple categorical indicator for the mediator and the dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
-#'
+#' Sampler for Partial Mediation Model with Multiple Categorical Indicator for the Mediator and DV
 #' @description
 #' Estimates a partial mediation model with multiple categorical indicator for the mediator and the dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
 #'
@@ -64,6 +63,69 @@
 #' \code{var_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
 #' }
 #' @export
+#' @examples
+#' SimMeasurementMYCat = function(X, beta_1, cutoff_M, beta_2, cutoff_Y, M_ind, Y_ind, beta_m_tilde,
+#'                                beta_y_tilde, ssq_m_tilde, ssq_y_tilde){
+#'
+#' nobs = dim(X)[1]
+#' m_star = m_tilde = matrix(double(nobs*M_ind), ncol = M_ind)
+#' y_star = y_tilde = matrix(double(nobs*Y_ind), ncol = Y_ind)
+#'
+#' M = cbind(rep(1,nobs),X)%*%beta_1 + rnorm(nobs)
+#' for(i in 1: M_ind){
+#'   m_tilde[,i] = beta_m_tilde[i] + M + sqrt(ssq_m_tilde[i])*rnorm(nobs);
+#'   m_star[,i] = cut(m_tilde[,i], br = cutoff_M[i,], right=TRUE, include.lowest = TRUE, labels = FALSE)
+#' }
+#'
+#' Y = cbind(rep(1,nobs),cbind(M,X))%*%beta_2 + rnorm(nobs)
+#' for(i in 1: Y_ind){
+#'   y_tilde[,i] = beta_y_tilde[i] + Y + sqrt(ssq_y_tilde[i])*rnorm(nobs);
+#'   y_star[,i] = cut(y_tilde[,i], br = cutoff_Y[i,], right=TRUE, include.lowest = TRUE, labels = FALSE)
+#' }
+#'
+#' return(list(Y = Y, M = M, y_star = y_star, m_star = m_star, X = X,
+#'             k_M=dim(cutoff_M)[2]-1, beta_1 = beta_1, beta_m_tilde = beta_m_tilde,
+#'                   ssq_m_tilde = ssq_m_tilde, m_tilde = m_tilde, cutoff_M = cutoff_M,
+#'                   k_Y=dim(cutoff_Y)[2]-1, beta_2 = beta_2, beta_y_tilde = beta_y_tilde,
+#'                   ssq_y_tilde = ssq_y_tilde, y_tilde = y_tilde, cutoff_Y = cutoff_Y,
+#'                   M_ind=M_ind, Y_ind=Y_ind))
+#' }
+#'
+#' M_ind = 2
+#' Y_ind = 2
+#' Mcut = Ycut = 8
+#' nobs=500
+#' X=as.matrix(runif(nobs,min=0, max=1))
+#' beta_1 = c(.5,1)
+#' beta_2 = c(.7, 1.5, 0)
+#' ssq_m_tilde = c(.5,.3)
+#' beta_m_tilde = c(0,-.5) #the intercepts for the latent M indicators w. measurement error
+#' ssq_y_tilde = c(.2,.2)
+#' beta_y_tilde = c(0,-.5)
+#' cutoff_M = matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
+#'                     -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Mcut, byrow = T)
+#' cutoff_Y =  matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
+#'                      -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Ycut, byrow = T)
+#' DataMYCat = SimMeasurementMYCat(X, beta_1, cutoff_M, beta_2, cutoff_Y, M_ind, Y_ind, beta_m_tilde,
+#'                                 beta_y_tilde, ssq_m_tilde, ssq_y_tilde)
+#'
+#'
+#' #estimation
+#' Mcut = max(DataMYCat$m_star) + 1
+#' Ycut = max(DataMYCat$y_star) + 1
+#' Data = list(X=cbind(rep(1,length(DataMYCat$X)),DataMYCat$X), m_star=as.matrix(DataMYCat$m_star),
+#'             y_star=as.matrix(DataMYCat$y_star), k_M = Mcut-1, k_Y=Ycut-1,
+#'             M_ind=dim(as.matrix(DataMYCat$m_star))[2], Y_ind=dim(as.matrix(DataMYCat$y_star))[2])
+#' # Mcmc = list(R=10000)
+#' out = MeasurementMYCat(Data=Data,R = 10000) # Mcmc=Mcmc)
+#'
+#' #results
+#' colMeans(out$beta_1)
+#' colMeans(out$beta_2)
+#'
+#' apply(out$cutoff_M,c(1,2),FUN = mean)
+#' apply(out$cutoff_Y,c(1,2),FUN = mean)
+#'
 #'
 ### Description MeasurementMYCat estimates a partial mediation model with multiple categorical indicator for the mediator
 # and the dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling

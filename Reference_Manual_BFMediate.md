@@ -1,0 +1,47 @@
+
+
+<!-- toc -->
+
+June 30, 2020
+
+# DESCRIPTION
+
+```
+Package: BFMediate
+Type: Package
+Title:  Mediation Analysis Using a Combination of Bayesian Estimation Methods, Latent Variable Models, and Bayes Factors
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: The focus is on measuring evidence for (full) mediation using Bayes factors. The package covers models with measurement error and discretization in the mediator (M) and/or the dependent variable. For further details, see the paper, Measuring Evidence for Mediation in the Presence of Measurement Error by Laghaie and Otter (2020).
+Roxygen: list(markdown = TRUE)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.0
+LinkingTo: 
+    BH (>= 1.66.0),
+    Rcpp (>= 0.12.0),
+    RcppArmadillo,
+    RcppEigen (>= 0.3.3.3.0),
+    rstan (>= 2.18.1),
+    StanHeaders (>= 2.18.0)
+Imports: 
+    methods,
+    Rcpp (>= 0.12.0),
+    rstan (>= 2.18.1),
+    rstantools (>= 2.0.0)
+Biarch: true
+Depends: 
+    R (>= 3.4.0)
+SystemRequirements: GNU make```
+
+
+# `BFMediate-package`: BFMediate: Mediation Analysis Using a Combination of Bayesian Estimation Methods, Latent Variable Models, and Bayes Factors
+
+## Description
+
+
+ The focus is on measuring evidence for (full) mediation using Bayes factors. The package covers models with measurement error and discretization in the mediator (M) and/or the dependent variable. For further details, see the paper, Measuring Evidence for Mediation in the Presence of Measurement Error by Laghaie and Otter (2020).
+
+
