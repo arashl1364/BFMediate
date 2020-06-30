@@ -11,31 +11,31 @@
 #' @param R number of MCMC iterations, default = 10000
 #'
 #' @details
-#' ## Argument Details
+#' *Argument Details*
 #'
-#' ## \code{Data = list(X, M, Y)}
+#' \code{Data = list(X, M, Y)}
 #'
-#' \describe{
-#' \item{X(N x 1) }{treatment variable vector}
-#' \item{M(N x 1) }{mediator vector}
-#' \item{Y(N x 1) }{dependent variable vector}
+#' \tabular{ll}{
+#' \code{X(N x 1) } \tab treatment variable vector \cr
+#' \code{M(N x 1) } \tab mediator vector \cr
+#' \code{Y(N x 1) } \tab dependent variable vector \cr
 #' }
 #'
-#' ## \code{pars = list(A_M,A_Y)} \[optional\]
+#' \code{pars = list(A_M,A_Y)} *[optional]*
 #'
-#' \describe{
-#' \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
-#' \item{A_Y}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
+#' \tabular{ll}{
+#' \code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
+#' \code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr
 #' }
 #'
 #' @return a list containing
-#' \describe{
-#' \item{beta_1(R X 2)}{matrix of eq.1 coefficients' posterior draws}
-#' \item{beta_2(R X 3)}{matrix of eq.2 coefficients' posterior draws}
-#' \item{ssq_M(R X 1)}{vector of eq.1 error variance posterior draws}
-#' \item{ssq_Y(R X 1)}{vector of eq.2 error variance posterior draws}
-#' \item{mu_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
-#' \item{var_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
+#' \tabular{ll}{
+#' \code{beta_1(R X 2) } \tab  matrix of eq.1 coefficients' posterior draws \cr
+#' \code{beta_2(R X 3) } \tab  matrix of eq.2 coefficients' posterior draws \cr
+#' \code{ssq_M(R X 1) } \tab  vector of eq.1 error variance posterior draws \cr
+#' \code{ssq_Y(R X 1) } \tab  vector of eq.2 error variance posterior draws \cr
+#' \code{mu_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
+#' \code{var_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
 #' }
 #' @export
 #' @examples
