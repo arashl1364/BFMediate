@@ -9,11 +9,11 @@
 #' @param R number of MCMC iterations, default = 10000
 #'
 #' @details
-#' *Model*
+#' ## Model
 #'
 #' \tabular{ll}{
-#' M = beta_0M + Xbeta_1 + U_M  \tab [eq.1] \cr
-#' Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab [eq.2] \cr
+#' M = beta_0M + Xbeta_1 + U_M  \tab \[eq.1\] \cr
+#' Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab \[eq.2\] \cr
 #' }
 #'
 #' Indicator equations:
@@ -29,32 +29,35 @@
 #' }
 #'
 #'
-#' *Argument Details*
-#'
-#' \code{Data = list(X, M, y_star)}
-#'
-#' \tabular{ll}{
-#' \code{X(N x 1) } \tab treatment variable vector \cr
-#' \code{M(N x 1) } \tab mediator vector  \cr
-#' \code{y_star(N x Y_ind) } \tab dependent variable indicators' matrix \cr
+#' ## Argument Details
+#' \describe{
+#'   \item{}{}
+#'   \item{}{}
+#'   \item{}{}
 #' }
 #'
-#' \code{Prior = list(A_M,A_Y)} *[optional]*
+#' ## \code{Data = list(X, M, y_star)}
+#' \describe{
+#'   \item{X(N x 1)}{treatment variable vector}
+#'   \item{M(N x 1)}{mediator vector}
+#'   \item{y_star(N x Y_ind)}{dependent variable indicators' matrix}
+#' }
 #'
-#' \tabular{ll}{
-#' \code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
-#' \code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr
+#' ## \code{Prior = list(A_M,A_Y)} \[optional\]
+#' \describe{
+#'   \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
+#'   \item{A_Y}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
 #' }
 #'
 #' @return
-#' \tabular{ll}{
-#' \code{beta_1(R X 2) } \tab  matrix of eq.1 coefficients' draws \cr
-#' \code{beta_2(R X 3) } \tab  matrix of eq.2 coefficients' draws \cr
-#' \code{tau (Y_ind X 2 X R) } \tab array of indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively. \cr
-#' \code{ssq_y_star(R X Y_ind) } \tab  Matrix of indicator equations' coefficients' error variance draws \cr
-#' \code{ssq_M(R X 1) } \tab  vector of eq.1 error variance draws \cr
-#' \code{mu_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
-#' \code{var_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
+#' \describe{
+#' \item{beta_1(R X 2)}{matrix of eq.1 coefficients' draws }
+#' \item{beta_2(R X 3)}{matrix of eq.2 coefficients' draws }
+#' \item{tau(Y_ind X 2 X R)}{array of indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively. }
+#' \item{ssq_y_star(R X Y_ind)}{  Matrix of indicator equations' coefficients' error variance draws }
+#' \item{ssq_M(R X 1)}{vector of eq.1 error variance draws }
+#' \item{mu_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) }
+#' \item{var_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) }
 #' }
 #' @export
 #' @examples

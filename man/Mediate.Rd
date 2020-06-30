@@ -18,64 +18,65 @@ Mediate(Data, Model, Prior, R, burnin)
 \item{burnin}{number of MCMC draws before the posterior is converged}
 }
 \value{
-\code{BK = list(eq1, eq2, Indirect_se, FullMed)} (only for "Simple"!)
+\subsection{\code{BK = list(eq1, eq2, Indirect_se, FullMed)} (only for "Simple"!)}{
 
-\tabular{ll}{
-\code{eq1} \tab the summary of the eq.1 regression \cr
-\code{eq2}  \tab the summary of the eq.2 regression \cr
-\code{Indirect_se} \tab the standard error of the indirect effect a la Sobel(1982) \cr
-\code{FullMed} \tab the significance test result for the direct effect \cr
+\describe{
+\item{eq1}{the summary of the eq.1 regression}
+\item{eq2}{the summary of the eq.2 regression}
+\item{Indirect_se}{the standard error of the indirect effect a la Sobel(1982)}
+\item{FullMed}{the significance test result for the direct effect}
+}
 }
 
-\code{PH = list(Indirect_mean, Indirect_CI, Direct_CI)}
+\subsection{\code{PH = list(Indirect_mean, Indirect_CI, Direct_CI)}}{
 
-\tabular{ll}{
-\code{Indirect_mean} \tab  the bootstrapped mean of the indirect effect \cr
-\code{Indirect_CI} \tab  the bootstrapped 95\% confidence interval of the indirect effect \cr
-\code{Direct_CI} \tab  the bootstrapped 95\% confidence interval of the direct effect \cr
+\describe{
+\item{Indirect_mean}{the bootstrapped mean of the indirect effect}
+\item{Indirect_CI}{the bootstrapped 95\% confidence interval of the indirect effect}
+\item{Direct_CI}{the bootstrapped 95\% confidence interval of the direct effect}
+}
 }
 
-\code{list(evidence, Indirect_CI, Direct_CI, BF,...)} (For all the models)
+\subsection{\code{list(evidence, Indirect_CI, Direct_CI, BF,...)} (For all the models)}{
 
-\tabular{ll}{
-\code{evidence} \tab the interpretation of the BF in terms of evidence in favor of full mediation according to Kass and Raftery (1995) \cr
-\code{Indirect_CI} \tab the Bayesian 95\% HDI (confidence interval) of the indirect effect \cr
-\code{Direct_CI} \tab the Bayesian 95\% HDI (confidence interval) of the direct effect \cr
-\code{BF} \tab the Bayes factor(BF_01) of the corresponding model (see Laghaie and Otter (2020))
+\describe{
+\item{evidence}{the interpretation of the BF in terms of evidence in favor of full mediation according to Kass and Raftery (1995) }
+\item{Indirect_CI}{the Bayesian 95\% HDI (confidence interval) of the indirect effect }
+\item{Direct_CI}{the Bayesian 95\% HDI (confidence interval) of the direct effect}
+\item{BF}{the Bayes factor(BF_01) of the corresponding model (see Laghaie and Otter (2020))}
 }
 
 For the rest of the values, see
-
-\tabular{l}{
-\link[BFMediate]{PartialMed} fpr "Simple" \cr
-\link[BFMediate]{MeasurementCont} for "Cont" \cr
-\link[BFMediate]{MeasurementMCat} for "MCat" \cr
-\link[BFMediate]{MeasurementYCat} for "YCat" \cr
-\link[BFMediate]{MeasurementMYCat} for "MYCat" \cr}
+\itemize{
+\item \link[BFMediate]{PartialMed} fpr "Simple"
+\item \link[BFMediate]{MeasurementCont} for "Cont"
+\item \link[BFMediate]{MeasurementMCat} for "MCat"
+\item \link[BFMediate]{MeasurementYCat} for "YCat"
+\item \link[BFMediate]{MeasurementMYCat} for "MYCat"
+}
+}
 }
 \description{
 Mediation Analysis and Bayes Factor Computation
 }
 \details{
-\bold{Model}
+\subsection{Model}{
 
-\tabular{l}{
-For Data arguments and Models, see \cr
-\link[BFMediate]{PartialMed} fpr "Simple" \cr
-\link[BFMediate]{MeasurementCont} for "Cont" \cr
-\link[BFMediate]{MeasurementMCat} for "MCat" \cr
-\link[BFMediate]{MeasurementYCat} for "YCat" \cr
-\link[BFMediate]{MeasurementMYCat} for "MYCat" \cr
+For Data arguments and Models, see
+\itemize{
+\item \link[BFMediate]{PartialMed} fpr "Simple"
+\item \link[BFMediate]{MeasurementCont} for "Cont"
+\item \link[BFMediate]{MeasurementMCat} for "MCat"
+\item \link[BFMediate]{MeasurementYCat} for "YCat"
+\item \link[BFMediate]{MeasurementMYCat} for "MYCat"
 }
 
 \code{Prior = list(A_M,A_Y) }  \emph{[optional]}
-\itemize{
-\item{asda}{sdfggdfh}
-\item{sdf}{dfgfsdgdsfg}
+
+\describe{
+\item{\code{A_M}}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
+\item{\code{A_Y}}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
 }
-\tabular{ll}{
-\code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
-\code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr
 }
 }
 \examples{

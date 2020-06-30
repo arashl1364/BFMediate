@@ -1,4 +1,4 @@
-#' Sampler for Partial Mediation Model with Multiple Categorical Indicator for the Mediator#'
+#' Sampler for Partial Mediation Model with Multiple Categorical Indicator for the Mediator
 #' @description
 #' Estimates a partial mediation model with multiple categorical indicator for the mediator and observed dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
 #'
@@ -9,10 +9,10 @@
 #' @param R number of MCMC iterations, default = 10000
 #'
 #' @details
-#' *Model*
+#' ## Model
 #' \tabular{ll}{
-#' M = beta_0M + Xbeta_1 + U_M  \tab \emph{[eq.1]} \cr
-#' Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab \emph{[eq.2]} \cr
+#' M = beta_0M + Xbeta_1 + U_M  \tab \[eq.1]\ \cr
+#' Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab \[eq.2\] \cr
 #' }
 #'
 #' Indicator equations:
@@ -28,33 +28,33 @@
 #' }
 #'
 #'
-#' *Argument Details*
+#' ## Argument Details
 #'
-#' \code{Data = list(X, m_star, Y)}
-#'
-#' \tabular{ll}{
-#' \code{X(N x 1) } \tab treatment variable vector \cr
-#' \code{m_star(N x M_ind) } \tab mediator indicators' matrix \cr
-#' \code{Y(N x 1) } \tab dependent variable vector \cr
+#' ## \code{Data = list(X, m_star, Y)}
+#' \describe{
+#'   \item{X(N x 1)}{treatment variable vector}
+#'   \item{m_star(N x M_ind)}{mediator indicators' matrix}
+#'   \item{Y(N x 1)}{dependent variable vector}
 #' }
 #'
-#' \code{Prior = list(A_M,A_Y)} *[optional]*
 #'
-#' \tabular{ll}{
-#' \code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
-#' \code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr
+#' ## \code{Prior = list(A_M,A_Y)} \[optional\]
+#' \describe{
+#'   \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
+#'   \item{A_Y}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
 #' }
 #'
 #' @return
-#' \tabular{ll}{
-#' \code{beta_1(R X 2) } \tab  matrix of eq.1 coefficients' draws \cr
-#' \code{beta_2(R X 3) } \tab  matrix of eq.2 coefficients' draws \cr
-#' \code{lambda (M_ind X 2 X R) } \tab array of indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively. \cr
-#' \code{ssq_m_star(R X M_ind) } \tab  Matrix of indicator equations' coefficients' error variance draws \cr
-#' \code{ssq_Y(R X 1) } \tab  vector of eq.2 error variance draws \cr
-#' \code{mu_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
-#' \code{var_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
+#' \describe{
+#'   \item{beta_1(R X 2)}{matrix of eq.1 coefficients' draws}
+#'   \item{beta_2(R X 3)}{matrix of eq.2 coefficients' draws}
+#'   \item{lambda (M_ind X 2 X R)}{array of indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively.}
+#'   \item{ssq_m_star(R X M_ind)}{Matrix of indicator equations' coefficients' error variance draws}
+#'   \item{ssq_Y(R X 1)}{vector of eq.2 error variance draws}
+#'   \item{mu_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
+#'   \item{var_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
 #' }
+#'
 #' @export
 #' @examples
 #' SimMeasurementMCat = function(X, beta_1, cutoff_M, beta_2, Sigma_Y, M_ind, beta_m_tilde, ssq_m_tilde){
