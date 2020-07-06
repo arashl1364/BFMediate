@@ -5,7 +5,7 @@
 #'
 #' @usage MeasurementMCat(Data,Prior,R)
 #'
-#' @param Data list(X, m_star, Y)
+#' @param Data list(X, m_tilde, Y)
 #' @param Prior list(A_M,A_Y)
 #' @param R number of MCMC iterations, default = 10000
 #'
@@ -31,11 +31,11 @@
 #'
 #' *Argument Details*
 #'
-#' \code{Data = list(X, m_star, Y)}
+#' \code{Data = list(X, m_tilde, Y)}
 #'
 #' \tabular{ll}{
 #' \code{X(N x 1) } \tab treatment variable vector \cr
-#' \code{m_star(N x M_ind) } \tab mediator indicators' matrix \cr
+#' \code{m_tilde(N x M_ind) } \tab mediator indicators' matrix \cr
 #' \code{Y(N x 1) } \tab dependent variable vector \cr
 #' }
 #'
@@ -61,7 +61,7 @@
 ### Description MeasurementMCat estimates a partial mediation model with multiple categorical indicator for the mediator
 # and observed dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
 ### Arguments:
-# Data  list(X, m_star, Y)
+# Data  list(X, m_tilde, Y)
 # Prior list(A_M,A_Y)
 # R
 ### Details:
@@ -76,9 +76,9 @@
 # ...
 # m*_k = lambda_0k-1 + M + U_m*_k
 # ˜m_k = OrdProbit(m*_k,C_m_k)
-## Data = list(X, m_star, Y)
+## Data = list(X, m_tilde, Y)
 # X(N x 1) treatment variable vector
-# m_star(N x M_ind) mediator indicators' matrix
+# m_tilde(N x M_ind) mediator indicators' matrix
 # Y(N x 1) dependent variable vector
 # Prior = list(A_M,A_Y) [optional]
 # A_M vector of coefficients' prior variances of eq.1 (def: rep(100,2))
@@ -164,8 +164,8 @@ MeasurementMCat=function(Data,Prior,R=10000){  #function(Data,Prior,Mcmc){
   if(missing(Data)) {pandterm("Requires Data argument -- list of y and X")}
   if(is.null(Data$X)) {pandterm("Requires Data element X")}
   X=Data$X
-  if(is.null(Data$m_star)) {pandterm("Requires Data element m_star")}
-  y=Data$m_star
+  if(is.null(Data$m_tilde)) {pandterm("Requires Data element m_tilde")}
+  y=Data$m_tilde
   if(is.null(Data$Y)) {pandterm("Requires Data element Y")}
   dep=Data$Y
   # if(is.null(Data$beta_2)) {pandterm("Requires Data element beta_2")}
@@ -210,7 +210,7 @@ MeasurementMCat=function(Data,Prior,R=10000){  #function(Data,Prior,Mcmc){
     else {betabar=Prior$betabar}
     if(is.null(Prior$A_M)) {A=diag(1/rep(100,2))}
     else {A=diag(1/Prior$A_M)}                       #A (A_M) prior variance of beta_1 vector
-    if(is.null(Prior$betabar_2)) {betabar=c(rep(0,nvar+1))}
+    if(is.null(Prior$betabar_2)) {betabar_2=c(rep(0,nvar+1))}
     else {betabar_2=Prior$betabar_2}
     if(is.null(Prior$A_Y)) {A_2=diag(1/c(100,100,1))}
     else {A_2=diag(1/Prior$A_Y)}                     #A_2 (A_Y) prior variance of beta_2 vector
@@ -259,7 +259,7 @@ MeasurementMCat=function(Data,Prior,R=10000){  #function(Data,Prior,Mcmc){
   cat("Starting Gibbs Sampler for Ordered Probit Model",fill=TRUE)
   cat("   with ",nobs,"observations",fill=TRUE)
   cat(" ", fill=TRUE)
-  cat("Table of m_star values",fill=TRUE)
+  cat("Table of m_tilde values",fill=TRUE)
   for(i in 1:M_ind) print(table(y[,i]))
   cat(" ",fill=TRUE)
   cat("Prior Parms: ",fill=TRUE)

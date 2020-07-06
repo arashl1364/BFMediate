@@ -223,7 +223,7 @@ BFMediate = function(Data, Model, Prior, R, burnin){  # BF){
     out = MeasurementCont(Data = Data, Prior = list(A_M = A_M, A_Y = A_Y),R=R, burnin = burnin)
     BF.LVM = exp(BFSD(post = out , prior = A_Y[3], burnin = 0)) #we already accounted for burnin in estimation
     Bayes.CI.Indirect = round(as.vector(quantile(out$beta_1[,2]*out$beta_2[,2],probs = c(.025,.975))),2)
-    Bayes.CI.Direct = round(as.vector(quantile(out$beta_3[,3],probs = c(.025,.975))),2)
+    Bayes.CI.Direct = round(as.vector(quantile(out$beta_2[,3],probs = c(.025,.975))),2)
 
     if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive",
                                    ifelse(BF.LVM>10,"Strong",
@@ -254,8 +254,8 @@ BFMediate = function(Data, Model, Prior, R, burnin){  # BF){
   # BF only M categorical
   if(Model == 'MCat'){
 
-    Mcut = max(Data$m_star) +1
-    Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$X), m_star=as.matrix(Data$m_star), Y= as.matrix(Data$Y) ,k=Mcut-1, M_ind=dim(Data$m_star)[2])
+    Mcut = max(Data$m_tilde) +1
+    Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$X), m_tilde=as.matrix(Data$m_tilde), Y= as.matrix(Data$Y) ,k=Mcut-1, M_ind=dim(Data$m_tilde)[2])
     out = MeasurementMCat(Data=Data_cat, Prior = Prior, R=R) #rordprobitGibbs_me_M_multi_merr_cpp(Data=Data_cat, Mcmc=Mcmc)
     BF.LVM = exp(BFSD(post = out , prior = A_Y[3], burnin = burnin))
     Bayes.CI.Indirect = round(as.vector(quantile(out$beta_1[,2]*out$beta_2[,2],probs = c(.025,.975))),2)
@@ -285,10 +285,10 @@ BFMediate = function(Data, Model, Prior, R, burnin){  # BF){
   if(Model == 'YCat'){
 
 
-    Ycut = max(as.matrix(Data$y_star)[,1]) +1
-    Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$M,Data$X), y = as.matrix(Data$y_star) ,k=Ycut-1, Y_ind=dim(as.matrix(Data$y_star))[2])
+    Ycut = max(as.matrix(Data$y_tilde)[,1]) +1
+    Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$M,Data$X), y = as.matrix(Data$y_tilde) ,k=Ycut-1, Y_ind=dim(as.matrix(Data$y_tilde))[2])
     Mcmc=list(R=R)
-    out = MeasurementYCat(Data=DataMeasurementYCat, Prior=Prior, R=10000) #rordprobitGibbs_me_multi_merr_cpp(Data=Data_cat, Mcmc=Mcmc)
+    out = MeasurementYCat(Data=Data_cat, Prior=Prior, R=10000) #rordprobitGibbs_me_multi_merr_cpp(Data=Data_cat, Mcmc=Mcmc)
     BF.LVM = BF.LVM = exp(BFSD(post = out , prior = A_Y[3], burnin = burnin))
     Bayes.CI.Indirect = round(as.vector(quantile(out,multi$beta_1[,2]*out$beta_2[,2], probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(out$beta_2[,3],probs = c(.025,.975))),2)
@@ -318,10 +318,10 @@ BFMediate = function(Data, Model, Prior, R, burnin){  # BF){
   # BF both M and Y categorical
   if(Model == 'MYCat'){
 
-    Mcut = max(Data$m_star) +1
-    Ycut = max(Data$y_star) +1
-    Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$X), m_star=as.matrix(Data$m_star), y_star=as.matrix(Data$y_star), k_M = Mcut-1, k_Y=Ycut-1, M_ind=dim(as.matrix(Data$m_star))[2], Y_ind=dim(as.matrix(Data$y_star))[2])
-    out = MeasurementYCat(Data=DataMeasurementYCat, Prior=Prior, R=10000) #Mediation_Ordered_Multi_Merr(Data=Data_cat, Mcmc=Mcmc)
+    Mcut = max(Data$m_tilde) +1
+    Ycut = max(Data$y_tilde) +1
+    Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$X), m_tilde=as.matrix(Data$m_tilde), y_tilde=as.matrix(Data$y_tilde), k_M = Mcut-1, k_Y=Ycut-1, M_ind=dim(as.matrix(Data$m_tilde))[2], Y_ind=dim(as.matrix(Data$y_tilde))[2])
+    out = MeasurementMYCat(Data=Data_cat, Prior=Prior, R=10000) #Mediation_Ordered_Multi_Merr(Data=Data_cat, Mcmc=Mcmc)
     BF.LVM = exp(BFSD(post = out , prior = A_Y[3], burnin = burnin))
     Bayes.CI.Indirect = round(as.vector(quantile(out$beta_1[,2]*out$beta_2[,2],probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(out$beta_2[,3],probs = c(.025,.975))),2)
