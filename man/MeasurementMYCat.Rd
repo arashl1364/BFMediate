@@ -2,7 +2,7 @@
 % Please edit documentation in R/MeasurementMYCat.R
 \name{MeasurementMYCat}
 \alias{MeasurementMYCat}
-\title{Estimates a partial mediation model with multiple categorical indicator for the mediator and the dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling}
+\title{Sampler for Partial Mediation Model with Multiple Categorical Indicator for the Mediator and DV}
 \usage{
 MeasurementMYCat(Data,Prior,R)
 }
@@ -14,24 +14,25 @@ MeasurementMYCat(Data,Prior,R)
 \item{R}{number of MCMC iterations, default = 10000}
 }
 \value{
-\tabular{ll}{
-\code{beta_1(R X 2) } \tab  matrix of eq.1 coefficients' draws \cr
-\code{beta_2(R X 3) } \tab  matrix of eq.2 coefficients' draws \cr
-\code{lambda (M_ind X 2 X R) } \tab array of mediator indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively. \cr
-\code{ssq_m_star(R X M_ind)} \tab  Matrix of mediator indicator equations' coefficients' error variance draws \cr
-\code{ssq_y_star(R X Y_ind) } \tab  Matrix of dependent variable indicator equations' coefficients' error variance draws \cr
-\code{mu_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
-\code{var_draw } \tab  vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor) \cr
+\describe{
+\item{beta_1(R X 2)}{matrix of eq.1 coefficients' draws}
+\item{beta_2(R X 3)}{matrix of eq.2 coefficients' draws}
+\item{lambda (M_ind X 2 X R)}{array of mediator indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively.}
+\item{ssq_m_star(R X M_ind)}{Matrix of mediator indicator equations' coefficients' error variance draws}
+\item{ssq_y_star(R X Y_ind)}{Matrix of dependent variable indicator equations' coefficients' error variance draws}
+\item{mu_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
+\item{var_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
 }
 }
 \description{
 Estimates a partial mediation model with multiple categorical indicator for the mediator and the dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
 }
 \details{
-\emph{Model}
+\subsection{Model}{
+
 \tabular{ll}{
-M = beta_0M + Xbeta_1 + U_M  \tab \link{eq.1} \cr
-Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab \link{eq.2} \cr
+M = beta_0M + Xbeta_1 + U_M  \tab [eq.1] \cr
+Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab [eq.2] \cr
 }
 
 Indicator equations:
@@ -52,21 +53,88 @@ y*_2    \tab = \tab tau_01 + M + U_y*_2 \cr
 y*_l   \tab =  \tab tau_0l-1 + M + U_y*_l \cr
 ˜y_l  \tab = \tab OrdProbit(y*_l,C_y_l) \cr
 }
-
-\emph{Argument Details}
-
-\code{Data = list(X, m_tilde, y_tilde)}
-
-\tabular{ll}{
-\code{X(N x 1) } \tab treatment variable vector \cr
-\code{m_tilde(N x M_ind) } \tab ediator indicators' matrix  \cr
-\code{y_tilde(N x Y_ind) } \tab dependent variable indicators' matrix \cr
 }
 
-\code{Prior = list(A_M,A_Y)} \emph{\link{optional}}
-
-\tabular{ll}{
-\code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
-\code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr
+\subsection{Argument Details}{
 }
+
+\subsection{\code{Data = list(X, m_tilde, y_tilde)}}{
+
+\describe{
+\item{X(N x 1)}{treatment variable vector}
+\item{m_tilde(N x M_ind)}{mediator indicators' matrix}
+\item{y_tilde(N x Y_ind)}{dependent variable indicators' matrix}
+}
+}
+
+\subsection{\code{Prior = list(A_M,A_Y)} [optional]}{
+
+\describe{
+\item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
+\item{A_Y}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
+}
+}
+}
+\examples{
+SimMeasurementMYCat = function(X, beta_1, cutoff_M, beta_2, cutoff_Y, M_ind, Y_ind,
+                               lambda, tau, ssq_m_star, ssq_y_star){
+
+  nobs = dim(X)[1]
+  m_tilde = m_star = matrix(double(nobs*M_ind), ncol = M_ind)
+  y_tilde = y_star = matrix(double(nobs*Y_ind), ncol = Y_ind)
+
+  M = cbind(rep(1,nobs),X)\%*\%beta_1 + rnorm(nobs)
+  for(i in 1: M_ind){
+    m_star[,i] = lambda[i] + M + sqrt(ssq_m_star[i])*rnorm(nobs);
+    m_tilde[,i] = cut(m_star[,i], br = cutoff_M[i,], right=TRUE, include.lowest = TRUE, labels = FALSE)
+  }
+
+  Y = cbind(rep(1,nobs),cbind(M,X))\%*\%beta_2 + rnorm(nobs)
+  for(i in 1: Y_ind){
+    y_star[,i] = tau[i] + Y + sqrt(ssq_y_star[i])*rnorm(nobs);
+    y_tilde[,i] = cut(y_star[,i], br = cutoff_Y[i,], right=TRUE, include.lowest = TRUE, labels = FALSE)
+  }
+
+  return(list(Y = Y, M = M, y_tilde = y_tilde, m_tilde = m_tilde, X = X,
+              k_M=dim(cutoff_M)[2]-1, beta_1 = beta_1, lambda = lambda,
+              ssq_m_star = ssq_m_star, m_star = m_star, cutoff_M = cutoff_M,
+              k_Y=dim(cutoff_Y)[2]-1, beta_2 = beta_2, tau = tau, ssq_y_star = ssq_y_star,
+              y_star = y_star, cutoff_Y = cutoff_Y, M_ind=M_ind, Y_ind=Y_ind))
+}
+
+M_ind = 2
+Y_ind = 2
+Mcut = Ycut = 8
+nobs=2000
+X=as.matrix(runif(nobs,min=0, max=1))
+beta_1 = c(.5,1)
+beta_2 = c(.7, 1.5, 0)
+ssq_m_star = c(.5,.3)
+lambda = c(0,-.5) #the intercepts for the latent M indicators w. measurement error
+ssq_y_star = c(.2,.2)
+tau = c(0,-.5)
+cutoff_M = matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
+                    -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Mcut, byrow = T)
+cutoff_Y =  matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
+                     -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Ycut, byrow = T)
+DataMYCat = SimMeasurementMYCat(X, beta_1, cutoff_M, beta_2, cutoff_Y, M_ind,
+                                Y_ind, lambda, tau, ssq_m_star, ssq_y_star)
+
+
+#estimation
+Mcut = max(DataMYCat$m_tilde) + 1
+Ycut = max(DataMYCat$y_tilde) + 1
+Data = list(X=cbind(rep(1,length(DataMYCat$X)),DataMYCat$X), m_tilde=as.matrix(DataMYCat$m_tilde),
+            y_tilde=as.matrix(DataMYCat$y_tilde), k_M = Mcut-1, k_Y=Ycut-1,
+            M_ind=dim(as.matrix(DataMYCat$m_tilde))[2], Y_ind=dim(as.matrix(DataMYCat$y_tilde))[2])
+out = MeasurementMYCat(Data=Data,R = 10000)
+
+#results
+colMeans(out$beta_1)
+colMeans(out$beta_2)
+apply(out$lambdadraw,MARGIN = c(1,2),FUN = mean)
+apply(out$taudraw,MARGIN = c(1,2),FUN = mean)
+
+apply(out$cutoff_M,c(1,2),FUN = mean)
+apply(out$cutoff_Y,c(1,2),FUN = mean)
 }

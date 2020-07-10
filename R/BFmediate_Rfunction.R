@@ -1,6 +1,6 @@
-#' Etimates different mediation models and computes Bayes factors to test full mediation in them
+#' Mediation Analysis and Bayes Factor Computation
 #'
-#' @usage BFMediate(Data, Model, Prior, R, burnin)
+#' @usage Mediate(Data, Model, Prior, R, burnin)
 #'
 #' @param Data  list(X, M, Y) for "Simple", list(X, m_star, y_star) for "Cont", list(X, m_tilde, Y) for "MCat", list(X, M, y_tilde) for "YCat", and list(X, m_tilde, y_tilde) for "MYCat"
 #' @param Model can be either "Simple", "Cont", "MCat", "YCat", "MYCat". In case of Simple, a simple partial mediation is estimated, Baron and Kenny (1986), and Preacher and Hayes (2004) proposed methods are also computed
@@ -9,63 +9,84 @@
 #' @param burnin number of MCMC draws before the posterior is converged
 #'
 #' @details
-#' *Model*
+#' ## Model
+#' For Data arguments and Models, see
 #'
-#' \tabular{l}{
-#' For Data arguments and Models, see \cr
-#' \link[BFMediate]{PartialMed} fpr "Simple" \cr
-#' \link[BFMediate]{MeasurementCont} for "Cont" \cr
-#' \link[BFMediate]{MeasurementMCat} for "MCat" \cr
-#' \link[BFMediate]{MeasurementYCat} for "YCat" \cr
-#' \link[BFMediate]{MeasurementMYCat} for "MYCat" \cr
-#' }
+#' * \link[BFMediate]{PartialMed} fpr "Simple"
+#' * \link[BFMediate]{MeasurementCont} for "Cont"
+#' * \link[BFMediate]{MeasurementMCat} for "MCat"
+#' * \link[BFMediate]{MeasurementYCat} for "YCat"
+#' * \link[BFMediate]{MeasurementMYCat} for "MYCat"
 #'
-#' \code{Prior = list(A_M,A_Y) }  *[optional]*
+#' \code{Prior = list(A_M,A_Y) }  *\[optional\]*
 #'
-#' \tabular{ll}{
-#' \code{A_M }   \tab vector of coefficients' prior variances of eq.1, default = rep(100,2) \cr
-#' \code{A_Y }   \tab vector of coefficients' prior variances of eq.2, default = c(100,100,1) \cr
+#' \describe{
+#'   \item{\code{A_M}}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
+#'   \item{\code{A_Y}}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
 #' }
 #'
 #' @return
-#' \code{BK = list(eq1, eq2, Indirect_se, FullMed)} (only for "Simple"!)
-#'
-#' \tabular{ll}{
-#' eq1 \tab the summary of the eq.1 regression \cr
-#' eq2 \tab the summary of the eq.2 regression \cr
-#' Indirect_se \tab the standard error of the indirect effect a la Sobel(1982) \cr
-#' FullMed \tab the significance test result for the direct effect \cr
+#' ## \code{BK = list(eq1, eq2, Indirect_se, FullMed)} (only for "Simple"!)
+#' \describe{
+#'   \item{eq1}{the summary of the eq.1 regression}
+#'   \item{eq2}{the summary of the eq.2 regression}
+#'   \item{Indirect_se}{the standard error of the indirect effect a la Sobel(1982)}
+#'   \item{FullMed}{the significance test result for the direct effect}
 #' }
 #'
-#' \code{PH = list(Indirect_mean, Indirect_CI, Direct_CI)}
-#'
-#' \tabular{ll}{
-#' Indirect_mean \tab  the bootstrapped mean of the indirect effect \cr
-#' Indirect_CI \tab  the bootstrapped 95% confidence interval of the indirect effect \cr
-#' Direct_CI \tab  the bootstrapped 95% confidence interval of the direct effect \cr
+#' ## \code{PH = list(Indirect_mean, Indirect_CI, Direct_CI)}
+#' \describe{
+#'   \item{Indirect_mean}{the bootstrapped mean of the indirect effect}
+#'   \item{Indirect_CI}{the bootstrapped 95% confidence interval of the indirect effect}
+#'   \item{Direct_CI}{the bootstrapped 95% confidence interval of the direct effect}
 #' }
 #'
-#' \code{list(evidence, Indirect_CI, Direct_CI, BF,...)} (For all the models)
-#'
-#' \tabular{ll}{
-#' \code{evidence} \tab interpretation of the BF in terms of evidence in favor of full mediation according to Kass and Raftery (1995) \cr
-#' \code{Indirect_CI} \tab the Bayesian 95% HDI (confidence interval) of the indirect effect \cr
-#' \code{Direct_CI} \tab the Bayesian 95% HDI (confidence interval) of the direct effect \cr
-#' \code{BF} \tab the Bayes factor(BF_01) of the corresponding model (see Laghaie and Otter (2020))
+#' ## \code{list(evidence, Indirect_CI, Direct_CI, BF,...)} (For all the models)
+#' \describe{
+#'   \item{evidence}{the interpretation of the BF in terms of evidence in favor of full mediation according to Kass and Raftery (1995) }
+#'   \item{Indirect_CI}{the Bayesian 95% HDI (confidence interval) of the indirect effect }
+#'   \item{Direct_CI}{the Bayesian 95% HDI (confidence interval) of the direct effect}
+#'   \item{BF}{the Bayes factor(BF_01) of the corresponding model (see Laghaie and Otter (2020))}
 #' }
 #'
 #' For the rest of the values, see
-#'
-#' \tabular{l}{
-#' \link[BFMediate]{PartialMed} fpr "Simple" \cr
-#' \link[BFMediate]{MeasurementCont} for "Cont" \cr
-#' \link[BFMediate]{MeasurementMCat} for "MCat" \cr
-#' \link[BFMediate]{MeasurementYCat} for "YCat" \cr
-#' \link[BFMediate]{MeasurementMYCat} for "MYCat" \cr
+#' * \link[BFMediate]{PartialMed} fpr "Simple"
+#' * \link[BFMediate]{MeasurementCont} for "Cont"
+#' * \link[BFMediate]{MeasurementMCat} for "MCat"
+#' * \link[BFMediate]{MeasurementYCat} for "YCat"
+#' * \link[BFMediate]{MeasurementMYCat} for "MYCat"
+#' @export
+#' @examples
+#' simPartialMed = function(beta_1,beta_2, sigma_M, sigma_Y,N,X) {
+#' eps_M = rnorm(N)*sigma_M      # generate errors for M (independent)
+#' eps_Y = rnorm(N)*sigma_Y      # generate errors for Y (independent)
+#' M = beta_1[1] + beta_1[2] * X + eps_M # generate latent mediator M
+#' Y = beta_2[1] + beta_2[2] * M + beta_2[3] * X + eps_Y  # generate dependent variable
+#' list(X = X, M = M, Y = Y)
 #' }
 #'
-#' @export
+#' # Set up data generating parameters
+#' N = 1000    # number of observations
+#' sigma_M = .2^.5    # error std M
+#' sigma_Y = .2^.5    # error std Y
+#' beta_1 = c(1, .3)   # beta_0M and beta_1
+#' beta_2 = c(1, .5, .01)    # beta_0Y, beta_2, beta_3
+#' X = rnorm(N,mean = 1,sd = 1)   # generate random X
+#' # Generate data based on parameters
+#' Data = simPartialMed(beta_1,beta_2,sigma_M,sigma_Y,N,X)
 #'
+#' #Estimation
+#' A_M = c(100,100);  # Prior variance for beta_0M, beta_1
+#' A_Y = c(100,100,1) # Prior variance for beta_0Y, beta_2, beta_3
+#' R = 2000
+#' out = BFMediate(Data = Data, Model = 'Simple',
+#'                 Prior = list(A_M = A_M, A_Y = A_Y),R=5000, burnin = 3000)
+#'
+#' # Results
+#' out$BK$FullMed
+#' out$PH$Indirect_CI
+#' colMeans(out$Simple$beta_2)
+#' out$Simple$BF
 ### Description BFMediate estimates different mediation models and computes Bayes factors
 # to test full mediation in them
 
@@ -115,7 +136,7 @@
 ## MeasurementMCat for "MCat"
 ## MeasurementYCat for "YCat"
 ## MeasurementMYCat for "MYCat"
-BFMediate = function(Data, Model, Prior, R, burnin){  # BF){
+Mediate = function(Data, Model, Prior, R, burnin){  # BF){
 
 
   if(missing(Prior))
