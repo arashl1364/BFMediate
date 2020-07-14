@@ -28,7 +28,7 @@ MeasurementMCat(Data,Prior,R)
 Estimates a partial mediation model with multiple categorical indicator for the mediator and observed dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
 }
 \details{
-\subsection{Model}{
+Model
 
 \tabular{ll}{
 M = beta_0M + Xbeta_1 + U_M  \tab [eq.1]\ \cr
@@ -45,27 +45,17 @@ m*_2   \tab = \tab lambda_01 + M + U_m*_2 \cr
 ... \tab  \tab  \cr
 m*_k  \tab =  \tab lambda_0k-1 + M + U_m*_k \cr
 ˜m_k \tab = \tab  OrdProbit(m*_k,C_m_k) \cr
-}
-}
-
-\subsection{Argument Details}{
-}
-
-\subsection{\code{Data = list(X, m_star, Y)}}{
+}Argument Details\code{Data = list(X, m_star, Y)}
 
 \describe{
 \item{X(N x 1)}{treatment variable vector}
 \item{m_star(N x M_ind)}{mediator indicators' matrix}
 \item{Y(N x 1)}{dependent variable vector}
-}
-}
-
-\subsection{\code{Prior = list(A_M,A_Y)} [optional]}{
+}\code{Prior = list(A_M,A_Y)} [optional]
 
 \describe{
 \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
 \item{A_Y}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
-}
 }
 }
 \examples{
@@ -106,7 +96,6 @@ cutoff_M = matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
 DataMCat = SimMeasurementMCat(X, beta_1, cutoff_M, beta_2, Sigma_Y, M_ind, lambda, ssq_m_star)
 
 #estimation
-Mcut = max(DataMCat$m_tilde) +1
 Data = list(X=cbind(rep(1,length(DataMCat$X)),DataMCat$X), m_tilde=as.matrix(DataMCat$m_tilde),
             Y= as.matrix(DataMCat$Y) ,k=Mcut-1, M_ind=dim(DataMCat$m_tilde)[2])
 out = MeasurementMCat(Data=Data, R=R)

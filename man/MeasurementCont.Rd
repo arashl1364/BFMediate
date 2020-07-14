@@ -28,7 +28,7 @@ MeasurementCont(Data, Prior, R, burnin)
 Estimates a partial mediation model with multiple categorical indicators for the mediator and the dependent variable using Hamiltonian Monte Carlo (HMC) with Stan
 }
 \details{
-\subsection{Model}{
+Model
 
 \tabular{ll}{
 M = beta_0M + Xbeta_1 + U_M  \tab (eq.1) \cr
@@ -52,27 +52,17 @@ y*_2    \tab = \tab tau_01 + M + U_y*_2 \cr
 ... \tab  \tab  \cr
 y*_l   \tab =  \tab tau_0l-1 + M + U_y*_l \cr
 ˜y_l  \tab = \tab OrdProbit(y*_l,C_y_l) \cr
-}
-}
-
-\subsection{Argument Details}{
-}
-
-\subsection{\code{Data = list(X, m_tilde, y_tilde)}}{
+}Argument Details\code{Data = list(X, m_tilde, y_tilde)}
 
 \describe{
 \item{X(N x 1)}{treatment variable vector}
 \item{m_tilde(N x M_ind)}{ediator indicators' matrix }
 \item{y_tilde(N x Y_ind)}{dependent variable indicators' matrix}
-}
-}
-
-\subsection{\code{Prior = list(A_M,A_Y)} \emph{[optional]}}{
+}\code{Prior = list(A_M,A_Y)} [optional]
 
 \describe{
 \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
 \item{A_Y}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
-}
 }
 }
 \examples{
@@ -111,7 +101,7 @@ sigma_M = 1^.5 # error std M
 sigma_y = 1^.5 # error std y
 sigma_m_star = c(.3,.5)^.5 #c(1,2)^.5
 sigma_y_star = c(.5,.3)^.5  #c(2,1)^.5
-beta_1 = c(1,1)
+beta_1 = c(.5,1)
 beta_2 = c(1,3,0)
 lambda = matrix(c(1,1.5),ncol=2)
 tau = matrix(c(1,2),ncol = 2)

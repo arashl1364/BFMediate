@@ -90,12 +90,12 @@
 #'
 #' #estimation
 #' A_M = c(100,100); #Prior variance for beta_0M, beta_1
-#' A_Y = c(100,100,100) #Prior variance for beta_0Y, beta_2, beta_3
+#' A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3
 #' Prior = list(A_M = A_M, A_Y = A_Y)
 #' Ycut = max(as.matrix(DataYCat$y_tilde)[,1]) +1
 #' Data = list(X=cbind(rep(1,length(DataYCat$X)),DataYCat$M,DataYCat$X), y = as.matrix(DataYCat$y_tilde),
 #'             k=Ycut-1, Y_ind=dim(as.matrix(DataYCat$y_tilde))[2])
-#' out = MeasurementYCat(Data=Data, Prior=prior, R=10000)
+#' out = MeasurementYCat(Data=Data, Prior=Prior, R=10000)
 #'
 #' #results
 #' colMeans(out$beta_1)
@@ -333,7 +333,7 @@ MeasurementYCat=function(Data,Prior,R=10000){  #,Mcmc){
   beta_1_draw = out$betadraw; ssq_M_draw = out$sigmasqdraw;
   ###################################################################
 
-  draws$cutoff_M=draws$cutoff_M[,2:k,]
+  draws$cutoff_Y=draws$cutoff_Y[,2:k,]
   draws$beta_1 = beta_1_draw
   draws$ssq_M = ssq_M_draw
   # attributes(draws$cutdraw)$class="bayesm.mat"
