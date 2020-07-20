@@ -12,7 +12,7 @@
 #' ## Model
 #' For Data arguments and Models, see
 #'
-#' * \link[BFMediate]{PartialMed} fpr "Simple"
+#' * \link[BFMediate]{PartialMed} for "Simple"
 #' * \link[BFMediate]{MeasurementCont} for "Cont"
 #' * \link[BFMediate]{MeasurementMCat} for "MCat"
 #' * \link[BFMediate]{MeasurementYCat} for "YCat"
@@ -79,7 +79,7 @@
 #' A_M = c(100,100);  # Prior variance for beta_0M, beta_1
 #' A_Y = c(100,100,1) # Prior variance for beta_0Y, beta_2, beta_3
 #' R = 2000
-#' out = BFMediate(Data = Data, Model = 'Simple',
+#' out = Mediate(Data = Data, Model = 'Simple',
 #'                 Prior = list(A_M = A_M, A_Y = A_Y),R=5000, burnin = 3000)
 #'
 #' # Results

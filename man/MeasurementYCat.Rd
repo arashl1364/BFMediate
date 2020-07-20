@@ -28,7 +28,7 @@ MeasurementYCat(Data,Prior,R)
 Estimates a partial mediation model with multiple categorical indicator for the dependent variable
 }
 \details{
-\subsection{Model}{
+Model
 
 \tabular{ll}{
 M = beta_0M + Xbeta_1 + U_M  \tab [eq.1] \cr
@@ -45,27 +45,17 @@ y*_2    \tab = \tab tau_01 + M + U_y*_2 \cr
 ... \tab  \tab  \cr
 y*_l   \tab =  \tab tau_0l-1 + M + U_y*_l \cr
 ˜y_l  \tab = \tab OrdProbit(y*_l,C_y_l) \cr
-}
-}
-
-\subsection{Argument Details}{
-}
-
-\subsection{\code{Data = list(X, M, y_star)}}{
+}Argument Details\code{Data = list(X, M, y_star)}
 
 \describe{
 \item{X(N x 1)}{treatment variable vector}
 \item{M(N x 1)}{mediator vector}
 \item{y_star(N x Y_ind)}{dependent variable indicators' matrix}
-}
-}
-
-\subsection{\code{Prior = list(A_M,A_Y)} [optional]}{
+}\code{Prior = list(A_M,A_Y)} [optional]
 
 \describe{
 \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
 \item{A_Y}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
-}
 }
 }
 \examples{
@@ -104,12 +94,12 @@ DataYCat = SimMeasurementYCat(X, beta_1, beta_2, sigma_M, cutoff_Y, Y_ind, tau, 
 
 #estimation
 A_M = c(100,100); #Prior variance for beta_0M, beta_1
-A_Y = c(100,100,100) #Prior variance for beta_0Y, beta_2, beta_3
+A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3
 Prior = list(A_M = A_M, A_Y = A_Y)
 Ycut = max(as.matrix(DataYCat$y_tilde)[,1]) +1
 Data = list(X=cbind(rep(1,length(DataYCat$X)),DataYCat$M,DataYCat$X), y = as.matrix(DataYCat$y_tilde),
             k=Ycut-1, Y_ind=dim(as.matrix(DataYCat$y_tilde))[2])
-out = MeasurementYCat(Data=Data, Prior=prior, R=10000)
+out = MeasurementYCat(Data=Data, Prior=Prior, R=10000)
 
 #results
 colMeans(out$beta_1)

@@ -28,7 +28,7 @@ MeasurementMYCat(Data,Prior,R)
 Estimates a partial mediation model with multiple categorical indicator for the mediator and the dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
 }
 \details{
-\subsection{Model}{
+Model
 
 \tabular{ll}{
 M = beta_0M + Xbeta_1 + U_M  \tab [eq.1] \cr
@@ -52,27 +52,17 @@ y*_2    \tab = \tab tau_01 + M + U_y*_2 \cr
 ... \tab  \tab  \cr
 y*_l   \tab =  \tab tau_0l-1 + M + U_y*_l \cr
 ˜y_l  \tab = \tab OrdProbit(y*_l,C_y_l) \cr
-}
-}
-
-\subsection{Argument Details}{
-}
-
-\subsection{\code{Data = list(X, m_tilde, y_tilde)}}{
+}Argument Details\code{Data = list(X, m_tilde, y_tilde)}
 
 \describe{
 \item{X(N x 1)}{treatment variable vector}
 \item{m_tilde(N x M_ind)}{mediator indicators' matrix}
 \item{y_tilde(N x Y_ind)}{dependent variable indicators' matrix}
-}
-}
-
-\subsection{\code{Prior = list(A_M,A_Y)} [optional]}{
+}\code{Prior = list(A_M,A_Y)} [optional]
 
 \describe{
 \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
 \item{A_Y}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
-}
 }
 }
 \examples{

@@ -28,24 +28,17 @@ a list containing
 Estimates a partial mediation model using series of Gibbs Samplers
 }
 \details{
-\subsection{Argument Details}{
-}
-
-\subsection{\code{Data = list(X, M, Y)}}{
+Argument Details\code{Data = list(X, M, Y)}
 
 \describe{
 \item{X(N x 1) }{treatment variable vector}
 \item{M(N x 1) }{mediator vector}
 \item{Y(N x 1) }{dependent variable vector}
-}
-}
-
-\subsection{\code{pars = list(A_M,A_Y)} [optional]}{
+}\code{pars = list(A_M,A_Y)} [optional]
 
 \describe{
 \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
 \item{A_Y}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
-}
 }
 }
 \examples{
@@ -62,7 +55,7 @@ N = 1000 # number of observations
 sigma_M = .2^.5 # error std M
 sigma_Y = .2^.5 # error std Y
 beta_1 = c(1, .3) # beta_0M and beta_1
-beta_2 = c(1, .5, .01) # beta_0Y, beta_2, beta_3
+beta_2 = c(1, .5, 0) # beta_0Y, beta_2, beta_3
 X = rnorm(N,mean = 1,sd = 1)# generate random X
 # Generate data based on parameters
 Data = simPartialMed(beta_1,beta_2,sigma_M,sigma_Y,N,X)
@@ -72,7 +65,4 @@ A_M = c(100,100); #Prior variance for beta_0M, beta_1
 A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3
 R = 2000
 out = PartialMed(Data=Data, pars = list(A_M=A_M, A_Y=A_Y), R = R)
-
-#Computing Bayes factor
-BFPartialMed = exp(BFSD(post = out , prior = A_Y[3], burnin = 0))
 }
