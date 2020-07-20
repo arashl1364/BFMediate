@@ -28,17 +28,24 @@ a list containing
 Estimates a partial mediation model using series of Gibbs Samplers
 }
 \details{
-Argument Details\code{Data = list(X, M, Y)}
+\subsection{Argument Details}{
+}
+
+\subsection{\code{Data = list(X, M, Y)}}{
 
 \describe{
 \item{X(N x 1) }{treatment variable vector}
 \item{M(N x 1) }{mediator vector}
 \item{Y(N x 1) }{dependent variable vector}
-}\code{pars = list(A_M,A_Y)} [optional]
+}
+}
+
+\subsection{\code{pars = list(A_M,A_Y)} [optional]}{
 
 \describe{
 \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
 \item{A_Y}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
+}
 }
 }
 \examples{

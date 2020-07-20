@@ -16,7 +16,7 @@
         "-DBOOST_DISABLE_ASSERTS",
         "-DEIGEN_NO_DEBUG"
     ],
-    "hash" : "159285465515911034041591103421",
+    "hash" : "159527321515911034041591103421",
     "is_cpp" : true,
     "pch" : "Rcpp"
 }
