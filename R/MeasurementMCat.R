@@ -94,6 +94,7 @@
 #' DataMCat = SimMeasurementMCat(X, beta_1, cutoff_M, beta_2, Sigma_Y, M_ind, lambda, ssq_m_star)
 #'
 #' #estimation
+#' Mcut = max(DataMCat$m_tilde) +1
 #' Data = list(X=cbind(rep(1,length(DataMCat$X)),DataMCat$X), m_tilde=as.matrix(DataMCat$m_tilde),
 #'             Y= as.matrix(DataMCat$Y) ,k=Mcut-1, M_ind=dim(DataMCat$m_tilde)[2])
 #' out = MeasurementMCat(Data=Data, R=R)

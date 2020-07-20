@@ -98,7 +98,7 @@
 #' sigma_y = 1^.5 # error std y
 #' sigma_m_star = c(.3,.5)^.5 #c(1,2)^.5
 #' sigma_y_star = c(.5,.3)^.5  #c(2,1)^.5
-#' beta_1 = c(.5,1)
+#' beta_1 = c(1,1)
 #' beta_2 = c(1,3,0)
 #' lambda = matrix(c(1,1.5),ncol=2)
 #' tau = matrix(c(1,2),ncol = 2)
