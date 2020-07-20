@@ -11,15 +11,22 @@
 #' ## Model
 #'
 #' \tabular{ll}{
-#' M = beta_0M + Xbeta_1 + U_M  \tab (eq.1) \cr
-#' Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab (eq.2) \cr
+#' \eqn{M = \beta_{0M} + X\beta_1 + U_M}  \tab (eq.1) \cr
+#' \eqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y} \tab (eq.2) \cr
 #' }
 #'
 #' Indicator equations:
 #'
+#'\eqn{m^*_1 = M + U_{m^*_1}\\ %\epsilon_{m_1}}\\
+#'\eqn{m^*_2 = \lambda_{01} + \lambda_{11}M + U_{m^*_2}}\\
+#'...\\
+#'\eqn{m^*_k = \lambda_{0k-1} + \lambda_{1k-1}M + U_{m^*_k}}\\
+#'
+#'
+#'
 #' \tabular{lcl}{
-#' m*_1    \tab = \tab M + U_m*_1 \cr
-#' ˜m_1   \tab = \tab  OrdProbit(m*_1,C_m_1) \cr
+#' {m*_1    \tab = \tab M + U_m*_1} \cr
+#' {˜m_1   \tab = \tab  OrdProbit(m*_1,C_m_1)} \cr
 #'  m*_2     \tab = \tab lambda_01 + M + U_m*_2 \cr
 #'  ˜m_2  \tab = \tab OrdProbit(m*_2,C_m_2) \cr
 #'  ... \tab  \tab  \cr
@@ -195,6 +202,9 @@ MeasurementCont = function(Data, Prior, R, burnin){
   #Running a Gibbs sampler regression of latent Y on latent M and X to store the MCMC draws for Bayes factor computation
   out = RuniregGibbsMulti(Data = list(y=post$Y, M = post$M, X=as.matrix(X)), Prior = list(ssq=1,A=diag(1/A_Y^2)), Mcmc = list(R=R-burnin,sigmasq=post$ssq_Y))
 
+  iota = rep(c(0,1),R-burnin)  #first measurement equations' fixed parameters
+  post$lambda = abind::abind(iota,post$lambda,along=2)
+  post$tau = abind::abind(iota,post$tau,along=2)
   return(list(beta_1 = cbind(post$beta_0_M,post$beta_1), beta_2 = cbind(post$beta_0_Y,post$beta_2,post$beta_3),
               ssq_M=post$ssq_M, ssq_Y = post$ssq_Y, Mdraw = post$M, Ydraw = post$Y,
               ssq_m_star = post$ssq_m_star, ssq_y_star = post$ssq_y_star,

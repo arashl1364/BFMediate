@@ -4,12 +4,12 @@
 \alias{BFSD}
 \title{Bayes factor for full mediation}
 \usage{
-BFSD(post,prior,burnin)
+BFSD(Post,Prior,burnin)
 }
 \arguments{
-\item{post}{output from PartialMed or any of measurement models}
+\item{Post}{output from PartialMed or any of measurement models}
 
-\item{prior}{prior variance of the direct effect}
+\item{Prior}{prior variance of the direct effect}
 
 \item{burnin}{number of MCMC draws before the posterior is converged, default = R/5}
 }
@@ -44,7 +44,7 @@ A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3
 R = 2000
 out = PartialMed(Data=Data, pars = list(A_M=A_M, A_Y=A_Y), R = R)
 #Computing Bayes factor
-BFPartialMed = exp(BFSD(post = out , prior = A_Y[3], burnin = R/5))
+BFPartialMed = exp(BFSD(Post = out , Prior = A_Y[3], burnin = R/5))
 }
 \seealso{
 For simulating data from simple mediation model see \link[BFMediate]{PartialMed}

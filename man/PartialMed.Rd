@@ -4,12 +4,12 @@
 \alias{PartialMed}
 \title{Gibbs Sampler for Partial Mediation Model}
 \usage{
-PartialMed(Data, pars, R)
+PartialMed(Data, Pars, R)
 }
 \arguments{
 \item{Data}{list(X, M, Y)}
 
-\item{pars}{list(A_M,A_Y)}
+\item{Pars}{list(A_M,A_Y)}
 
 \item{R}{number of MCMC iterations, default = 10000}
 }
@@ -34,7 +34,7 @@ Argument Details\code{Data = list(X, M, Y)}
 \item{X(N x 1) }{treatment variable vector}
 \item{M(N x 1) }{mediator vector}
 \item{Y(N x 1) }{dependent variable vector}
-}\code{pars = list(A_M,A_Y)} [optional]
+}\code{Pars = list(A_M,A_Y)} [optional]
 
 \describe{
 \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
@@ -61,8 +61,8 @@ X = rnorm(N,mean = 1,sd = 1)# generate random X
 Data = simPartialMed(beta_1,beta_2,sigma_M,sigma_Y,N,X)
 
 #Estimation
-A_M = c(100,100); #Prior variance for beta_0M, beta_1
-A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3
+A_M = c(100,100); #prior variance for beta_0M, beta_1
+A_Y = c(100,100,1) #prior variance for beta_0Y, beta_2, beta_3
 R = 2000
-out = PartialMed(Data=Data, pars = list(A_M=A_M, A_Y=A_Y), R = R)
+out = PartialMed(Data=Data, Pars = list(A_M=A_M, A_Y=A_Y), R = R)
 }
