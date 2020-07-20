@@ -9,18 +9,25 @@
 #' @param R number of MCMC iterations, default = 10000
 #'
 #' @details
-#' ## Model:
-#' (eq.1) \deqn{M = \beta_{0M} + X\beta_1 + U_M}{M = \beta_0M + X\beta_1 + U_M}
-#' (eq.2) \deqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y}
+#' ## Model
 #'
-#' ## Indicator equations:
-#' \deqn{y^*_1 = M + U_{y^*_1}}{y*_1 = M + U_{y*_1}}
-#' \deqn{\tilde{y}_1 = OrdProbit(y^*_1 ,C_{y_1})}{˜y_1 = OrdProbit(y*_1,C_{y_1})}
-#' \deqn{y^*_2 = \tau_{01} + M + U_{y^*_2}}{y*_2 = \tau_01 + M + U_{y*_2}}
-#' \deqn{\tilde{y}_2 = OrdProbit(y^*_2, C_{y_2})}{˜y_2 = OrdProbit(y*_2,C_{y_2})}
-#' \deqn{...}
-#' \deqn{y^*_l = \tau_{0l-1} + M + U_{y^*_l}}{y*_l = \tau_0l-1 + M + U_{y*_l}}
-#' \deqn{\tilde{y}_l = OrdProbit(y^*_l,C_{y_l})}{˜y_l = OrdProbit(y*_l,C_{y_l})}
+#' \tabular{ll}{
+#' M = beta_0M + Xbeta_1 + U_M  \tab \[eq.1\] \cr
+#' Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab \[eq.2\] \cr
+#' }
+#'
+#' Indicator equations:
+#'
+#' \tabular{lcl}{
+#' y*_1   \tab = \tab M + U_y*_1 \cr
+#'  ˜y_1  \tab = \tab  OrdProbit(y*_1,C_y_1) \cr
+#'  y*_2    \tab = \tab tau_01 + M + U_y*_2 \cr
+#'  ˜y_2  \tab = \tab OrdProbit(y*_2,C_y_2) \cr
+#'  ... \tab  \tab  \cr
+#'   y*_l   \tab =  \tab tau_0l-1 + M + U_y*_l \cr
+#'  ˜y_l  \tab = \tab OrdProbit(y*_l,C_y_l) \cr
+#' }
+#'
 #'
 #' ## Argument Details
 #' ## \code{Data = list(X, M, y_star)}

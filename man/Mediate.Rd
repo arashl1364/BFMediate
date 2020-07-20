@@ -17,50 +17,11 @@ Mediate(Data, Model, Prior, R, burnin)
 
 \item{burnin}{number of MCMC draws before the posterior is converged}
 }
-\value{
-\subsection{\code{BK = list(eq1, eq2, Indirect_se, FullMed)} (only for "Simple"!)}{
-
-\describe{
-\item{eq1}{the summary of the eq.1 regression}
-\item{eq2}{the summary of the eq.2 regression}
-\item{Indirect_se}{the standard error of the indirect effect a la Sobel(1982)}
-\item{FullMed}{the significance test result for the direct effect}
-}
-}
-
-\subsection{\code{PH = list(Indirect_mean, Indirect_CI, Direct_CI)}}{
-
-\describe{
-\item{Indirect_mean}{the bootstrapped mean of the indirect effect}
-\item{Indirect_CI}{the bootstrapped 95\% confidence interval of the indirect effect}
-\item{Direct_CI}{the bootstrapped 95\% confidence interval of the direct effect}
-}
-}
-
-\subsection{\code{list(evidence, Indirect_CI, Direct_CI, BF,...)} (For all the models)}{
-
-\describe{
-\item{evidence}{the interpretation of the BF in terms of evidence in favor of full mediation according to Kass and Raftery (1995) }
-\item{Indirect_CI}{the Bayesian 95\% HDI (confidence interval) of the indirect effect }
-\item{Direct_CI}{the Bayesian 95\% HDI (confidence interval) of the direct effect}
-\item{BF}{the Bayes factor(BF_01) of the corresponding model (see Laghaie and Otter (2020))}
-}
-
-For the rest of the values, see
-\itemize{
-\item \link[BFMediate]{PartialMed} fpr "Simple"
-\item \link[BFMediate]{MeasurementCont} for "Cont"
-\item \link[BFMediate]{MeasurementMCat} for "MCat"
-\item \link[BFMediate]{MeasurementYCat} for "YCat"
-\item \link[BFMediate]{MeasurementMYCat} for "MYCat"
-}
-}
-}
 \description{
 Mediation Analysis and Bayes Factor Computation
 }
 \details{
-\subsection{Model}{
+Model
 
 For Data arguments and Models, see
 \itemize{
@@ -76,7 +37,6 @@ For Data arguments and Models, see
 \describe{
 \item{\code{A_M}}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
 \item{\code{A_Y}}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
-}
 }
 }
 \examples{

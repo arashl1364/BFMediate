@@ -28,42 +28,41 @@ MeasurementCont(Data, Prior, R, burnin)
 Estimates a partial mediation model with multiple categorical indicators for the mediator and the dependent variable using Hamiltonian Monte Carlo (HMC) with Stan
 }
 \details{
-\subsection{Model}{
+Model
 
-(eq.1) \deqn{M = \beta_0 M + X \beta_1 + U_M}{M = \beta_0*M + X*\beta_1 + U_M}
-(eq.2) \deqn{Y = \beta_0 Y + M \beta_2 + X \beta_3 + U_Y}{Y = \beta_0*Y + M*\beta_2 + X*\beta_3 + U_Y}
+\tabular{ll}{
+M = beta_0M + Xbeta_1 + U_M  \tab (eq.1) \cr
+Y = beta_0Y + Mbeta_2 + Xbeta_3 + U_Y \tab (eq.2) \cr
 }
 
-\subsection{Indicator equations:}{
+Indicator equations:
 
-\deqn{m^*_1 = M + U_{m^*_1}}{m*_1 = M + U_{m*_1}}
-\deqn{m^*_2 = \lambda_{01} + M + U_{m^*_2}}{m*_2 = \lambda_01 + M + U_{m*_2}}
-...
-\deqn{m^*_k = \lambda_{0k-1} + M + U_{m^*_k}}{m*_k = \lambda_0k-1 + M + U_{m*_k}}
-\deqn{y^*_1 = M + U_{y^*_1}}{y*_1 = M + U_y*_1}
-\deqn{y^*_2 = \tau_{01} + M + U_{y^*_2}}{y*_2 = \tau_01 + M + U_{y*_2}}
-...
-\deqn{y^*_l = \tau_{0l-1} + M + U_{y^*_l}}{y*_l = \tau_0l-1 + M + U_{y*_l}}
-}
-
-\subsection{Argument Details}{
-}
-
-\subsection{\code{Data = list(X, m_tilde, y_tilde)}}{
+\tabular{lcl}{
+m*_1    \tab = \tab M + U_m*_1 \cr
+˜m_1   \tab = \tab  OrdProbit(m*_1,C_m_1) \cr
+m*_2     \tab = \tab lambda_01 + M + U_m*_2 \cr
+˜m_2  \tab = \tab OrdProbit(m*_2,C_m_2) \cr
+... \tab  \tab  \cr
+m*_k   \tab =  \tab lambda_0k-1 + M + U_m*_k \cr
+˜m_k   \tab = \tab OrdProbit(m*_k,C_m_k) \cr
+y*_1   \tab = \tab M + U_y*_1 \cr
+˜y_1  \tab = \tab  OrdProbit(y*_1,C_y_1) \cr
+y*_2    \tab = \tab tau_01 + M + U_y*_2 \cr
+˜y_2  \tab = \tab OrdProbit(y*_2,C_y_2) \cr
+... \tab  \tab  \cr
+y*_l   \tab =  \tab tau_0l-1 + M + U_y*_l \cr
+˜y_l  \tab = \tab OrdProbit(y*_l,C_y_l) \cr
+}Argument Details\code{Data = list(X, m_tilde, y_tilde)}
 
 \describe{
 \item{X(N x 1)}{treatment variable vector}
 \item{m_tilde(N x M_ind)}{ediator indicators' matrix }
 \item{y_tilde(N x Y_ind)}{dependent variable indicators' matrix}
-}
-}
-
-\subsection{\code{Prior = list(A_M,A_Y)} \emph{[optional]}}{
+}\code{Prior = list(A_M,A_Y)} [optional]
 
 \describe{
 \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
 \item{A_Y}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
-}
 }
 }
 \examples{
