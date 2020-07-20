@@ -3,11 +3,11 @@
 #' @description
 #' Estimates a partial mediation model using series of Gibbs Samplers
 #'
-#' @usage PartialMed(Data, pars, R)
+#' @usage PartialMed(Data, Pars, R)
 
 #'
 #' @param Data list(X, M, Y)
-#' @param pars list(A_M,A_Y)
+#' @param Pars list(A_M,A_Y)
 #' @param R number of MCMC iterations, default = 10000
 #'
 #' @details
@@ -21,7 +21,7 @@
 #' \item{Y(N x 1) }{dependent variable vector}
 #' }
 #'
-#' ## \code{pars = list(A_M,A_Y)} \[optional\]
+#' ## \code{Pars = list(A_M,A_Y)} \[optional\]
 #'
 #' \describe{
 #' \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
@@ -58,21 +58,21 @@
 #' Data = simPartialMed(beta_1,beta_2,sigma_M,sigma_Y,N,X)
 #'
 #' #Estimation
-#' A_M = c(100,100); #Prior variance for beta_0M, beta_1
-#' A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3
+#' A_M = c(100,100); #prior variance for beta_0M, beta_1
+#' A_Y = c(100,100,1) #prior variance for beta_0Y, beta_2, beta_3
 #' R = 2000
-#' out = PartialMed(Data=Data, pars = list(A_M=A_M, A_Y=A_Y), R = R)
+#' out = PartialMed(Data=Data, Pars = list(A_M=A_M, A_Y=A_Y), R = R)
 #Description PartialMed estimates a partial mediation model using series of Gibbs Samplers
 #Arguments:
 # Data  list(X, M, Y)
-# pars list(A_M,A_Y)
+# Pars list(A_M,A_Y)
 # R
 #Details:
 # Data = list(X, M, Y)
 # X(N x 1) treatment variable vector
 # M(N x 1) mediator vector
 # Y(N x 1) dependent variable vector
-# pars = list(A_M,A_Y) [optional]
+# Pars = list(A_M,A_Y) [optional]
 # A_M vector of coefficients' prior variances of eq.1 (def: rep(100,2))
 # A_Y vector of coefficients' prior variances of eq.2 (def: c(100,100,1))
 # R number of MCMC iterations (def:10000)
@@ -83,7 +83,7 @@
 # ssq_Y(R X 1) vector of eq.2 error variance posterior draws
 # mu_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
 # var_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
-PartialMed=function(Data, pars, R=10000){
+PartialMed=function(Data, Pars, R=10000){
 
     #initialization and memory allocation
 
@@ -93,16 +93,16 @@ PartialMed=function(Data, pars, R=10000){
   k=dim(X)[2] + 1  # accounting for the intercept
   if(is.null(k)) k=2
 
-  if(missing(pars)){
+  if(missing(Pars)){
     A_M = 1/rep(100,2)  #rep(.01,2)
     A_Y = 1/c(100,100,1) #rep(.01,3)
   }
   else
   {
-    if(is.null(pars$A_M)) {A_M = 1/rep(100,2)} #{A_M = rep(.01,2)}
-    else {A_M = 1/pars$A_M}
-    if(is.null(pars$A_Y)) {A_Y = 1/c(100,100,1)} #{A_Y = rep(.01,3)}
-    else {A_Y = 1/pars$A_Y}
+    if(is.null(Pars$A_M)) {A_M = 1/rep(100,2)} #{A_M = rep(.01,2)}
+    else {A_M = 1/Pars$A_M}
+    if(is.null(Pars$A_Y)) {A_Y = 1/c(100,100,1)} #{A_Y = rep(.01,3)}
+    else {A_Y = 1/Pars$A_Y}
   }
 
   ##Posterior draws
