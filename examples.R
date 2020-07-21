@@ -1,3 +1,6 @@
+library(devtools)
+install_github("arashl1364/BFMediate")
+library(BFMediate)
 ##################################################
 ######   Simple partial mediation model    #######
 #### and BF sensitivity to the choice of prior ###
@@ -24,26 +27,26 @@ Data = simPartialMed(beta_1,beta_2,sigma_M,sigma_Y,N,X)
 
 #Choosing the reference prior for the direct effect (beta_3)
 A_M = c(100,100); #Prior variance for beta_0M, beta_1
-A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3(reference prior)
+A_Y_inf = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3(reference prior)
 R = 2000
-out_1 = PartialMed(Data=Data, Pars = list(A_M=A_M, A_Y=A_Y), R = R)
+out_1 = PartialMed(Data=Data, Pars = list(A_M=A_M, A_Y=A_Y_inf), R = R)
 #estimation results
 colMeans(out_1$beta_1)    #posterior means of the first mediation equation's coeffcients
 colMeans(out_1$beta_2)    #posterior means of the second mediation equation's coeffcients
 
 
 #Choosing a diffuse prior for the direct effect (beta_3)
-A_Y = c(100,100,100) #Prior variance for beta_0Y, beta_2, beta_3
+A_Y_dif = c(100,100,100) #Prior variance for beta_0Y, beta_2, beta_3
 R = 2000
-out_100 = PartialMed(Data=Data, Pars = list(A_M=A_M, A_Y=A_Y), R = R)
+out_100 = PartialMed(Data=Data, Pars = list(A_M=A_M, A_Y=A_Y_dif), R = R)
 #estimation results
 colMeans(out_1$beta_1)    #posterior means of the first mediation equation's coeffcients
 colMeans(out_1$beta_2)    #posterior means of the second mediation equation's coeffcients
 
 
 #comparing  Bayes factors of the two models
-BF_1 = exp(BFSD(Post = out_1 , Prior = A_Y[3], burnin = 0))
-BF_100 = exp(BFSD(Post = out_100 , Prior = A_Y[3], burnin = 0))
+BF_1 = exp(BFSD(Post = out_1 , Prior = A_Y_inf[3], burnin = 0))
+BF_100 = exp(BFSD(Post = out_100 , Prior = A_Y_dif[3], burnin = 0))
 #BF_100 is much larger than BF_1 as the former model assumes large values of direct effect
 #a priori probable
 
@@ -107,8 +110,8 @@ out_large_ind = MeasurementCont(Data = Data, Prior = list(A_M = A_M, A_Y = A_Y),
 #results
 colMeans(out_large_ind$beta_1)    #posterior means of the first mediation equation's coeffcients
 colMeans(out_large_ind$beta_2)    #posterior means of the second mediation equation's coeffcients
-colMeans(out_large_ind$tau)     #posterior means of the M measurement equation parameters (column1: intercepts, column2: coefficients(fixed to 1))
-colMeans(out_large_ind$lambda)  #posterior means of the M measurement equation parameters (column1: intercepts, column2: coefficients(fixed to 1))
+colMeans(out_large_ind$tau)     #posterior means of the M measurement equation parameters (column1: intercepts, column2: coefficients(row1 is fixed to {0,1}))
+colMeans(out_large_ind$lambda)  #posterior means of the M measurement equation parameters (column1: intercepts, column2: coefficients(row1 is fixed to {0,1}))
 
 #Estimation with the smallest y indicator as the identifying indicator
 temp = Data$y_star[,1]; Data$y_star[,1] = Data$y_star[,2]; Data$y_star[,2] = temp   #changing the refrence indicator of y

@@ -184,7 +184,7 @@ MeasurementCont = function(Data, Prior, R, burnin){
   #Running a Gibbs sampler regression of latent Y on latent M and X to store the MCMC draws for Bayes factor computation
   out = RuniregGibbsMulti(Data = list(y=post$Y, M = post$M, X=as.matrix(X)), Prior = list(ssq=1,A=diag(1/A_Y^2)), Mcmc = list(R=R-burnin,sigmasq=post$ssq_Y))
 
-  iota = rep(c(0,1),R-burnin)  #first measurement equations' fixed parameters
+  iota = matrix(rep(c(0,1),R-burnin), ncol=2, byrow=T)  #first measurement equations' fixed parameters
   post$lambda = abind::abind(iota,post$lambda,along=2)
   post$tau = abind::abind(iota,post$tau,along=2)
   return(list(beta_1 = cbind(post$beta_0_M,post$beta_1), beta_2 = cbind(post$beta_0_Y,post$beta_2,post$beta_3),
