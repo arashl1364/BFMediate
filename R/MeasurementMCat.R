@@ -9,7 +9,7 @@
 #' @param R number of MCMC iterations, default = 10000
 #'
 #' @details
-#' ## Model:
+#' ## Model
 #'
 #' (eq.1) \deqn{M = \beta_{0M} + X\beta_1 + U_M}{M = \beta_0M + X\beta_1 + U_M}
 #' (eq.2) \deqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y}

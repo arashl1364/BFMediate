@@ -9,11 +9,11 @@
 #' @param R number of MCMC iterations, default = 10000
 #'
 #' @details
-#' ## Model:
+#' ## Model
 #' (eq.1) \deqn{M = \beta_{0M} + X\beta_1 + U_M}{M = \beta_0M + X\beta_1 + U_M}
 #' (eq.2) \deqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y}
 #'
-#' ## Indicator equations:
+#' ## Indicator equations
 #' \deqn{y^*_1 = M + U_{y^*_1}}{y*_1 = M + U_{y*_1}}
 #' \deqn{\tilde{y}_1 = OrdProbit(y^*_1 ,C_{y_1})}{˜y_1 = OrdProbit(y*_1,C_{y_1})}
 #' \deqn{y^*_2 = \tau_{01} + M + U_{y^*_2}}{y*_2 = \tau_01 + M + U_{y*_2}}

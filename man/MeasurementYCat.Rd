@@ -28,10 +28,13 @@ MeasurementYCat(Data,Prior,R)
 Estimates a partial mediation model with multiple categorical indicator for the dependent variable
 }
 \details{
-Model:
+\subsection{Model}{
 
 (eq.1) \deqn{M = \beta_{0M} + X\beta_1 + U_M}{M = \beta_0M + X\beta_1 + U_M}
-(eq.2) \deqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y}Indicator equations:
+(eq.2) \deqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y}
+}
+
+\subsection{Indicator equations}{
 
 \deqn{y^*_1 = M + U_{y^*_1}}{y*_1 = M + U_{y*_1}}
 \deqn{\tilde{y}_1 = OrdProbit(y^*_1 ,C_{y_1})}{˜y_1 = OrdProbit(y*_1,C_{y_1})}
@@ -40,17 +43,27 @@ Model:
 \deqn{...}
 \deqn{y^*_l = \tau_{0l-1} + M + U_{y^*_l}}{y*_l = \tau_0l-1 + M + U_{y*_l}}
 \deqn{\tilde{y}_l = OrdProbit(y^*_l,C_{y_l})}{˜y_l = OrdProbit(y*_l,C_{y_l})}
-Argument Details\code{Data = list(X, M, y_star)}
+
+}
+
+\subsection{Argument Details}{
+}
+
+\subsection{\code{Data = list(X, M, y_star)}}{
 
 \describe{
 \item{X(N x 1)}{treatment variable vector}
 \item{M(N x 1)}{mediator vector}
 \item{y_star(N x Y_ind)}{dependent variable indicators' matrix}
-}\code{Prior = list(A_M,A_Y)} [optional]
+}
+}
+
+\subsection{\code{Prior = list(A_M,A_Y)} [optional]}{
 
 \describe{
 \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
 \item{A_Y}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
+}
 }
 }
 \examples{

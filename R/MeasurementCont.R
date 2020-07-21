@@ -13,7 +13,7 @@
 #' (eq.1) \deqn{M = \beta_0 M + X \beta_1 + U_M}{M = \beta_0*M + X*\beta_1 + U_M}
 #' (eq.2) \deqn{Y = \beta_0 Y + M \beta_2 + X \beta_3 + U_Y}{Y = \beta_0*Y + M*\beta_2 + X*\beta_3 + U_Y}
 #'
-#' ## Indicator equations:
+#' ## Indicator equations
 #' \deqn{m^*_1 = M + U_{m^*_1}}{m*_1 = M + U_{m*_1}}
 #' \deqn{m^*_2 = \lambda_{01} + M + U_{m^*_2}}{m*_2 = \lambda_01 + M + U_{m*_2}}
 #' ...

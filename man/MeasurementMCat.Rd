@@ -28,10 +28,13 @@ MeasurementMCat(Data,Prior,R)
 Estimates a partial mediation model with multiple categorical indicator for the mediator and observed dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
 }
 \details{
-Model:
+\subsection{Model}{
 
 (eq.1) \deqn{M = \beta_{0M} + X\beta_1 + U_M}{M = \beta_0M + X\beta_1 + U_M}
-(eq.2) \deqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y}Indicator equations:
+(eq.2) \deqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y}
+}
+
+\subsection{Indicator equations:}{
 
 \deqn{m^*_1 = M + U_{m^*_1}}{m*_1 = M + U_{m*_1}}
 \deqn{\tilde{m}_1 = OrdProbit(m^*_1 ,C_{m_1})}{˜m_1 = OrdProbit(m*_1,C_{m_1})}
@@ -40,17 +43,27 @@ Model:
 \deqn{...}
 \deqn{m^*_k = \lambda_{0k-1} + M + U_{m^*_k}}{m*_k = \lambda_0k-1 + M + U_{m*_k}}
 \deqn{\tilde{m}_k = OrdProbit(m^*_k ,C_{m_k})}{˜m_k = OrdProbit(m*_k,C_{m_k})}
-Argument Details\code{Data = list(X, m_star, Y)}
+
+}
+
+\subsection{Argument Details}{
+}
+
+\subsection{\code{Data = list(X, m_star, Y)}}{
 
 \describe{
 \item{X(N x 1)}{treatment variable vector}
 \item{m_star(N x M_ind)}{mediator indicators' matrix}
 \item{Y(N x 1)}{dependent variable vector}
-}\code{Prior = list(A_M,A_Y)} [optional]
+}
+}
+
+\subsection{\code{Prior = list(A_M,A_Y)} [optional]}{
 
 \describe{
 \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
 \item{A_Y}{vector of coefficients' prior variances of eq.2, default = c(100,100,1)}
+}
 }
 }
 \examples{
