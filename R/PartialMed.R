@@ -3,11 +3,11 @@
 #' @description
 #' Estimates a partial mediation model using series of Gibbs Samplers
 #'
-#' @usage PartialMed(Data, Pars, R)
+#' @usage PartialMed(Data, Prior, R)
 
 #'
 #' @param Data list(X, M, Y)
-#' @param Pars list(A_M,A_Y)
+#' @param Prior list(A_M,A_Y)
 #' @param R number of MCMC iterations, default = 10000
 #'
 #' @details
@@ -21,7 +21,7 @@
 #' \item{Y(N x 1) }{dependent variable vector}
 #' }
 #'
-#' ## \code{Pars = list(A_M,A_Y)} \[optional\]
+#' ## \code{Prior = list(A_M,A_Y)} \[optional\]
 #'
 #' \describe{
 #' \item{A_M}{vector of coefficients' prior variances of eq.1, default = rep(100,2)}
@@ -61,18 +61,18 @@
 #' A_M = c(100,100); #prior variance for beta_0M, beta_1
 #' A_Y = c(100,100,1) #prior variance for beta_0Y, beta_2, beta_3
 #' R = 2000
-#' out = PartialMed(Data=Data, Pars = list(A_M=A_M, A_Y=A_Y), R = R)
+#' out = PartialMed(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y), R = R)
 #Description PartialMed estimates a partial mediation model using series of Gibbs Samplers
 #Arguments:
 # Data  list(X, M, Y)
-# Pars list(A_M,A_Y)
+# Prior list(A_M,A_Y)
 # R
 #Details:
 # Data = list(X, M, Y)
 # X(N x 1) treatment variable vector
 # M(N x 1) mediator vector
 # Y(N x 1) dependent variable vector
-# Pars = list(A_M,A_Y) [optional]
+# Prior = list(A_M,A_Y) [optional]
 # A_M vector of coefficients' prior variances of eq.1 (def: rep(100,2))
 # A_Y vector of coefficients' prior variances of eq.2 (def: c(100,100,1))
 # R number of MCMC iterations (def:10000)
@@ -83,7 +83,7 @@
 # ssq_Y(R X 1) vector of eq.2 error variance posterior draws
 # mu_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
 # var_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
-PartialMed=function(Data, Pars, R=10000){
+PartialMed=function(Data, Prior, R=10000){
 
     #initialization and memory allocation
 
@@ -93,16 +93,16 @@ PartialMed=function(Data, Pars, R=10000){
   k=dim(X)[2] + 1  # accounting for the intercept
   if(is.null(k)) k=2
 
-  if(missing(Pars)){
+  if(missing(Prior)){
     A_M = 1/rep(100,2)  #rep(.01,2)
     A_Y = 1/c(100,100,1) #rep(.01,3)
   }
   else
   {
-    if(is.null(Pars$A_M)) {A_M = 1/rep(100,2)} #{A_M = rep(.01,2)}
-    else {A_M = 1/Pars$A_M}
-    if(is.null(Pars$A_Y)) {A_Y = 1/c(100,100,1)} #{A_Y = rep(.01,3)}
-    else {A_Y = 1/Pars$A_Y}
+    if(is.null(Prior$A_M)) {A_M = 1/rep(100,2)} #{A_M = rep(.01,2)}
+    else {A_M = 1/Prior$A_M}
+    if(is.null(Prior$A_Y)) {A_Y = 1/c(100,100,1)} #{A_Y = rep(.01,3)}
+    else {A_Y = 1/Prior$A_Y}
   }
 
   ##Posterior draws
@@ -127,15 +127,7 @@ PartialMed=function(Data, Pars, R=10000){
     #
     out<-runiregGibbs_me(Data = list(y=M,X=cbind(rep(1,N),X)),Prior=list(ssq=1,A = as.matrix(diag(A_M,k))),Mcmc = list(R=R))
     beta_1_draw = out$betadraw; ssq_M_draw = out$sigmasqdraw;
-    # ##Moments
-    # mu_beta_1_draw = out$mubeta
-    # IR_beta_1_draw = out$IR      #covariance matrix of beta_1
-    # nu_ssq_M_draw = out$nu
-    # S_ssq_M_draw = out$S
-    #
-    #
-    # draw beta_2, ssq_y | Y,M,X
-    #
+
     out<-runiregGibbs_me(Data = list(y=Y,X=cbind(rep(1,N),M,X)),Prior=list(ssq=1, A =  as.matrix(diag(A_Y,k+1))), Mcmc = list(R=R))
     beta_2_draw = out$betadraw; ssq_y_draw = out$sigmasqdraw;
     ##Moments
@@ -146,15 +138,6 @@ PartialMed=function(Data, Pars, R=10000){
 
   ctime = proc.time()[3]
   cat('  Total Time Elapsed: ',round((ctime-itime)/60,2),'\n')
-
-  # attributes(beta_1_draw)$class=c("bayesm.mat","mcmc")
-  # attributes(beta_1_draw)$mcpar=c(1,R,1)
-  # attributes(beta_2_draw)$class=c("bayesm.mat","mcmc")
-  # attributes(beta_2_draw)$mcpar=c(1,R,1)
-  # attributes(ssq_M_draw)$class=c("bayesm.var","bayesm.mat","mcmc")
-  # attributes(ssq_M_draw)$mcpar=c(1,R,1)
-  # attributes(ssq_y_draw)$class=c("bayesm.var","bayesm.mat","mcmc")
-  # attributes(ssq_y_draw)$mcpar=c(1,R,1)
 
   return(list(beta_1=beta_1_draw,beta_2=beta_2_draw, ssq_M=ssq_M_draw ,ssq_y=ssq_y_draw,
               mu_draw=mu_beta_2_draw[,3], var_draw=IR_beta_2_draw[3,3,]))    #MCMC moments of the direct effect
