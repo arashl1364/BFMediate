@@ -81,7 +81,7 @@ BF_100 = exp(BFSD(Post = out_100 , Prior = A_Y_dif[3], burnin = 0))
 
 Bayes factor of the model with a diffuse prior (100) is much larger than the one with our reference prior (1), as the former model assumes large values of direct effect a priori probable.
 
-#Model with multiple (categorical) indicators for M and Y, and the sensitivity of variance explained to the choice of prior variance  
+# Model with multiple (categorical) indicators for M and Y, and the sensitivity of variance explained to the choice of prior variance  
 
 If rating scale data for multiple variables are collected to measure the mediator and the dependent variable, we can use them to account for measurement error in a latent variable model. This will help us reveal the evidence obfuscated due to measurement error and obtain more reliable estimates of indirect and direct effects. We illustrate this using simulated data from a full mediation model with multiple categorized indicators:    
 
