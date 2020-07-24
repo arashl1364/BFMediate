@@ -12,7 +12,7 @@ Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS = "true")
 devtools::install_github("arashl1364/BFMediate")
 ```
 
-# Note: Compiling the Stan part of the package might require the following configuration on some Windows machines. If the installation fails please run the code below and try again: 
+## Note: Compiling the Stan part of the package might require the following configuration on some Windows machines. If the installation fails please run the code below and try again: 
 
 ```
 dotR <- file.path(Sys.getenv("HOME"), ".R")
