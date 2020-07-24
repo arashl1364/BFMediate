@@ -251,4 +251,4 @@ out_MYCat$BF
 out_MYCat$evidence
 ```
 
-All the parameter estimates e.g. direct effect posterior, estimated indicator cutoffs for M and Y, etc. are also stored in the output. For a complete list of the output values please see the help page of the function. (see Laghaie & Otter 2020)   
+All the parameter estimates e.g. direct effect posterior, estimated indicator cutoffs for M and Y, etc. are also stored in the output. For a complete list of the output values please see the help page of the function.   
