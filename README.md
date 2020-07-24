@@ -202,7 +202,6 @@ apply(out$cutoff_Y,c(1,2),FUN = mean)   #posterior means of Y indicators' cutoff
 Using the _Mediate_ function in the package, we can compare the results from Baron & Kenny (1986), Preacher & Hayes (2004), and the proposed Bayesian approach to mediation analysis. We can use the data generated in the previous example to do so.
 
 ```
-
 #creating composite measures of M and Y using their indicators
 Data_comp = NULL
 Data_comp$M = rowMeans(DataMYCat$m_tilde)
@@ -215,5 +214,41 @@ A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3(reference prior)
 Prior = list(A_Y = A_Y, A_M = A_M)
 out_comp = Mediate(Data = Data_comp, Model = "Simple",Prior = Prior,R = 10000, burnin = 2000)
 
+```
+
+If "Simple" is given as the model, _Mediate_ function performs a mediation analysis a la Baron & Kenny (1986), as well as, Preacher & Hayes (2004) bootstrapping analysis and the proposed Bayesian method. The results are stord in lists BK, PH, and Simple respecteively.
 
 ```
+#Regression estimates of the first and second B&K mediation equations
+out_comp$BK$eq1
+out_comp$BK$eq2
+out_comp$BK$FullMed #full mediation Null hypothesis test result
+
+#Bootstrapped estimates a la Preacher & Hayes (2004)
+out_comp$PH$Indirect_mean  #indirect effect's mean
+out_comp$PH$Indirect_CI    #indirect effect's bootstrapped confidence interval
+out_comp$PH$Direct_CI     #direct effect's bootstrapped confidence interval
+
+#Proposed Bayesian approach results
+colMeans(out_comp$Simple$beta_1)   #Bayesian posterior means of the first equation parameters
+colMeans(out_comp$Simple$beta_2)   #Bayesian posterior means of the second equation parameters
+out_comp$Simple$BF     #Bayes factor
+out_comp$Simple$evidence    #evidence in favor of full mediation (Kass & Raftery 1995)
+
+```
+
+Instead of estimating a simple model using the composite measures, we can estimate the the LVM to account for measurement error and descritization. Note that here the analysis done by _Mediate_ essentially runs _MeasurementMYCat_ and _BFSD_, as we did in the above example. 
+
+```
+out_MYCat = Mediate(Data = DataMYCat, Model = "MYCat",Prior = Prior,R = 10000, burnin = 2000)
+
+```
+
+Comparing the results from LVM with the results from the simple model shows that accounting for measurement error reveals the obfuscated evidence in favor of full mediation in the underlying model:
+
+```
+out_MYCat$BF
+out_MYCat$evidence
+```
+
+All the parameter estimates e.g. direct effect posterior, estimated indicator cutoffs for M and Y, etc. are also stored in the output. For a complete list of the output values please see the help page of the function.   
