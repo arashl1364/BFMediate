@@ -7,7 +7,7 @@ Note: This is a preliminary version of the package. We would appreciate if you c
 ## Installation 
 
 ```
-## From github
+## Installation from github might take a while on some machines
 Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS = "true")
 devtools::install_github("arashl1364/BFMediate")
 ```
