@@ -12,6 +12,19 @@ Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS = "true")
 devtools::install_github("arashl1364/BFMediate")
 ```
 
+# Note: Compiling the Stan part of the package might require the following configuration on some Windows machines. If the installation fails please run the code below and try again: 
+
+```
+dotR <- file.path(Sys.getenv("HOME"), ".R")
+if (!file.exists(dotR)) dir.create(dotR)
+M <- file.path(dotR, "Makevars.win")
+if (!file.exists(M)) file.create(M)
+cat("\nCXX14FLAGS=-O3 -march=corei7 -mtune=corei7",
+    "CXX14 = $(BINPREF)g++ -m$(WIN) -std=c++1y",
+    "CXX11FLAGS=-O3 -march=corei7 -mtune=corei7",
+    file = M, sep = "\n", append = TRUE)
+```
+
 ## Getting Started
 
 # Simple partial mediation model and BF sensitivity to the choice of prior
