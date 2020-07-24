@@ -197,4 +197,23 @@ apply(out$cutoff_M,c(1,2),FUN = mean)   #posterior means of M indicators' cutoff
 apply(out$cutoff_Y,c(1,2),FUN = mean)   #posterior means of Y indicators' cutoffs
 ```
 
+## Comparing results from different approaches 
 
+Using the _Mediate_ function in the package, we can compare the results from Baron & Kenny (1986), Preacher & Hayes (2004), and the proposed Bayesian approach to mediation analysis. We can use the data generated in the previous example to do so.
+
+```
+
+#creating composite measures of M and Y using their indicators
+Data_comp = NULL
+Data_comp$M = rowMeans(DataMYCat$m_tilde)
+Data_comp$Y = rowMeans(DataMYCat$y_tilde)
+Data_comp$X = DataMYCat$X
+
+#Estimation
+A_M = c(100,100); #Prior variance for beta_0M, beta_1
+A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3(reference prior)
+Prior = list(A_Y = A_Y, A_M = A_M)
+out_comp = Mediate(Data = Data_comp, Model = "Simple",Prior = Prior,R = 10000, burnin = 2000)
+
+
+```

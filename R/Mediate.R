@@ -200,11 +200,11 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
 
 
     # BF Simple
-    Simple = PartialMed(Data = Data, R=R,pars = list(A_M=A_M, A_Y=A_Y))
+    Simple = PartialMed(Data = Data, R=R, Prior = list(A_M=A_M, A_Y=A_Y))
     beta_1 = Simple$beta_1[,2]
     beta_2 = Simple$beta_2[,2]
     beta_3 = Simple$beta_2[,3]
-    BF.Simple = exp(BFSD(post = Simple , prior = A_Y[3], burnin = burnin))
+    BF.Simple = exp(BFSD(Post = Simple , Prior = A_Y[3], burnin = burnin))
     Bayes.CI.Indirect = round(as.vector(quantile(beta_1*beta_2,probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(beta_3,probs = c(.025,.975))),2)
 
@@ -242,7 +242,7 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     y_ind =  dim(y_star)[2];
 
     out = MeasurementCont(Data = Data, Prior = list(A_M = A_M, A_Y = A_Y),R=R, burnin = burnin)
-    BF.LVM = exp(BFSD(post = out , prior = A_Y[3], burnin = 0)) #we already accounted for burnin in estimation
+    BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = 0)) #we already accounted for burnin in estimation
     Bayes.CI.Indirect = round(as.vector(quantile(out$beta_1[,2]*out$beta_2[,2],probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(out$beta_2[,3],probs = c(.025,.975))),2)
 
@@ -278,7 +278,7 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Mcut = max(Data$m_tilde) +1
     Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$X), m_tilde=as.matrix(Data$m_tilde), Y= as.matrix(Data$Y) ,k=Mcut-1, M_ind=dim(Data$m_tilde)[2])
     out = MeasurementMCat(Data=Data_cat, Prior = Prior, R=R) #rordprobitGibbs_me_M_multi_merr_cpp(Data=Data_cat, Mcmc=Mcmc)
-    BF.LVM = exp(BFSD(post = out , prior = A_Y[3], burnin = burnin))
+    BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = burnin))
     Bayes.CI.Indirect = round(as.vector(quantile(out$beta_1[,2]*out$beta_2[,2],probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(out$beta_2[,3],probs = c(.025,.975))),2)
 
@@ -310,7 +310,7 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$M,Data$X), y = as.matrix(Data$y_tilde) ,k=Ycut-1, Y_ind=dim(as.matrix(Data$y_tilde))[2])
     Mcmc=list(R=R)
     out = MeasurementYCat(Data=Data_cat, Prior=Prior, R=10000) #rordprobitGibbs_me_multi_merr_cpp(Data=Data_cat, Mcmc=Mcmc)
-    BF.LVM = BF.LVM = exp(BFSD(post = out , prior = A_Y[3], burnin = burnin))
+    BF.LVM = BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = burnin))
     Bayes.CI.Indirect = round(as.vector(quantile(out,multi$beta_1[,2]*out$beta_2[,2], probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(out$beta_2[,3],probs = c(.025,.975))),2)
 
@@ -343,7 +343,7 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Ycut = max(Data$y_tilde) +1
     Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$X), m_tilde=as.matrix(Data$m_tilde), y_tilde=as.matrix(Data$y_tilde), k_M = Mcut-1, k_Y=Ycut-1, M_ind=dim(as.matrix(Data$m_tilde))[2], Y_ind=dim(as.matrix(Data$y_tilde))[2])
     out = MeasurementMYCat(Data=Data_cat, Prior=Prior, R=10000) #Mediation_Ordered_Multi_Merr(Data=Data_cat, Mcmc=Mcmc)
-    BF.LVM = exp(BFSD(post = out , prior = A_Y[3], burnin = burnin))
+    BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = burnin))
     Bayes.CI.Indirect = round(as.vector(quantile(out$beta_1[,2]*out$beta_2[,2],probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(out$beta_2[,3],probs = c(.025,.975))),2)
 
