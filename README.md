@@ -27,6 +27,8 @@ cat("\nCXX14FLAGS=-O3 -march=corei7 -mtune=corei7",
 
 ## Getting Started
 
+In what follows we use simulated data to illustrate how is mediation analysis done using this package. All the models and analyses done here are discussed in detail in Laghaie & Otter (2020).
+
 # Simple partial mediation model and BF sensitivity to the choice of prior
 
 Among other functions _BFMediate_ contains functions that estimate simple mediation models and compute empirical evidence in favor of/against full mediation in the causal theory level. We illustrate this by first simulating data from a full mediation model:  
@@ -168,7 +170,7 @@ for(i in 1:length(sd)){
 
 After ascertaining that the reference prior for direct effect variance does not imply a large variance explained. We estimate the data using the reference prior. The estimation function takes the following parameters: 
 Data, a list containing X, a 2-column matrix with a vector of ones as its first and the manipulation variable as its second column; m_star and y_star, matrices of M and Y indicator variables respectively, stored column-wise; k_M and k_Y, the number of rating scales for M and Y indicators respectively; and M_ind and Y_ind, the number of M and Y indicators.
-Prior, a list containing priors for first and second mediation (latent) equations.  
+Prior, a list containing priors for first and second mediation (latent) equations' coefficients.  
 R, number of Mcmc iterations.
 ```
 Mcut = max(DataMYCat$m_tilde) + 1

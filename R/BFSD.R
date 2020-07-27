@@ -1,7 +1,7 @@
 #' Bayes factor for full mediation
 #'
 #' @description
-#' Computes Bayes factors for the partial mediation model using Savage-Dickey approximation
+#' Computes Bayes factors for the partial mediation model using Savage-Dickey ratio
 #'
 #' @usage BFSD(Post,Prior,burnin)
 #'
@@ -41,7 +41,7 @@
 #' @seealso
 #' For simulating data from simple mediation model see \link[BFMediate]{PartialMed}
 #Description:
-# BFSD computes Bayes factors for the partial mediation model using Savage-Dickey approximation.
+# BFSD computes Bayes factors for the partial mediation model using Savage-Dickey ratio.
 # The restricted model is full mediation (direct effect = 0) and the unrestricted model (direct effect != 0) )
 # is partial mediation.
 #Arguments:
