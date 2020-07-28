@@ -138,6 +138,9 @@
 ## MeasurementMYCat for "MYCat"
 Mediate = function(Data, Model, Prior, R, burnin){  # BF){
 
+  ############################################
+  ## Arash Laghaie 2019
+  ############################################
 
   if(missing(Prior))
   { A_M = rep(100,2); A_Y = c(100,100,1);}

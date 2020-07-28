@@ -52,8 +52,11 @@
 #
 #Value:
 # log(BF_01), which is the evidence in favor of the full mediation model (see Laghaie and Otter (2020) for guidelines on how to interpret BF_01)
-BFSD = function(Post,Prior=1,burnin){ #function(Data,Post,Prior,model,burnin,M){
+BFSD = function(Post,Prior=1,burnin){
 
+  ############################################
+  ## Arash Laghaie 2019
+  ############################################
   A = Prior
   lik=0;
 

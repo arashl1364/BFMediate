@@ -85,7 +85,9 @@
 # var_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
 PartialMed=function(Data, Prior, R=10000){
 
-    #initialization and memory allocation
+  ############################################
+  ## Arash Laghaie 2019
+  ############################################
 
   #Data
   X=as.matrix(Data$X); Y=Data$Y; M=Data$M;

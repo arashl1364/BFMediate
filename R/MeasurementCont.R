@@ -153,6 +153,11 @@
 # mu_draw(R X 1) vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
 # var_draw(R X 1) vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
 MeasurementCont = function(Data, Prior, R, burnin){
+
+  ############################################
+  ## Arash Laghaie 2019
+  ############################################
+
   if(missing(Prior))
   { A_M = rep(10,2); A_Y = c(10,10,1);}
   else

@@ -76,7 +76,7 @@
 #'
 #' M_ind = 2
 #' Mcut =  8
-#' nobs= 500
+#' nobs= 1000
 #' X=as.matrix(runif(nobs,min=0, max=1))
 #' beta_1 = c(.5,1)
 #' beta_2 = c(1, 2, 0)
@@ -135,57 +135,13 @@
 # ssq_Y(R X 1) vector of eq.2 error variance draws
 # mu_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
 # var_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
-MeasurementMCat=function(Data,Prior,R=10000){  #function(Data,Prior,Mcmc){
-  #
-  # revision history:
-  #   3/07  Hsiu-Wen Liu
-  #   3/07  fixed naming of dstardraw rossi
-  #
-  # purpose:
-  #   draw from posterior for ordered probit using Gibbs Sampler
-  #   and metropolis RW
-  #
-  # Arguments:
-  #   Data - list of X,y,k
-  #     X is nobs x nvar, y is nobs vector of 1,2,.,k (ordinal variable)
-  #   Prior - list of A, betabar
-  #     A is nvar x nvar prior preci matrix
-  #     betabar is nvar x 1 prior mean
-  #     Ad is ndstar x ndstar prior preci matrix of dstar (ncut is number of cut-offs being estimated)
-  #     dstarbar is ndstar x 1 prior mean of dstar
-  #   Mcmc
-  #     R is number of draws
-  #     keep is thinning parameter
-  #     nprint - print estimated time remaining on every nprint'th draw
-  #     s is scale parameter of random work Metropolis
-  #
-  # Output:
-  #   list of betadraws and cutdraws
-  #
-  # Model:
-  #    z=Xbeta + e  < 0  e ~N(0,1)
-  #    y=1,..,k, if z~c(c[k], c[k+1])
-  #
-  #    cutoffs = c[1],..,c[k+1]
-  #    dstar = dstar[1],dstar[k-2]
-  #    set c[1]=-100, c[2]=0, ...,c[k+1]=100
-  #
-  #    c[3]=exp(dstar[1]),c[4]=c[3]+exp(dstar[2]),...,
-  #    c[k]=c[k-1]+exp(datsr[k-2])
-  #
-  # Note: 1. length of dstar = length of cutoffs - 3
-  #       2. Be careful in assessing prior parameter, Ad.  .1 is too small for many applications.
-  #
-  # Prior: beta ~ N(betabar,A^-1)
-  #        dstar ~ N(dstarbar, Ad^-1)
-  #
-  #
-  # ----------------------------------------------------------------------
-
-  # Rcpp::sourceCpp('rordprobitGibbs_me_M_multi_merr.cpp')
+MeasurementMCat=function(Data,Prior,R=10000){
+  ############################################
+  # Arash Laghaie 2019
+  # The ordered probit part of the inference and the R shell is based on rordprobitGibbs {bayesm}
+  ############################################
   # define functions needed
   #  dstartoc is a fuction to transfer dstar to its cut-off value
-
   dstartoc=function(dstar) {c(-100, 0, cumsum(exp(dstar)), 100)}
 
   # compute conditional likelihood of data given cut-offs
@@ -297,34 +253,34 @@ MeasurementMCat=function(Data,Prior,R=10000){  #function(Data,Prior,Mcmc){
   # print out problem
   #
   cat(" ", fill=TRUE)
-  cat("Starting Gibbs Sampler for Ordered Probit Model",fill=TRUE)
+  cat("Starting Gibbs Sampler for mediation LVM Model",fill=TRUE)
   cat("   with ",nobs,"observations",fill=TRUE)
   cat(" ", fill=TRUE)
   cat("Table of m_tilde values",fill=TRUE)
   for(i in 1:M_ind) print(table(y[,i]))
   cat(" ",fill=TRUE)
-  cat("Prior Parms: ",fill=TRUE)
-  cat("betabar",fill=TRUE)
-  print(betabar)
-  cat(" ", fill=TRUE)
-  cat("A",fill=TRUE)
-  print(A)
-  cat(" ", fill=TRUE)
-  cat("betabar_2",fill=TRUE)
-  print(betabar_2)
-  cat(" ", fill=TRUE)
-  cat("A_2",fill=TRUE)
-  print(A_2)
-  cat(" ", fill=TRUE)
-  cat("dstarbar",fill=TRUE)
-  print(dstarbar)
-  cat(" ", fill=TRUE)
-  cat("Ad",fill=TRUE)
-  print(Ad)
-  cat(" ", fill=TRUE)
-  cat("MCMC parms: ",fill=TRUE)
-  cat("R= ",R," keep= ",keep," nprint= ",nprint,"s= ",s, fill=TRUE)
-  cat(" ",fill=TRUE)
+  # cat("Prior Parms: ",fill=TRUE)
+  # cat("betabar",fill=TRUE)
+  # print(betabar)
+  # cat(" ", fill=TRUE)
+  # cat("A",fill=TRUE)
+  # print(A)
+  # cat(" ", fill=TRUE)
+  # cat("betabar_2",fill=TRUE)
+  # print(betabar_2)
+  # cat(" ", fill=TRUE)
+  # cat("A_2",fill=TRUE)
+  # print(A_2)
+  # cat(" ", fill=TRUE)
+  # cat("dstarbar",fill=TRUE)
+  # print(dstarbar)
+  # cat(" ", fill=TRUE)
+  # cat("Ad",fill=TRUE)
+  # print(Ad)
+  # cat(" ", fill=TRUE)
+  # cat("MCMC parms: ",fill=TRUE)
+  # cat("R= ",R," keep= ",keep," nprint= ",nprint,"s= ",s, fill=TRUE)
+  # cat(" ",fill=TRUE)
 
   # use (-Hessian+Ad)^(-1) evaluated at betahat as the basis of the
   # covariance matrix for the random walk Metropolis increments
@@ -337,9 +293,6 @@ MeasurementMCat=function(Data,Prior,R=10000){  #function(Data,Prior,Mcmc){
   inc.root=chol(chol2inv(chol((-dstarout$hessian+Ad))))  # chol((H+Ad)^-1)
 
   ###################################################################
-  # Keunwoo Kim
-  # 08/20/2014
-  ###################################################################
   draws=MeasurementMCatCpp(dep,y,X,k,A,betabar,Ad,A_2,betabar_2,
                                             s,inc.root,dstarbar,betahat,
                                             M_ind,
@@ -349,12 +302,7 @@ MeasurementMCat=function(Data,Prior,R=10000){  #function(Data,Prior,Mcmc){
   ###################################################################
 
   draws$cutoff_M=draws$cutoff_M[,2:k,]
-  # attributes(draws$cutdraw)$class="bayesm.mat"
-  # attributes(draws$betadraw)$class="bayesm.mat"
-  # attributes(draws$dstardraw)$class="bayesm.mat"
-  # attributes(draws$cutdraw)$mcpar=c(1,R,keep)
-  # attributes(draws$betadraw)$mcpar=c(1,R,keep)
-  # attributes(draws$dstardraw)$mcpar=c(1,R,keep)
+
 
   return(draws)
 }

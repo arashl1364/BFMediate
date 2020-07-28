@@ -87,7 +87,7 @@
 #' M_ind = 2
 #' Y_ind = 2
 #' Mcut = Ycut = 8
-#' nobs=2000
+#' nobs=1000
 #' X=as.matrix(runif(nobs,min=0, max=1))
 #' beta_1 = c(.5,1)
 #' beta_2 = c(.7, 1.5, 0)
@@ -168,56 +168,14 @@
 # mu_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
 # var_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
 
-MeasurementMYCat=function(Data,Prior,R=10000){    #,Mcmc){
-  # Rcpp::sourceCpp('Mediation_Ordered_Multi_Merr.cpp')
+MeasurementMYCat=function(Data,Prior,R=10000){
   #
-  # revision history:
-  #   3/07  Hsiu-Wen Liu
-  #   3/07  fixed naming of dstardraw rossi
-  #   19/10/2018 Arash Laghaie
-  # purpose:
-  #   draw from posterior for ordered probit using Gibbs Sampler
-  #   and metropolis RW
-  #
-  # Arguments:
-  #   Data - list of X,y_tilde,k_Y
-  #     X is nobs x nvar_Y, y_star is nobs vector of 1,2,.,k_Y (ordinal variable)
-  #   Prior - list of A_Y, beta_2_bar
-  #     A_Y is nvar_Y x nvar_Y prior preci matrix
-  #     beta_2_bar is nvar_Y x 1 prior mean
-  #     Ad_Y is ndstar_Y x ndstar_Y prior preci matrix of dstar_Y (ncut_Y is number of cut-offs being estimated)
-  #     dstarbar_Y is ndstar_Y x 1 prior mean of dstar_Y
-  #   Mcmc
-  #     R is number of draws
-  #     keep is thinning parameter
-  #     nprint - print estimated time remaining on every nprint'th draw
-  #     s_Y is scale parameter of random work Metropolis
-  #
-  # Output:
-  #   list of beta_2_draws and cutdraws
-  #
-  # Model:
-  #    z=Xbeta_2 + e  < 0  e ~N(0,1)
-  #    y_star=1,..,k_Y, if z~c(c[k_Y], c[k_Y+1])
-  #
-  #    cutoffs = c[1],..,c[k_Y+1]
-  #    dstar_Y = dstar_Y[1],dstar_Y[k_Y-2]
-  #    set c[1]=-100, c[2]=0, ...,c[k_Y+1]=100
-  #
-  #    c[3]=exp(dstar_Y[1]),c[4]=c[3]+exp(dstar_Y[2]),...,
-  #    c[k_Y]=c[k_Y-1]+exp(datsr[k_Y-2])
-  #
-  # Note: 1. length of dstar_Y = length of cutoffs - 3
-  #       2. Be careful in assessing prior parameter, Ad_Y.  .1 is too small for many applications.
-  #
-  # Prior: beta_2 ~ N(beta_2_bar,A_Y^-1)
-  #        dstar_Y ~ N(dstarbar_Y, Ad_Y^-1)
-  #
+  # Arash Laghaie 2019
+  # The ordered probit part of the inference and the R shell is based on rordprobitGibbs {bayesm}
   #
   # ----------------------------------------------------------------------
-  # Rcpp::sourceCpp('Mediation_Ordered_Multi_Merr.cpp')
   # define functions needed
-  #  dstartoc is a fuction to transfer dstar_Y to its cut-off value
+  #  dstartoc is a fuction to transfer dstar to its cut-off value
 
   dstartoc=function(dstar) {c(-100, 0, cumsum(exp(dstar)), 100)}
 
@@ -364,7 +322,7 @@ MeasurementMYCat=function(Data,Prior,R=10000){    #,Mcmc){
   # print out problem
   #
   cat(" ", fill=TRUE)
-  cat("Starting Gibbs Sampler for Ordered Probit Model",fill=TRUE)
+  cat("Starting Gibbs Sampler for mediation LVM Model",fill=TRUE)
   cat("   with ",nobs,"observations",fill=TRUE)
   cat(" ", fill=TRUE)
   cat("Table of y_tilde values",fill=TRUE)
@@ -372,30 +330,30 @@ MeasurementMYCat=function(Data,Prior,R=10000){    #,Mcmc){
   cat("Table of m_tilde values",fill=TRUE)
   for(i in 1:M_ind) print(table(m_tilde[,i]))
   cat(" ",fill=TRUE)
-  cat("Prior Parms: ",fill=TRUE)
-  cat("betabar",fill=TRUE)
-  print(betabar)
-  cat("beta_2_bar",fill=TRUE)
-  print(beta_2_bar)
-  cat(" ", fill=TRUE)
-  cat("A_M",fill=TRUE)
-  print(A_M)
-  cat("A_Y",fill=TRUE)
-  print(A_Y)
-  cat(" ", fill=TRUE)
-  cat("dstarbar_M",fill=TRUE)
-  print(dstarbar_M)
-  cat("dstarbar_Y",fill=TRUE)
-  print(dstarbar_Y)
-  cat(" ", fill=TRUE)
-  cat("Ad_M",fill=TRUE)
-  print(Ad_M)
-  cat("Ad_Y",fill=TRUE)
-  print(Ad_Y)
-  cat(" ", fill=TRUE)
-  cat("MCMC parms: ",fill=TRUE)
-  cat("R= ",R," keep= ",keep," nprint= ",nprint,"s_M= ",s_M,"s_Y= ",s_Y, fill=TRUE)
-  cat(" ",fill=TRUE)
+  # cat("Prior Parms: ",fill=TRUE)
+  # cat("betabar",fill=TRUE)
+  # print(betabar)
+  # cat("beta_2_bar",fill=TRUE)
+  # print(beta_2_bar)
+  # cat(" ", fill=TRUE)
+  # cat("A_M",fill=TRUE)
+  # print(A_M)
+  # cat("A_Y",fill=TRUE)
+  # print(A_Y)
+  # cat(" ", fill=TRUE)
+  # cat("dstarbar_M",fill=TRUE)
+  # print(dstarbar_M)
+  # cat("dstarbar_Y",fill=TRUE)
+  # print(dstarbar_Y)
+  # cat(" ", fill=TRUE)
+  # cat("Ad_M",fill=TRUE)
+  # print(Ad_M)
+  # cat("Ad_Y",fill=TRUE)
+  # print(Ad_Y)
+  # cat(" ", fill=TRUE)
+  # cat("MCMC parms: ",fill=TRUE)
+  # cat("R= ",R," keep= ",keep," nprint= ",nprint,"s_M= ",s_M,"s_Y= ",s_Y, fill=TRUE)
+  # cat(" ",fill=TRUE)
 
   # use (-Hessian+Ad_M)^(-1) evaluated at betahat as the basis of the
   # covariance matrix for the random walk Metropolis increments
@@ -419,12 +377,7 @@ MeasurementMYCat=function(Data,Prior,R=10000){    #,Mcmc){
                                   reltol = 1e-06, trace=0), mu=Xmstar%*%beta_2_hat, y=rowMeans(y_tilde))
   inc.root_Y=chol(chol2inv(chol((-dstarout$hessian+Ad_Y))))  # chol((H+Ad_Y)^-1)
 
-  ###################################################################
-  ###################################################################
-  # Keunwoo Kim
-  # 08/20/2014
-  # Modified by Arash Laghaie
-  # 12/27/2018
+
   ###################################################################
   draws= MeasurementMYCatCpp(X, m_tilde, y_tilde, k_M, k_Y,M_ind,Y_ind,
                                      A_M, betabar, Ad_M, s_M, inc.root_M, dstarbar_M, betahat,
@@ -433,20 +386,8 @@ MeasurementMYCat=function(Data,Prior,R=10000){    #,Mcmc){
   ###################################################################
 
   draws$cutoff_M=draws$cutoff_M[,2:k_M,]
-  # attributes(draws$cutdraw_M)$class="bayesm.mat"
-  # attributes(draws$betadraw)$class="bayesm.mat"
-  # attributes(draws$dstardraw_M)$class="bayesm.mat"
-  # attributes(draws$cutdraw_M)$mcpar=c(1,R,keep)
-  # attributes(draws$betadraw)$mcpar=c(1,R,keep)
-  # attributes(draws$dstardraw_M)$mcpar=c(1,R,keep)
 
   draws$cutoff_Y=draws$cutoff_Y[,2:k_Y,]
-  # attributes(draws$cutdraw_Y)$class="bayesm.mat"
-  # attributes(draws$beta_2_draw)$class="bayesm.mat"
-  # attributes(draws$dstardraw_Y)$class="bayesm.mat"
-  # attributes(draws$cutdraw_Y)$mcpar=c(1,R,keep)
-  # attributes(draws$beta_2_draw)$mcpar=c(1,R,keep)
-  # attributes(draws$dstardraw_Y)$mcpar=c(1,R,keep)
 
   return(draws)
 }
