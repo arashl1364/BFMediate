@@ -221,7 +221,7 @@ out_comp = Mediate(Data = Data_comp, Model = "Simple",Prior = Prior,R = 10000, b
 If "Simple" is given as the model, _Mediate_ function performs a mediation analysis a la Baron & Kenny (1986), as well as, Preacher & Hayes (2004) bootstrapping analysis and the proposed Bayesian method. The results are stord in lists BK, PH, and Simple respecteively.
 
 ```
-#Regression estimates of the first and second B&K mediation equations
+#Regression estimates of B&K's M and Y equations
 out_comp$BK$eq1
 out_comp$BK$eq2
 out_comp$BK$FullMed #full mediation Null hypothesis test result
