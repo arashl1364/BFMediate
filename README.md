@@ -70,8 +70,8 @@ We can then view any function of the posterior estimates, e.g. posterior means:
 
 ```
 #estimation results
-colMeans(out_1$beta_M)    #posterior means of the M equation's coeffcients
-colMeans(out_1$beta_Y)    #posterior means of the Y equation's coeffcients
+colMeans(out_1$beta_M)    #posterior means of M equation's coeffcients
+colMeans(out_1$beta_Y)    #posterior means of Y equation's coeffcients
 
 ```
 
