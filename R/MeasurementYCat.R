@@ -49,13 +49,13 @@
 #' }
 #' @export
 #' @examples
-#' SimMeasurementYCat = function(X, beta_1, beta_2, sigma_M, cutoff_Y, Y_ind, tau, ssq_y_star){
+#' SimMeasurementYCat = function(X, beta_M, beta_Y, sigma_M, cutoff_Y, Y_ind, tau, ssq_y_star){
 #'
 #'   nobs = dim(X)[1]
 #'   y_tilde = y_star = matrix(double(nobs*Y_ind), ncol = Y_ind)
 #'
-#'   M = beta_1[1] + beta_1[2] * X + rnorm(nobs) * sigma_M
-#'   Y = beta_2[1] + beta_2[2] * M + beta_2[3] * X + rnorm(nobs)
+#'   M = beta_M[1] + beta_M[2] * X + rnorm(nobs) * sigma_M
+#'   Y = beta_Y[1] + beta_Y[2] * M + beta_Y[3] * X + rnorm(nobs)
 #'
 #'   for(i in 1: Y_ind){
 #'     y_star[,i] = tau[i] + Y + sqrt(ssq_y_star[i])*rnorm(nobs);
@@ -63,8 +63,8 @@
 #'   }
 #'
 #'   return(list(Y = Y, M = M, y_tilde = y_tilde, X = X,
-#'               beta_1 = beta_1,
-#'               k_Y=dim(cutoff_Y)[2]-1, beta_2 = beta_2, tau = tau,
+#'               beta_M = beta_M,
+#'               k_Y=dim(cutoff_Y)[2]-1, beta_Y = beta_Y, tau = tau,
 #'              ssq_y_star = ssq_y_star, y_star = y_star, cutoff_Y = cutoff_Y,
 #'               Y_ind=Y_ind))
 #' }
@@ -73,14 +73,14 @@
 #' Ycut = 8
 #' nobs = 1000
 #' X=as.matrix(runif(nobs,min=0, max=1))
-#' beta_1 = c(.5,1)
-#' beta_2 = c(1, 4, 2)
+#' beta_M = c(.5,1)
+#' beta_Y = c(1, 4, 2)
 #' sigma_M = 1^.5
 #' ssq_y_star = c(.5,.7)
 #' tau = c(0,-.5)   #first intercept should always be 0
 #' cutoff_Y =  matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
 #'                      -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Ycut, byrow = T)
-#' DataYCat = SimMeasurementYCat(X, beta_1, beta_2, sigma_M, cutoff_Y, Y_ind, tau, ssq_y_star)
+#' DataYCat = SimMeasurementYCat(X, beta_M, beta_Y, sigma_M, cutoff_Y, Y_ind, tau, ssq_y_star)
 #'
 #' #estimation
 #' A_M = c(100,100); #Prior variance for beta_0M, beta_1

@@ -15,8 +15,8 @@ MeasurementMYCat(Data,Prior,R)
 }
 \value{
 \describe{
-\item{beta_1(R X 2)}{matrix of eq.1 coefficients' draws}
-\item{beta_2(R X 3)}{matrix of eq.2 coefficients' draws}
+\item{beta_M(R X 2)}{matrix of eq.1 coefficients' draws}
+\item{beta_Y(R X 3)}{matrix of eq.2 coefficients' draws}
 \item{lambda (M_ind X 2 X R)}{array of mediator indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively.}
 \item{ssq_m_star(R X M_ind)}{Matrix of mediator indicator equations' coefficients' error variance draws}
 \item{ssq_y_star(R X Y_ind)}{Matrix of dependent variable indicator equations' coefficients' error variance draws}
@@ -74,39 +74,39 @@ Estimates a partial mediation model with multiple categorical indicator for the 
 }
 }
 \examples{
-SimMeasurementMYCat = function(X, beta_1, cutoff_M, beta_2, cutoff_Y, M_ind, Y_ind,
+SimMeasurementMYCat = function(X, beta_M, cutoff_M, beta_Y, cutoff_Y, M_ind, Y_ind,
                                lambda, tau, ssq_m_star, ssq_y_star){
 
   nobs = dim(X)[1]
   m_tilde = m_star = matrix(double(nobs*M_ind), ncol = M_ind)
   y_tilde = y_star = matrix(double(nobs*Y_ind), ncol = Y_ind)
 
-  M = cbind(rep(1,nobs),X)\%*\%beta_1 + rnorm(nobs)
+  M = cbind(rep(1,nobs),X)\%*\%beta_M + rnorm(nobs)
   for(i in 1: M_ind){
     m_star[,i] = lambda[i] + M + sqrt(ssq_m_star[i])*rnorm(nobs);
     m_tilde[,i] = cut(m_star[,i], br = cutoff_M[i,], right=TRUE, include.lowest = TRUE, labels = FALSE)
   }
 
-  Y = cbind(rep(1,nobs),cbind(M,X))\%*\%beta_2 + rnorm(nobs)
+  Y = cbind(rep(1,nobs),cbind(M,X))\%*\%beta_Y + rnorm(nobs)
   for(i in 1: Y_ind){
     y_star[,i] = tau[i] + Y + sqrt(ssq_y_star[i])*rnorm(nobs);
     y_tilde[,i] = cut(y_star[,i], br = cutoff_Y[i,], right=TRUE, include.lowest = TRUE, labels = FALSE)
   }
 
   return(list(Y = Y, M = M, y_tilde = y_tilde, m_tilde = m_tilde, X = X,
-              k_M=dim(cutoff_M)[2]-1, beta_1 = beta_1, lambda = lambda,
+              k_M=dim(cutoff_M)[2]-1, beta_M = beta_M, lambda = lambda,
               ssq_m_star = ssq_m_star, m_star = m_star, cutoff_M = cutoff_M,
-              k_Y=dim(cutoff_Y)[2]-1, beta_2 = beta_2, tau = tau, ssq_y_star = ssq_y_star,
+              k_Y=dim(cutoff_Y)[2]-1, beta_Y = beta_Y, tau = tau, ssq_y_star = ssq_y_star,
               y_star = y_star, cutoff_Y = cutoff_Y, M_ind=M_ind, Y_ind=Y_ind))
 }
 
 M_ind = 2
 Y_ind = 2
 Mcut = Ycut = 8
-nobs=2000
+nobs=1000
 X=as.matrix(runif(nobs,min=0, max=1))
-beta_1 = c(.5,1)
-beta_2 = c(.7, 1.5, 0)
+beta_M = c(.5,1)
+beta_Y = c(.7, 1.5, 0)
 ssq_m_star = c(.5,.3)
 lambda = c(0,-.5) #the intercepts for the latent M indicators w. measurement error
 ssq_y_star = c(.2,.2)
@@ -115,7 +115,7 @@ cutoff_M = matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
                     -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Mcut, byrow = T)
 cutoff_Y =  matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
                      -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Ycut, byrow = T)
-DataMYCat = SimMeasurementMYCat(X, beta_1, cutoff_M, beta_2, cutoff_Y, M_ind,
+DataMYCat = SimMeasurementMYCat(X, beta_M, cutoff_M, beta_Y, cutoff_Y, M_ind,
                                 Y_ind, lambda, tau, ssq_m_star, ssq_y_star)
 
 
@@ -128,8 +128,8 @@ Data = list(X=cbind(rep(1,length(DataMYCat$X)),DataMYCat$X), m_tilde=as.matrix(D
 out = MeasurementMYCat(Data=Data,R = 10000)
 
 #results
-colMeans(out$beta_1)
-colMeans(out$beta_2)
+colMeans(out$beta_M)
+colMeans(out$beta_Y)
 apply(out$lambdadraw,MARGIN = c(1,2),FUN = mean)
 apply(out$taudraw,MARGIN = c(1,2),FUN = mean)
 

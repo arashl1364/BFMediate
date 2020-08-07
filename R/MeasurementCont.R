@@ -53,22 +53,22 @@
 #' @export
 #' @examples
 #' library(rstan)
-#' SimMeasurementCont = function( beta_1, beta_2 , lambda, tau, m_ind, y_ind, sigma_M, sigma_m_star,
+#' SimMeasurementCont = function( beta_M, beta_Y , lambda, tau, m_ind, y_ind, sigma_M, sigma_m_star,
 #'                               sigma_y, sigma_y_star, N, X) {
 #'
 #'   m_star = matrix(double(N*m_ind),ncol = m_ind); y_star = matrix(double(N*y_ind),ncol = y_ind)
 #'   eps_m_star = matrix(double(N*m_ind),ncol = m_ind); eps_y_star = matrix(double(N*y_ind),ncol = y_ind)
 #'   eps_M = rnorm(N)*sigma_M # generate errors for M (independent)
 #'   eps_Y = rnorm(N)*sigma_y # generate errors for y (independent)
-#'   M = beta_1[1] + X*beta_1[2]  + eps_M # generate latent mediator M
-#'   y = beta_2[1] +  M*beta_2[2] + X*beta_2[3] + eps_Y # generate dependent variable
+#'   M = beta_M[1] + X*beta_M[2]  + eps_M # generate latent mediator M
+#'   y = beta_Y[1] +  M*beta_Y[2] + X*beta_Y[3] + eps_Y # generate dependent variable
 #'
 #'   eps_m_star[,1]=rnorm(N)*sigma_m_star[1] # generate errors for m_star (independent)
 #'   m_star[,1] =  M + eps_m_star[,1] # generate observed mediator indicators m_star
 #'   if(m_ind>1){
 #'     for(i in 2:(m_ind))   {
 #'       eps_m_star[,i]=rnorm(N)*sigma_m_star[i] # generate errors for m_star (independent)
-#'       m_star[,i] =  lambda[(i-1),1] + M*lambda[(i-1),2] + X*beta_2[-c(1,2)] + eps_m_star[,i]
+#'       m_star[,i] =  lambda[(i-1),1] + M*lambda[(i-1),2] + X*beta_Y[-c(1,2)] + eps_m_star[,i]
 #'     }
 #'   }
 #'
@@ -87,14 +87,14 @@
 #' sigma_y = 1^.5 # error std y
 #' sigma_m_star = c(.3,.5)^.5 #c(1,2)^.5
 #' sigma_y_star = c(.5,.3)^.5  #c(2,1)^.5
-#' beta_1 = c(.5,1)
-#' beta_2 = c(1,3,0)
+#' beta_M = c(.5,1)
+#' beta_Y = c(1,3,0)
 #' lambda = matrix(c(1,1.5),ncol=2)
 #' tau = matrix(c(1,2),ncol = 2)
-#' k=length(beta_1)-1
+#' k=length(beta_M)-1
 #' nobs = 1000   # number of observations
 #' X = runif(nobs) # generate random X from a uniform distribution
-#' Data = SimMeasurementCont( beta_1, beta_2 , lambda, tau, m_ind, y_ind, sigma_M, sigma_m_star,
+#' Data = SimMeasurementCont( beta_M, beta_Y , lambda, tau, m_ind, y_ind, sigma_M, sigma_m_star,
 #'                           sigma_y, sigma_y_star, nobs, X)
 #' R = 5000; burnin = 3000
 #'
@@ -108,7 +108,7 @@
 #' colMeans(out$beta_M)
 #' colMeans(out$beta_Y)
 #'
-#' BFMeasurementCont = exp(BFSD(post = out , prior = A_Y[3],burnin = 0))
+#' BFMeasurementCont = exp(BFSD(Post = out , Prior = A_Y[3],burnin = 0))
 ### Description MeasurementCont estimates a partial mediation model with multiple categorical indicators for the mediator
 # and the dependent variable using Hamiltonian Monte Carlo (HMC) with Stan
 

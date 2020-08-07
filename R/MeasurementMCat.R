@@ -53,23 +53,23 @@
 #'
 #' @export
 #' @examples
-#' SimMeasurementMCat = function(X, beta_1, cutoff_M, beta_2, Sigma_Y, M_ind, lambda, ssq_m_star){
+#' SimMeasurementMCat = function(X, beta_M, cutoff_M, beta_Y, Sigma_Y, M_ind, lambda, ssq_m_star){
 #'
 #'   nobs = dim(X)[1]
 #'   m_star = m_tilde = matrix(double(nobs*M_ind), ncol = M_ind)
 #'
-#'   M = beta_1[1] + beta_1[2] * X + rnorm(nobs)  #cbind(rep(1,nobs),X)%*%beta_1 + rnorm(nobs)
+#'   M = beta_M[1] + beta_M[2] * X + rnorm(nobs)  #cbind(rep(1,nobs),X)%*%beta_M + rnorm(nobs)
 #'
 #'   for(i in 1: M_ind){
 #'     m_star[,i] = lambda[i] + M + sqrt(ssq_m_star[i])*rnorm(nobs);
 #'     m_tilde[,i] = cut(m_star[,i], br = cutoff_M[i,], right=TRUE, include.lowest = TRUE, labels = FALSE)
 #'   }
 #'
-#'   Y = beta_2[1] + beta_2[2] * M + beta_2[3] * X + rnorm(nobs)*Sigma_Y
-#'                                                      #cbind(rep(1,nobs),cbind(M,X))%*%beta_2 + rnorm(nobs)
+#'   Y = beta_Y[1] + beta_Y[2] * M + beta_Y[3] * X + rnorm(nobs)*Sigma_Y
+#'                                                      #cbind(rep(1,nobs),cbind(M,X))%*%beta_Y + rnorm(nobs)
 #'
 #'   return(list(Y = Y, M = M, m_tilde = m_tilde, X = X,
-#'               beta_1 = beta_1, beta_2 = beta_2,
+#'               beta_M = beta_M, beta_Y = beta_Y,
 #'               lambda = lambda, ssq_m_star = ssq_m_star, m_star = m_star, cutoff_M = cutoff_M,
 #'               k_M=dim(cutoff_M)[2]-1, M_ind=M_ind))
 #' }
@@ -78,8 +78,8 @@
 #' Mcut =  8
 #' nobs= 1000
 #' X=as.matrix(runif(nobs,min=0, max=1))
-#' beta_1 = c(.5,1)
-#' beta_2 = c(1, 2, 0)
+#' beta_M = c(.5,1)
+#' beta_Y = c(1, 2, 0)
 #' Sigma_Y = 1^.5
 #' ssq_m_star = c(.5,.7)
 #' lambda = c(0,-.5)   #the intercepts for the latent M indicators w. measurement
@@ -87,7 +87,7 @@
 #'
 #' cutoff_M = matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
 #'                     -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Mcut, byrow = T)
-#' DataMCat = SimMeasurementMCat(X, beta_1, cutoff_M, beta_2, Sigma_Y, M_ind, lambda, ssq_m_star)
+#' DataMCat = SimMeasurementMCat(X, beta_M, cutoff_M, beta_Y, Sigma_Y, M_ind, lambda, ssq_m_star)
 #'
 #' #estimation
 #' Data = list(X=cbind(rep(1,length(DataMCat$X)),DataMCat$X), m_tilde=as.matrix(DataMCat$m_tilde),
