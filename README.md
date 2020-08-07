@@ -62,7 +62,7 @@ We then estimate the model, using _PartialMed_ function that takes Data, a list 
 A_M = c(100,100); #Prior variance for beta_0M, beta_1
 A_Y_inf = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3(reference prior)
 R = 2000
-out_1 = PartialMed(Data=Data, Pars = list(A_M=A_M, A_Y=A_Y_inf), R = R)
+out_1 = PartialMed(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y_inf), R = R)
 
 ```
 
@@ -81,7 +81,7 @@ We can compute and analyse the sensitivity of the Bayes factor to the direct eff
 #Choosing a diffuse prior for the direct effect (beta_3)
 A_Y_dif = c(100,100,100) #Prior variance for beta_0Y, beta_2, beta_3
 R = 2000
-out_100 = PartialMed(Data=Data, Pars = list(A_M=A_M, A_Y=A_Y_dif), R = R)
+out_100 = PartialMed(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y_dif), R = R)
 
 ```
 
