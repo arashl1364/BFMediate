@@ -30,8 +30,8 @@
 #'
 #' @return a list containing
 #' \describe{
-#' \item{beta_1(R X 2)}{matrix of eq.1 coefficients' posterior draws}
-#' \item{beta_2(R X 3)}{matrix of eq.2 coefficients' posterior draws}
+#' \item{beta_M(R X 2)}{matrix of eq.1 coefficients' posterior draws}
+#' \item{beta_Y(R X 3)}{matrix of eq.2 coefficients' posterior draws}
 #' \item{ssq_M(R X 1)}{vector of eq.1 error variance posterior draws}
 #' \item{ssq_Y(R X 1)}{vector of eq.2 error variance posterior draws}
 #' \item{mu_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
@@ -77,8 +77,8 @@
 # A_Y vector of coefficients' prior variances of eq.2 (def: c(100,100,1))
 # R number of MCMC iterations (def:10000)
 #Value:
-# beta_1(R X 2)  matrix of eq.1 coefficients' posterior draws
-# beta_2(R X 3)  matrix of eq.2 coefficients' posterior draws
+# beta_M(R X 2)  matrix of eq.1 coefficients' posterior draws
+# beta_Y(R X 3)  matrix of eq.2 coefficients' posterior draws
 # ssq_M(R X 1) vector of eq.1 error variance posterior draws
 # ssq_Y(R X 1) vector of eq.2 error variance posterior draws
 # mu_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
@@ -141,7 +141,7 @@ PartialMed=function(Data, Prior, R=10000){
   ctime = proc.time()[3]
   cat('  Total Time Elapsed: ',round((ctime-itime)/60,2),'\n')
 
-  return(list(beta_1=beta_1_draw,beta_2=beta_2_draw, ssq_M=ssq_M_draw ,ssq_y=ssq_y_draw,
+  return(list(beta_M=beta_1_draw,beta_Y=beta_2_draw, ssq_M=ssq_M_draw ,ssq_y=ssq_y_draw,
               mu_draw=mu_beta_2_draw[,3], var_draw=IR_beta_2_draw[3,3,]))    #MCMC moments of the direct effect
 
   # return(list(beta_1=beta_1_draw,beta_2=beta_2_draw, ssq_M=ssq_M_draw ,ssq_y=ssq_y_draw,

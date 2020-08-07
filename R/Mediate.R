@@ -204,9 +204,9 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
 
     # BF Simple
     Simple = PartialMed(Data = Data, R=R, Prior = list(A_M=A_M, A_Y=A_Y))
-    beta_1 = Simple$beta_1[,2]
-    beta_2 = Simple$beta_2[,2]
-    beta_3 = Simple$beta_2[,3]
+    beta_1 = Simple$beta_M[,2]
+    beta_2 = Simple$beta_Y[,2]
+    beta_3 = Simple$beta_Y[,3]
     BF.Simple = exp(BFSD(Post = Simple , Prior = A_Y[3], burnin = burnin))
     Bayes.CI.Indirect = round(as.vector(quantile(beta_1*beta_2,probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(beta_3,probs = c(.025,.975))),2)
@@ -227,10 +227,8 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Simple$BF = BF.Simple
 
     return(list(BK = BK, PH = PH, Simple = Simple))
-    # return(list(BK.beta_1 = BK.beta_1, BK.beta_1.sd = BK.beta_1.sd, BK.beta_2 = BK.beta_2, BK.beta_2.sd = BK.beta_2.sd, BK.beta_3 = BK.beta_3, BK.beta_3.sd = BK.beta_3.sd, BK.beta_3.pvalue = BK.beta_3.pvalue, std_res = std_res, evidence = evidence,
-    #             PH.mean.Indirect = PH.mean.Indirect, PH.CI.Indirect = PH.CI.Indirect, PH.CI.Direct = PH.CI.Direct, Bayes.CI.Indirect = Bayes.CI.Indirect, Bayes.CI.Direct = Bayes.CI.Direct,
-    #             beta_1 = beta_1, beta_2 = beta_2, beta_3 = beta_3, BF.Simple = BF.Simple, CI = CI))
-  }
+
+    }
 
   ################################
   ##### Continous Data Multi #####
@@ -246,8 +244,8 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
 
     out = MeasurementCont(Data = Data, Prior = list(A_M = A_M, A_Y = A_Y),R=R, burnin = burnin)
     BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = 0)) #we already accounted for burnin in estimation
-    Bayes.CI.Indirect = round(as.vector(quantile(out$beta_1[,2]*out$beta_2[,2],probs = c(.025,.975))),2)
-    Bayes.CI.Direct = round(as.vector(quantile(out$beta_2[,3],probs = c(.025,.975))),2)
+    Bayes.CI.Indirect = round(as.vector(quantile(out$beta_M[,2]*out$beta_Y[,2],probs = c(.025,.975))),2)
+    Bayes.CI.Direct = round(as.vector(quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
 
     if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive",
                                    ifelse(BF.LVM>10,"Strong",
@@ -257,7 +255,7 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
                                    ifelse(1/BF.LVM>10,"Strong",
                                           ifelse(1/BF.LVM>3.2,"Substantial","Not worth more than a bare mention")))
 
-    CI = as.character(ifelse((quantile(out$beta_3, probs = .025)>0) | (quantile(out$beta_3,probs = .975)<0),"Reject","Accept"))
+    CI = as.character(ifelse((quantile(out$beta_Y[,3], probs = .025)>0) | (quantile(out$beta_Y[,3],probs = .975)<0),"Reject","Accept"))
 
 
     out$evidence = evidence
@@ -282,8 +280,8 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$X), m_tilde=as.matrix(Data$m_tilde), Y= as.matrix(Data$Y) ,k=Mcut-1, M_ind=dim(Data$m_tilde)[2])
     out = MeasurementMCat(Data=Data_cat, Prior = Prior, R=R) #rordprobitGibbs_me_M_multi_merr_cpp(Data=Data_cat, Mcmc=Mcmc)
     BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = burnin))
-    Bayes.CI.Indirect = round(as.vector(quantile(out$beta_1[,2]*out$beta_2[,2],probs = c(.025,.975))),2)
-    Bayes.CI.Direct = round(as.vector(quantile(out$beta_2[,3],probs = c(.025,.975))),2)
+    Bayes.CI.Indirect = round(as.vector(quantile(out$beta_M[,2]*out$beta_Y[,2],probs = c(.025,.975))),2)
+    Bayes.CI.Direct = round(as.vector(quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
 
     if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive",
                                    ifelse(BF.LVM>10,"Strong",
@@ -314,8 +312,8 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Mcmc=list(R=R)
     out = MeasurementYCat(Data=Data_cat, Prior=Prior, R=10000) #rordprobitGibbs_me_multi_merr_cpp(Data=Data_cat, Mcmc=Mcmc)
     BF.LVM = BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = burnin))
-    Bayes.CI.Indirect = round(as.vector(quantile(out,multi$beta_1[,2]*out$beta_2[,2], probs = c(.025,.975))),2)
-    Bayes.CI.Direct = round(as.vector(quantile(out$beta_2[,3],probs = c(.025,.975))),2)
+    Bayes.CI.Indirect = round(as.vector(quantile(out,multi$beta_M[,2]*out$beta_Y[,2], probs = c(.025,.975))),2)
+    Bayes.CI.Direct = round(as.vector(quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
 
     if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive",
                                    ifelse(BF.LVM>10,"Strong",
@@ -347,8 +345,8 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$X), m_tilde=as.matrix(Data$m_tilde), y_tilde=as.matrix(Data$y_tilde), k_M = Mcut-1, k_Y=Ycut-1, M_ind=dim(as.matrix(Data$m_tilde))[2], Y_ind=dim(as.matrix(Data$y_tilde))[2])
     out = MeasurementMYCat(Data=Data_cat, Prior=Prior, R=10000) #Mediation_Ordered_Multi_Merr(Data=Data_cat, Mcmc=Mcmc)
     BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = burnin))
-    Bayes.CI.Indirect = round(as.vector(quantile(out$beta_1[,2]*out$beta_2[,2],probs = c(.025,.975))),2)
-    Bayes.CI.Direct = round(as.vector(quantile(out$beta_2[,3],probs = c(.025,.975))),2)
+    Bayes.CI.Indirect = round(as.vector(quantile(out$beta_M[,2]*out$beta_Y[,2],probs = c(.025,.975))),2)
+    Bayes.CI.Direct = round(as.vector(quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
 
     if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive",
                                    ifelse(BF.LVM>10,"Strong",

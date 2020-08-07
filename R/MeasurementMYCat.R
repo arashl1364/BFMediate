@@ -47,8 +47,8 @@
 #'
 #' @return
 #' \describe{
-#'   \item{beta_1(R X 2)}{matrix of eq.1 coefficients' draws}
-#'   \item{beta_2(R X 3)}{matrix of eq.2 coefficients' draws}
+#'   \item{beta_M(R X 2)}{matrix of eq.1 coefficients' draws}
+#'   \item{beta_Y(R X 3)}{matrix of eq.2 coefficients' draws}
 #'   \item{lambda (M_ind X 2 X R)}{array of mediator indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively.}
 #'   \item{ssq_m_star(R X M_ind)}{Matrix of mediator indicator equations' coefficients' error variance draws}
 #'   \item{ssq_y_star(R X Y_ind)}{Matrix of dependent variable indicator equations' coefficients' error variance draws}
@@ -112,8 +112,8 @@
 #' out = MeasurementMYCat(Data=Data,R = 10000)
 #'
 #' #results
-#' colMeans(out$beta_1)
-#' colMeans(out$beta_2)
+#' colMeans(out$beta_M)
+#' colMeans(out$beta_Y)
 #' apply(out$lambdadraw,MARGIN = c(1,2),FUN = mean)
 #' apply(out$taudraw,MARGIN = c(1,2),FUN = mean)
 #'
@@ -157,8 +157,8 @@
 # R number of MCMC iterations (def:10000)
 
 ### Value:
-# beta_1(R X 2)  matrix of eq.1 coefficients' draws
-# beta_2(R X 3)  matrix of eq.2 coefficients' draws
+# beta_M(R X 2)  matrix of eq.1 coefficients' draws
+# beta_Y(R X 3)  matrix of eq.2 coefficients' draws
 # lambda (M_ind X 2 X R) array of mediator indicator coefficients' draws.
 # tau (Y_ind X 2 X R) array of dependent variable indicator coefficients' draws.
 # Each slice is one draw, where rows represent the indicator equation and columns are the coefficients

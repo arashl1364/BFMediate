@@ -39,8 +39,8 @@
 #'
 #' @return
 #' \describe{
-#' \item{beta_1(R X 2)}{matrix of eq.1 coefficients' draws }
-#' \item{beta_2(R X 3)}{matrix of eq.2 coefficients' draws }
+#' \item{beta_M(R X 2)}{matrix of eq.1 coefficients' draws }
+#' \item{beta_Y(R X 3)}{matrix of eq.2 coefficients' draws }
 #' \item{tau(Y_ind X 2 X R)}{array of indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively. }
 #' \item{ssq_y_star(R X Y_ind)}{  Matrix of indicator equations' coefficients' error variance draws }
 #' \item{ssq_M(R X 1)}{vector of eq.1 error variance draws }
@@ -92,8 +92,8 @@
 #' out = MeasurementYCat(Data=Data, Prior=Prior, R=10000)
 #'
 #' #results
-#' colMeans(out$beta_1)
-#' colMeans(out$beta_2)
+#' colMeans(out$beta_M)
+#' colMeans(out$beta_Y)
 #' apply(out$cutoff_Y,c(1,2),FUN = mean)
 ### Description MeasurementYCat estimates a partial mediation model with multiple categorical indicator for the dependent variable
 # and observed mediator using a mixture of Metropolis-Hastings and Gibbs sampling
@@ -122,8 +122,8 @@
 # A_Y vector of coefficients' prior variances of eq.2 (def: c(100,100,1))
 # R number of MCMC iterations (def:10000)
 ### Value:
-# beta_1(R X 2)  matrix of eq.1 coefficients' draws
-# beta_2(R X 3)  matrix of eq.2 coefficients' draws
+# beta_M(R X 2)  matrix of eq.1 coefficients' draws
+# beta_Y(R X 3)  matrix of eq.2 coefficients' draws
 # tau (Y_ind X 2 X R) array of indicator coefficients' draws.
 # Each slice is one draw, where rows represent the indicator equation and columns are the coefficients
 # All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively
@@ -284,7 +284,7 @@ MeasurementYCat=function(Data,Prior,R=10000){  #,Mcmc){
   ###################################################################
 
   draws$cutoff_Y=draws$cutoff_Y[,2:k,]
-  draws$beta_1 = beta_1_draw
+  draws$beta_M = beta_1_draw
   draws$ssq_M = ssq_M_draw
 
   return(draws)

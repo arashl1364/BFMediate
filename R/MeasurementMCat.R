@@ -42,8 +42,8 @@
 #'
 #' @return
 #' \describe{
-#'   \item{beta_1(R X 2)}{matrix of eq.1 coefficients' draws}
-#'   \item{beta_2(R X 3)}{matrix of eq.2 coefficients' draws}
+#'   \item{beta_M(R X 2)}{matrix of eq.1 coefficients' draws}
+#'   \item{beta_Y(R X 3)}{matrix of eq.2 coefficients' draws}
 #'   \item{lambda (M_ind X 2 X R)}{array of indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively.}
 #'   \item{ssq_m_star(R X M_ind)}{Matrix of indicator equations' coefficients' error variance draws}
 #'   \item{ssq_Y(R X 1)}{vector of eq.2 error variance draws}
@@ -96,8 +96,8 @@
 #'
 #'
 #' #results
-#' colMeans(out$beta_1)
-#' colMeans(out$beta_2)
+#' colMeans(out$beta_M)
+#' colMeans(out$beta_Y)
 #' apply(out$cutoff_M,c(1,2),FUN = mean)
 ### Description MeasurementMCat estimates a partial mediation model with multiple categorical indicator for the mediator
 # and observed dependent variable using a mixture of Metropolis-Hastings and Gibbs sampling
@@ -126,8 +126,8 @@
 # A_Y vector of coefficients' prior variances of eq.2 (def: c(100,100,1))
 # R number of MCMC iterations (def:10000)
 ### Value:
-# beta_1(R X 2)  matrix of eq.1 coefficients' draws
-# beta_2(R X 3)  matrix of eq.2 coefficients' draws
+# beta_M(R X 2)  matrix of eq.1 coefficients' draws
+# beta_Y(R X 3)  matrix of eq.2 coefficients' draws
 # lambda (M_ind X 2 X R) array of indicator coefficients' draws.
 # Each slice is one draw, where rows represent the indicator equation and columns are the coefficients
 # All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively
@@ -206,11 +206,11 @@ MeasurementMCat=function(Data,Prior,R=10000){
     if(is.null(Prior$betabar)) {betabar=c(rep(0,nvar))}
     else {betabar=Prior$betabar}
     if(is.null(Prior$A_M)) {A=diag(1/rep(100,2))}
-    else {A=diag(1/Prior$A_M)}                       #A (A_M) prior variance of beta_1 vector
+    else {A=diag(1/Prior$A_M)}                       #A (A_M) prior variance of beta_M vector
     if(is.null(Prior$betabar_2)) {betabar_2=c(rep(0,nvar+1))}
     else {betabar_2=Prior$betabar_2}
     if(is.null(Prior$A_Y)) {A_2=diag(1/c(100,100,1))}
-    else {A_2=diag(1/Prior$A_Y)}                     #A_2 (A_Y) prior variance of beta_2 vector
+    else {A_2=diag(1/Prior$A_Y)}                     #A_2 (A_Y) prior variance of beta_Y vector
     if(is.null(Prior$Ad)) {Ad=diag(ndstar)}
     else {Ad=Prior$Ad}
     if(is.null(Prior$dstarbar)) {dstarbar=c(rep(0,ndstar))}

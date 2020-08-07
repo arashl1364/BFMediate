@@ -70,8 +70,8 @@ We can then view any function of the posterior estimates, e.g. posterior means:
 
 ```
 #estimation results
-colMeans(out_1$beta_1)    #posterior means of the first mediation equation's coeffcients
-colMeans(out_1$beta_2)    #posterior means of the second mediation equation's coeffcients
+colMeans(out_1$beta_M)    #posterior means of the M equation's coeffcients
+colMeans(out_1$beta_Y)    #posterior means of the Y equation's coeffcients
 
 ```
 
@@ -190,8 +190,8 @@ Similar to the simple model we can compute any function of the posteriors of the
 
 ```
 #results
-colMeans(out$beta_1)    #posterior means of the first mediation equation's coeffcients
-colMeans(out$beta_2)    #posterior means of the second mediation equation's coeffcients
+colMeans(out$beta_M)    #posterior means of M equation's coeffcients
+colMeans(out$beta_Y)    #posterior means of Y equation's coeffcients
 apply(out$lambdadraw,MARGIN = c(1,2),FUN = mean) #posterior means of the M measurement equation parameters (column1: intercepts, column2: coefficients(fixed to 1))
 apply(out$taudraw,MARGIN = c(1,2),FUN = mean)    #posterior means of the Y measurement equation parameters (column1: intercepts, column2: coefficients(fixed to 1))
 
@@ -232,8 +232,8 @@ out_comp$PH$Indirect_CI    #indirect effect's bootstrapped confidence interval
 out_comp$PH$Direct_CI     #direct effect's bootstrapped confidence interval
 
 #Proposed Bayesian approach results
-colMeans(out_comp$Simple$beta_1)   #Bayesian posterior means of the first equation parameters
-colMeans(out_comp$Simple$beta_2)   #Bayesian posterior means of the second equation parameters
+colMeans(out_comp$Simple$beta_M)   #Bayesian posterior means of M equation's parameters
+colMeans(out_comp$Simple$beta_Y)   #Bayesian posterior means of Y equation's parameters
 out_comp$Simple$BF     #Bayes factor
 out_comp$Simple$evidence    #evidence in favor of full mediation (Kass & Raftery 1995)
 

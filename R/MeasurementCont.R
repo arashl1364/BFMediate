@@ -41,8 +41,8 @@
 #'
 #' @return
 #' \describe{
-#'   \item{beta_1(R X 2)}{matrix of eq.1 coefficients' draws}
-#'   \item{beta_2(R X 3)}{matrix of eq.2 coefficients' draws}
+#'   \item{beta_M(R X 2)}{matrix of eq.1 coefficients' draws}
+#'   \item{beta_Y(R X 3)}{matrix of eq.2 coefficients' draws}
 #'   \item{lambda (M_ind X 2 X R)}{array of mediator indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively.}
 #'   \item{ssq_m_star(R X M_ind)}{Matrix of mediator indicator equations' coefficients' error variance draws}
 #'   \item{ssq_y_star(R X Y_ind)}{Matrix of dependent variable indicator equations' coefficients' error variance draws}
@@ -105,8 +105,8 @@
 #' out = MeasurementCont(Data = Data, Prior = list(A_M = A_M, A_Y = A_Y),R=5000, burnin = 3000)
 #'
 #' #Results
-#' colMeans(out$beta_1)
-#' colMeans(out$beta_2)
+#' colMeans(out$beta_M)
+#' colMeans(out$beta_Y)
 #'
 #' BFMeasurementCont = exp(BFSD(post = out , prior = A_Y[3],burnin = 0))
 ### Description MeasurementCont estimates a partial mediation model with multiple categorical indicators for the mediator
@@ -142,8 +142,8 @@
 # R number of MCMC iterations (def:10000)
 # burnin number of MCMC iterations to be discarded from the draws
 ### Value:
-# beta_1(R X 2)  matrix of eq.1 coefficients' draws
-# beta_2(R X 3)  matrix of eq.2 coefficients' draws
+# beta_M(R X 2)  matrix of eq.1 coefficients' draws
+# beta_Y(R X 3)  matrix of eq.2 coefficients' draws
 # lambda (M_ind X 2 X R) array of mediator indicator coefficients' draws.
 # tau (Y_ind X 2 X R) array of dependent variable indicator coefficients' draws.
 # Each slice is one draw, where rows represent the indicator equation and columns are the coefficients
@@ -192,7 +192,7 @@ MeasurementCont = function(Data, Prior, R, burnin){
   iota = matrix(rep(c(0,1),R-burnin), ncol=2, byrow=T)  #first measurement equations' fixed parameters
   post$lambda = abind::abind(iota,post$lambda,along=2)
   post$tau = abind::abind(iota,post$tau,along=2)
-  return(list(beta_1 = cbind(post$beta_0_M,post$beta_1), beta_2 = cbind(post$beta_0_Y,post$beta_2,post$beta_3),
+  return(list(beta_M = cbind(post$beta_0_M,post$beta_1), beta_Y = cbind(post$beta_0_Y,post$beta_2,post$beta_3),
               ssq_M=post$ssq_M, ssq_Y = post$ssq_Y, Mdraw = post$M, Ydraw = post$Y,
               ssq_m_star = post$ssq_m_star, ssq_y_star = post$ssq_y_star,
               lambda = post$lambda, tau = post$tau,

@@ -210,7 +210,7 @@ List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat
     Named("Y_draw") = zdraw,
     Named("cutoff_Y") = cutdraw,
     // Named("dstardraw") = dstardraw,
-    Named("beta_2") = betadraw,
+    Named("beta_Y") = betadraw,
     Named("tau") = taudraw,
     Named("ssq_y_tilde_draw") = ssq_y_tilde_draw,
     Named("mu_draw") = mubeta_2_draw,
