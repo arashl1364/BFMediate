@@ -123,5 +123,5 @@ out = MeasurementCont(Data = Data, Prior = list(A_M = A_M, A_Y = A_Y),R=5000, bu
 colMeans(out$beta_M)
 colMeans(out$beta_Y)
 
-BFMeasurementCont = exp(BFSD(post = out , prior = A_Y[3],burnin = 0))
+BFMeasurementCont = exp(BFSD(Post = out , Prior = A_Y[3],burnin = 0))
 }

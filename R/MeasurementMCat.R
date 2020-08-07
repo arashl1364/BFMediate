@@ -53,6 +53,7 @@
 #'
 #' @export
 #' @examples
+#' set.seed(60)
 #' SimMeasurementMCat = function(X, beta_M, cutoff_M, beta_Y, Sigma_Y, M_ind, lambda, ssq_m_star){
 #'
 #'   nobs = dim(X)[1]

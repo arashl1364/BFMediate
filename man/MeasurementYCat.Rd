@@ -67,6 +67,7 @@ Estimates a partial mediation model with multiple categorical indicator for the 
 }
 }
 \examples{
+set.seed(60)
 SimMeasurementYCat = function(X, beta_M, beta_Y, sigma_M, cutoff_Y, Y_ind, tau, ssq_y_star){
 
   nobs = dim(X)[1]

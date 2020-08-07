@@ -49,6 +49,7 @@
 #' }
 #' @export
 #' @examples
+#' set.seed(60)
 #' SimMeasurementYCat = function(X, beta_M, beta_Y, sigma_M, cutoff_Y, Y_ind, tau, ssq_y_star){
 #'
 #'   nobs = dim(X)[1]

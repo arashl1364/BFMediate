@@ -101,6 +101,7 @@ Bayes factor of the model with a diffuse prior (100) is much larger than the one
 If rating scale data for multiple variables are collected to measure the mediator and the dependent variable, we can use them to account for measurement error in a latent variable model. This will help us reveal the evidence obfuscated due to measurement error and obtain more reliable estimates of indirect and direct effects. We illustrate this using simulated data from a full mediation model with multiple categorized indicators:    
 
 ```
+set.seed(60)
 SimMeasurementMYCat = function(X, beta_1, cutoff_M, beta_2, cutoff_Y, M_ind, Y_ind, lambda, tau, ssq_m_star, ssq_y_star){
 
   nobs = dim(X)[1]

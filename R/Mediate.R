@@ -211,13 +211,13 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Bayes.CI.Indirect = round(as.vector(quantile(beta_1*beta_2,probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(beta_3,probs = c(.025,.975))),2)
 
-    if(BF.Simple>1) evidence = ifelse(BF.Simple>100,"Decisive",
-                                      ifelse(BF.Simple>10,"strong",
-                                             ifelse(BF.Simple>3.2,"Substantial","Not worth more than a bare mention")))
+    if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive in favor of full mediation",
+                                   ifelse(BF.LVM>10,"Strong in favor of full mediation",
+                                          ifelse(BF.LVM>3.2,"Substantial in favor of full mediation","Not worth more than a bare mention")))
 
-    if(BF.Simple<1) evidence = ifelse(1/BF.Simple>100,"Decisive",
-                                      ifelse(1/BF.Simple>10,"strong",
-                                             ifelse(1/BF.Simple>3.2,"Substantial","Not worth more than a bare mention")))
+    if(BF.LVM<1) evidence = ifelse(1/BF.LVM>100,"Decisive against full mediation",
+                                   ifelse(1/BF.LVM>10,"Strong against full mediation",
+                                          ifelse(1/BF.LVM>3.2,"Substantial against full mediation","Not worth more than a bare mention")))
 
     # CI = as.character(ifelse((quantile(beta_3,probs = .025)>0) | (quantile(beta_3,probs = .975)<0),"Reject","Accept"))
 
@@ -247,13 +247,13 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Bayes.CI.Indirect = round(as.vector(quantile(out$beta_M[,2]*out$beta_Y[,2],probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
 
-    if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive",
-                                   ifelse(BF.LVM>10,"Strong",
-                                          ifelse(BF.LVM>3.2,"Substantial","Not worth more than a bare mention")))
+    if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive in favor of full mediation",
+                                   ifelse(BF.LVM>10,"Strong in favor of full mediation",
+                                          ifelse(BF.LVM>3.2,"Substantial in favor of full mediation","Not worth more than a bare mention")))
 
-    if(BF.LVM<1) evidence = ifelse(1/BF.LVM>100,"Decisive",
-                                   ifelse(1/BF.LVM>10,"Strong",
-                                          ifelse(1/BF.LVM>3.2,"Substantial","Not worth more than a bare mention")))
+    if(BF.LVM<1) evidence = ifelse(1/BF.LVM>100,"Decisive against full mediation",
+                                   ifelse(1/BF.LVM>10,"Strong against full mediation",
+                                          ifelse(1/BF.LVM>3.2,"Substantial against full mediation","Not worth more than a bare mention")))
 
     CI = as.character(ifelse((quantile(out$beta_Y[,3], probs = .025)>0) | (quantile(out$beta_Y[,3],probs = .975)<0),"Reject","Accept"))
 
@@ -283,13 +283,13 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Bayes.CI.Indirect = round(as.vector(quantile(out$beta_M[,2]*out$beta_Y[,2],probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
 
-    if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive",
-                                   ifelse(BF.LVM>10,"Strong",
-                                          ifelse(BF.LVM>3.2,"Substantial","Not worth more than a bare mention")))
+    if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive in favor of full mediation",
+                                   ifelse(BF.LVM>10,"Strong in favor of full mediation",
+                                          ifelse(BF.LVM>3.2,"Substantial in favor of full mediation","Not worth more than a bare mention")))
 
-    if(BF.LVM<1) evidence = ifelse(1/BF.LVM>100,"Decisive",
-                                   ifelse(1/BF.LVM>10,"Strong",
-                                          ifelse(1/BF.LVM>3.2,"Substantial","Not worth more than a bare mention")))
+    if(BF.LVM<1) evidence = ifelse(1/BF.LVM>100,"Decisive against full mediation",
+                                   ifelse(1/BF.LVM>10,"Strong against full mediation",
+                                          ifelse(1/BF.LVM>3.2,"Substantial against full mediation","Not worth more than a bare mention")))
 
     # CI = as.character(ifelse((quantile(out$beta_2[,3], probs = .025)>0) | (quantile(out$beta_2[,3],probs = .975)<0),"Reject","Accept"))
 
@@ -315,13 +315,13 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Bayes.CI.Indirect = round(as.vector(quantile(out,multi$beta_M[,2]*out$beta_Y[,2], probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
 
-    if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive",
-                                   ifelse(BF.LVM>10,"Strong",
-                                          ifelse(BF.LVM>3.2,"Substantial","Not worth more than a bare mention")))
+    if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive in favor of full mediation",
+                                   ifelse(BF.LVM>10,"Strong in favor of full mediation",
+                                          ifelse(BF.LVM>3.2,"Substantial in favor of full mediation","Not worth more than a bare mention")))
 
-    if(BF.LVM<1) evidence = ifelse(1/BF.LVM>100,"Decisive",
-                                   ifelse(1/BF.LVM>10,"Strong",
-                                          ifelse(1/BF.LVM>3.2,"Substantial","Not worth more than a bare mention")))
+    if(BF.LVM<1) evidence = ifelse(1/BF.LVM>100,"Decisive against full mediation",
+                                   ifelse(1/BF.LVM>10,"Strong against full mediation",
+                                          ifelse(1/BF.LVM>3.2,"Substantial against full mediation","Not worth more than a bare mention")))
 
     # CI = as.character(ifelse((quantile(out$beta_2[,3], probs = .025)>0) | (quantile(out$beta_2[,3],probs = .975)<0),"Reject","Accept"))
 
@@ -348,13 +348,13 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Bayes.CI.Indirect = round(as.vector(quantile(out$beta_M[,2]*out$beta_Y[,2],probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
 
-    if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive",
-                                   ifelse(BF.LVM>10,"Strong",
-                                          ifelse(BF.LVM>3.2,"Substantial","Not worth more than a bare mention")))
+    if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive in favor of full mediation",
+                                   ifelse(BF.LVM>10,"Strong in favor of full mediation",
+                                          ifelse(BF.LVM>3.2,"Substantial in favor of full mediation","Not worth more than a bare mention")))
 
-    if(BF.LVM<1) evidence = ifelse(1/BF.LVM>100,"Decisive",
-                                   ifelse(1/BF.LVM>10,"Strong",
-                                          ifelse(1/BF.LVM>3.2,"Substantial","Not worth more than a bare mention")))
+    if(BF.LVM<1) evidence = ifelse(1/BF.LVM>100,"Decisive against full mediation",
+                                   ifelse(1/BF.LVM>10,"Strong against full mediation",
+                                          ifelse(1/BF.LVM>3.2,"Substantial against full mediation","Not worth more than a bare mention")))
 
     # CI = as.character(ifelse((quantile(out$beta_2[,3], probs = .025)>0) | (quantile(out$beta_2[,3],probs = .975)<0),"Reject","Accept"))
 

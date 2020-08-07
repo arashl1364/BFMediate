@@ -58,6 +58,7 @@
 #'
 #' @export
 #' @examples
+#' set.seed(60)
 #' SimMeasurementMYCat = function(X, beta_M, cutoff_M, beta_Y, cutoff_Y, M_ind, Y_ind,
 #'                                lambda, tau, ssq_m_star, ssq_y_star){
 #'
