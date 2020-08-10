@@ -197,7 +197,7 @@ A_M = c(100,100); #Prior variance for beta_0M, beta_1
 A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3(reference prior)
 
 ```
-#Estimation and convergence assessment 
+## Estimation and convergence assessment 
 In order to assess the convergence of the MCMC procedure we estimate the model with different number of iterations (R), and plot the posteriors' MCMC traces each time.
 
 ```
@@ -291,7 +291,7 @@ out_MYCat$evidence
 
 All the parameter estimates e.g. direct effect posterior, estimated indicator cutoffs for M and Y, etc. are also stored in the output. For a complete list of the output values please see the help page of the function.   
 
-#Stability of Bayes factor 
+## Stability of Bayes factor 
 We can also investigate the convergence of Bayes factor in the number of draws used from the posterior
 ```
 rep = c(10,50,100,1000,2000,5000,8000)
