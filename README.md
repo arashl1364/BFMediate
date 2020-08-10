@@ -65,7 +65,20 @@ R = 2000
 out_1 = PartialMed(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y_inf), R = R)
 
 ```
+In order to work with the estimated posterior draws e.g. to compute posterior means, 95% HDI, and particularly to compute Bayes factors off of the posterior draws, it is important to make sure the MCMC procedure has converged and the estimated distribution is stable. We can do this by plotting the MCMC traces of the model parameters.
+The simple partial mediation model converges immediately and there is no need to set a burnin and throw away any number of initial draws:  
+```
+if(.Platform$OS.type=="windows") {
+  quartz<-function() windows()
+}
 
+#plotting MCMC traces to assess convergence
+quartz()
+par(mfrow=c(1,3)) 
+matplot(out_1$beta_M[,2], type = 'l')
+matplot(out_1$beta_Y[,2], type = 'l')
+matplot(out_1$beta_Y[,3], type = 'l')
+```
 We can then view any function of the posterior estimates, e.g. posterior means: 
 
 ```
@@ -183,21 +196,43 @@ Data = list(X=cbind(rep(1,length(DataMYCat$X)),DataMYCat$X), m_tilde=as.matrix(D
 A_M = c(100,100); #Prior variance for beta_0M, beta_1
 A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3(reference prior)
 
-out = MeasurementMYCat(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y), R = 10000)
+```
+#Estimation and convergence assessment 
+In order to assess the convergence of the MCMC procedure we estimate the model with different number of iterations (R), and plot the posteriors' MCMC traces each time.
 
 ```
+out_2000 = MeasurementMYCat(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y), R = 2000)
+#plotting MCMC traces to assess convergence
+quartz()
+par(mfrow=c(1,3)) 
+matplot(out_2000$beta_M[,2], type = 'l')
+matplot(out_2000$beta_Y[,2], type = 'l')
+matplot(out_2000$beta_Y[,3], type = 'l')
+
+out_10000 = MeasurementMYCat(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y), R = 10000)
+#plotting MCMC traces to assess convergence
+quartz()
+par(mfrow=c(1,3)) 
+matplot(out_10000$beta_M[,2], type = 'l')
+matplot(out_10000$beta_Y[,2], type = 'l')
+matplot(out_10000$beta_Y[,3], type = 'l')
+
+```
+In the first estimation results, we see that posteriors seem to converge quite fast (after 500 iterations). But as the algorithm runs relatively fast we estimate the model with R = 10000 and throw away the first 2000 draws as burnin. 
+
 
 Similar to the simple model we can compute any function of the posteriors of the direct and indirect effects, measurement equations' parameters of both M and Y, and the indicators' cutoff values.
 
 ```
 #results
-colMeans(out$beta_M)    #posterior means of M equation's coeffcients
-colMeans(out$beta_Y)    #posterior means of Y equation's coeffcients
-apply(out$lambdadraw,MARGIN = c(1,2),FUN = mean) #posterior means of the M measurement equation parameters (column1: intercepts, column2: coefficients(fixed to 1))
-apply(out$taudraw,MARGIN = c(1,2),FUN = mean)    #posterior means of the Y measurement equation parameters (column1: intercepts, column2: coefficients(fixed to 1))
+burnin = 2000
+colMeans(out_10000$beta_M[(burnin+1):R,])    #posterior means of M equation's coeffcients
+colMeans(out_10000$beta_Y[(burnin+1):R,])    #posterior means of Y equation's coeffcients
+apply(out_10000$lambdadraw[,,(burnin+1):R],MARGIN = c(1,2),FUN = mean) #posterior means of the M measurement equation parameters (column1: intercepts, column2: coefficients(fixed to 1))
+apply(out_10000$taudraw[,,(burnin+1):R],MARGIN = c(1,2),FUN = mean)    #posterior means of the Y measurement equation parameters (column1: intercepts, column2: coefficients(fixed to 1))
 
-apply(out$cutoff_M,c(1,2),FUN = mean)   #posterior means of M indicators' cutoffs
-apply(out$cutoff_Y,c(1,2),FUN = mean)   #posterior means of Y indicators' cutoffs
+apply(out_10000$cutoff_M[,,(burnin+1):R],c(1,2),FUN = mean)   #posterior means of M indicators' cutoffs
+apply(out_10000$cutoff_Y[,,(burnin+1):R],c(1,2),FUN = mean)   #posterior means of Y indicators' cutoffs
 ```
 
 ## Comparing results from different approaches 
@@ -255,3 +290,21 @@ out_MYCat$evidence
 ```
 
 All the parameter estimates e.g. direct effect posterior, estimated indicator cutoffs for M and Y, etc. are also stored in the output. For a complete list of the output values please see the help page of the function.   
+
+#Stability of Bayes factor 
+We can also investigate the convergence of Bayes factor in the number of draws used from the posterior
+```
+rep = c(10,50,100,1000,2000,5000,8000)
+BF = rep(0,length(rep))
+samp = NULL
+for(i in 1:length(rep)){
+  draws = sample((burnin+1):R, size = rep[i])
+  samp$mu_draw = out_MYCat$mu_draw[draws]
+  samp$var_draw = out_MYCat$var_draw[draws]
+  BF[i] = exp(BFSD(samp,Prior = 1, burnin = 0))
+}
+```
+
+The above analysis shows that the Bayes factor converges already with a sample size of 2000 from the posterior.
+
+

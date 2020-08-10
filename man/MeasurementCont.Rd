@@ -111,13 +111,13 @@ nobs = 1000   # number of observations
 X = runif(nobs) # generate random X from a uniform distribution
 Data = SimMeasurementCont( beta_M, beta_Y , lambda, tau, m_ind, y_ind, sigma_M, sigma_m_star,
                           sigma_y, sigma_y_star, nobs, X)
-R = 5000; burnin = 3000
+R = 5000; burnin = 1000
 
 A_M=rep(100,2);
 A_Y=c(100,100,1)
 
 #Estimation
-out = MeasurementCont(Data = Data, Prior = list(A_M = A_M, A_Y = A_Y),R=5000, burnin = 3000)
+out = MeasurementCont(Data = Data, Prior = list(A_M = A_M, A_Y = A_Y),R=5000, burnin = 1000)
 
 #Results
 colMeans(out$beta_M)

@@ -43,7 +43,13 @@ List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_tilde, arma::mat
 
 
   // set Initial values
-  arma::vec M = randu<arma::vec>(ny);
+  // arma::vec M = randu<arma::vec>(ny);
+  arma::vec oldbeta(2);
+  oldbeta.fill(.1);
+  arma::vec oldbeta_2(3);
+  oldbeta_2.fill(.1);
+  arma::vec M = X*oldbeta;
+
   arma::mat XM(ny,nvar_Y);
   XM.col(0).ones();
   XM.col(1) = M;
@@ -51,7 +57,7 @@ List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_tilde, arma::mat
 
   arma::mat olddstar_M(M_ind,ndstar_M);
   olddstar_M.zeros();
-  arma::vec oldbeta = betahat;
+  // arma::vec oldbeta = betahat;
   arma::vec oldz_M = M;
   arma::mat old_m_tilde(ny, M_ind);
   old_m_tilde.randn();
@@ -60,10 +66,9 @@ List MeasurementMYCatCpp(arma::mat const& X, arma::mat const& m_tilde, arma::mat
   arma::mat old_lambda(M_ind,2);
   old_lambda.col(1).ones();
 
-
-  arma::mat olddstar_Y(Y_ind,ndstar_Y);
+ arma::mat olddstar_Y(Y_ind,ndstar_Y);
   olddstar_Y.zeros();
-  arma::vec oldbeta_2 = beta_2_hat;
+  // arma::vec oldbeta_2 = beta_2_hat;
   arma::vec oldz_Y = randu<vec>(ny);
   arma::mat old_y_tilde(ny, Y_ind);
   old_y_tilde.randn();

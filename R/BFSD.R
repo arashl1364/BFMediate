@@ -1,7 +1,7 @@
-#' Bayes factor for full mediation
+#' log Bayes factor for full mediation
 #'
 #' @description
-#' Computes Bayes factors for the partial mediation model using Savage-Dickey ratio
+#' Computes log Bayes factors for the partial mediation model using Savage-Dickey ratio
 #'
 #' @usage BFSD(Post,Prior,burnin)
 #'
@@ -10,7 +10,7 @@
 #' @param burnin number of MCMC draws before the posterior is converged, default = R/5
 #'
 #' @return
-#' log(BF_01), which is the evidence in favor of the full mediation model (see Laghaie and Otter (2020) for guidelines on how to interpret BF_01)
+#' log(BF_01), which is the evidence in favor of/against full mediation model (see Laghaie and Otter (2020) for guidelines on how to interpret BF_01)
 #' @export
 #' @examples
 #' simPartialMed = function(beta_M,beta_Y, sigma_M, sigma_Y,N,X) {
