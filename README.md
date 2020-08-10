@@ -218,7 +218,7 @@ matplot(out_10000$beta_Y[,2], type = 'l')
 matplot(out_10000$beta_Y[,3], type = 'l')
 
 ```
-In the first estimation results, we see that posteriors seem to converge quite fast (after 500 iterations). But as the algorithm runs relatively fast we estimate the model with R = 10000 and throw away the first 2000 draws as burnin. 
+In the first estimation results, we see that posteriors seem to converge quite fast (after 500 iterations). But as the algorithm runs relatively fast, to make sure we are using draws from a converged posterior, we estimate the model with R = 10000 and throw away the first 2000 draws as burnin. 
 
 
 Similar to the simple model we can compute any function of the posteriors of the direct and indirect effects, measurement equations' parameters of both M and Y, and the indicators' cutoff values.
