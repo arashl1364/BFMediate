@@ -201,7 +201,8 @@ A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3(reference prior)
 In order to assess the convergence of the MCMC procedure we estimate the model with different number of iterations (R), and plot the posteriors' MCMC traces each time.
 
 ```
-out_2000 = MeasurementMYCat(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y), R = 2000)
+R = 2000
+out_2000 = MeasurementMYCat(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y), R = R)
 #plotting MCMC traces to assess convergence
 quartz()
 par(mfrow=c(1,3)) 
@@ -209,7 +210,8 @@ matplot(out_2000$beta_M[,2], type = 'l')
 matplot(out_2000$beta_Y[,2], type = 'l')
 matplot(out_2000$beta_Y[,3], type = 'l')
 
-out_10000 = MeasurementMYCat(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y), R = 10000)
+R = 10000
+out_10000 = MeasurementMYCat(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y), R = R)
 #plotting MCMC traces to assess convergence
 quartz()
 par(mfrow=c(1,3)) 
@@ -250,7 +252,7 @@ Data_comp$X = DataMYCat$X
 A_M = c(100,100); #Prior variance for beta_0M, beta_1
 A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3(reference prior)
 Prior = list(A_Y = A_Y, A_M = A_M)
-out_comp = Mediate(Data = Data_comp, Model = "Simple",Prior = Prior,R = 10000, burnin = 2000)
+out_comp = Mediate(Data = Data_comp, Model = "Simple",Prior = Prior,R = R, burnin = burnin)
 
 ```
 
@@ -302,6 +304,7 @@ for(i in 1:length(rep)){
   samp$mu_draw = out_MYCat$mu_draw[draws]
   samp$var_draw = out_MYCat$var_draw[draws]
   BF[i] = exp(BFSD(samp,Prior = 1, burnin = 0))
+  BF
 }
 ```
 
