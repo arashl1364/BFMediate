@@ -79,13 +79,14 @@ matplot(out_1$beta_M[,2], type = 'l')
 matplot(out_1$beta_Y[,2], type = 'l')
 matplot(out_1$beta_Y[,3], type = 'l')
 ```
-We can then view any function of the posterior estimates, e.g. posterior means: 
+We can then view any function of the posterior estimates, e.g. posterior means. Distribution of the indirect effect can be computed, without any hassles, simply by multiplying the posteriors of beta_1 and beta_2.   
 
 ```
 #estimation results
 colMeans(out_1$beta_M)    #posterior means of M equation's coeffcients
 colMeans(out_1$beta_Y)    #posterior means of Y equation's coeffcients
-
+hist(out_1$beta_M[,2] * out_1$beta_Y[,2])   #plotting the distribution of the indirect effect
+quantile(out_1$beta_M[,2]*out_1$beta_Y[,2], probs = c(.025,.975))  #95% posterior highest density interval(HDI) of the indirect effect
 ```
 
 We can compute and analyse the sensitivity of the Bayes factor to the direct effect prior variance (3rd element of A_Y) by estimating another model where the direct effect prior variance is =100.  
