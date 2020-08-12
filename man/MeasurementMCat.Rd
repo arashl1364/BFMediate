@@ -46,6 +46,18 @@ Estimates a partial mediation model with multiple categorical indicator for the 
 
 }
 
+\subsection{Prior specification:}{
+
+\deqn{\beta_{0M} ~ N(0,100), \beta_{0Y} ~ N(0,100)}
+\deqn{\beta_1 ~ N(0,100), \beta_2 ~ N(0,100), \beta_3 ~ N(0,1)}
+\deqn{\lambda_{20},...,\lambda_{K0} ~  N(0,100)}
+\deqn{\sigma^2_{m*_1}, ..., \sigma^2_{m*_K} ~ (nu*S)/χ^2_{nu}}
+\deqn{C*_{m_1}, ..., C*_{m_K}  ~  N(0,I)}
+
+Note: \deqn{C*_{m_1}, ..., C*_{m_K}} are untransformed
+cutoffs, which are then exponentially transformed to impose sign and order constraint on them. Subjective prior values for the error variances are nu=1, S=3.
+}
+
 \subsection{Argument Details}{
 }
 

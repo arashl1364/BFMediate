@@ -28,6 +28,19 @@ a list containing
 Estimates a partial mediation model using series of Gibbs Samplers
 }
 \details{
+\subsection{Model}{
+
+(eq.1) \deqn{M = \beta_{0M} + X\beta_1 + U_M}{M = \beta_0M + X\beta_1 + U_M}
+(eq.2) \deqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y}
+}
+
+\subsection{Prior specification:}{
+
+\deqn{\beta_{0M} ~ N(0,100), \beta_{0Y} ~ N(0,100)}
+\deqn{\beta_1 ~ N(0,100), \beta_2 ~ N(0,100), \beta_3 ~ N(0,1)}
+\deqn{\sigma^2_M ~ (nu*S)/χ^2_{nu},\sigma^2_Y ~ (nu*S)/χ^2_{nu}}, where nu=1 and S=3.
+}
+
 \subsection{Argument Details}{
 }
 

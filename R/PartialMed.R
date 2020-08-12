@@ -10,7 +10,19 @@
 #' @param Prior list(A_M,A_Y)
 #' @param R number of MCMC iterations, default = 10000
 #'
+#'
 #' @details
+#'
+#' ## Model
+#' (eq.1) \deqn{M = \beta_{0M} + X\beta_1 + U_M}{M = \beta_0M + X\beta_1 + U_M}
+#' (eq.2) \deqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y}
+#'
+#' ## Prior specification:
+#'
+#'\deqn{\beta_{0M} ~ N(0,100), \beta_{0Y} ~ N(0,100)}
+#'\deqn{\beta_1 ~ N(0,100), \beta_2 ~ N(0,100), \beta_3 ~ N(0,1)}
+#'\deqn{\sigma^2_M ~ (nu*S)/χ^2_{nu},\sigma^2_Y ~ (nu*S)/χ^2_{nu}}, where nu=1 and S=3.
+#'
 #' ## Argument Details
 #'
 #' ## \code{Data = list(X, M, Y)}

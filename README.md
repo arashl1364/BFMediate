@@ -106,7 +106,7 @@ out_100 = PartialMed(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y_dif), R = R)
 
 ```
 
-The function _BFSD_ computes log Bayes factors for each model.  The resulting Bayes factors measure the degree of empirical support for the Null hypothesis that the direct effect is equal to zero, i.e., that X and Y are mean independent conditional on M.
+The function _BFSD_ computes log Bayes factors for each model.  The resulting Bayes factors measure the degree of empirical support for the Null hypothesis that the direct effect is equal to zero, i.e., that X and Y are mean independent conditional on M. For the prior specification of the rest of the model parameters please see the help page of the _PartialMed_ function.
 
 ```
 #comparing  Bayes factors of the two models
@@ -302,7 +302,7 @@ The comparison of results from the LVM to those from the simple model illustrate
 out_MYCat$BF
 out_MYCat$evidence
 ```
-Draws for all the parameters are stored in the output. For a complete list of the output values please see the help page of the function.   
+Draws for all the parameters are stored in the output. For a complete list of the output values as well as the prior specification for all the model parameters please see the help page of the function.   
 
 ## Stability of Bayes factor 
 Last, we illustrate how to assess Monte-Carlo variation in inferred Bayes factors.  Based on perfect knowledge of the posterior the Bayes factor is a fixed number given the model and the prior.  Because inferene is based on a finite sample from the posterior, it is important to check if the posterior sample is large enough to yield the same Monte-Carlo estimate of the Bayes factor (up to a required degree of precision) across independent replications.  

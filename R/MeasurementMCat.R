@@ -23,6 +23,18 @@
 #' \deqn{m^*_k = \lambda_{0k-1} + M + U_{m^*_k}}{m*_k = \lambda_0k-1 + M + U_{m*_k}}
 #' \deqn{\tilde{m}_k = OrdProbit(m^*_k ,C_{m_k})}{˜m_k = OrdProbit(m*_k,C_{m_k})}
 #'
+#' ## Prior specification:
+#'
+#'\deqn{\beta_{0M} ~ N(0,100), \beta_{0Y} ~ N(0,100)}
+#'\deqn{\beta_1 ~ N(0,100), \beta_2 ~ N(0,100), \beta_3 ~ N(0,1)}
+#\deqn{\sigma^2_M ~ (nu*S)/χ^2_{nu},{.2cm}\sigma^2_Y ~ (nu*S)/χ^2_{nu}}
+#'\deqn{\lambda_{20},...,\lambda_{K0} ~  N(0,100)}
+#'\deqn{\sigma^2_{m*_1}, ..., \sigma^2_{m*_K} ~ (nu*S)/χ^2_{nu}}
+#'\deqn{C*_{m_1}, ..., C*_{m_K}  ~  N(0,I)}
+#'
+#' Note: \deqn{C*_{m_1}, ..., C*_{m_K}} are untransformed
+#' cutoffs, which are then exponentially transformed to impose sign and order constraint on them. Subjective prior values for the error variances are nu=1, S=3.
+#'
 #'
 #' ## Argument Details
 #'
