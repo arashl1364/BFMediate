@@ -53,19 +53,19 @@ X = rnorm(N,mean = 1,sd = 1) # generate random X
 Data = simPartialMed(beta_1,beta_2,sigma_M,sigma_Y,N,X)
 
 ```
-We then estimate the model, using _PartialMed_ function that takes Data, a list containing the manipulation (X), the mediator (M), and the dependent variable (Y). Prior, that takes vector of prior variances of first and second mediation equations, A_M and A_Y, and the number of Mcmc iterations R.  
+We then estimate the model, using _PartialMed_ function that takes Data, a list containing the manipulation (X), the mediator (M), and the dependent variable (Y). Prior, that takes vector of prior variances of M equation (M = beta_0M + X*beta_1 + U_M) and Y equation (Y = beta_0Y + M*beta_2 + X*beta_3 + U_Y), A_M and A_Y, and the number of Mcmc iterations R.  
 
 ```
 #Estimation
 
 #Choosing the reference prior for the direct effect (beta_3)
 A_M = c(100,100); #Prior variance for beta_0M, beta_1
-A_Y_inf = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3(reference prior)
+A_Y_ref = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3(reference prior)
 R = 2000
-out_1 = PartialMed(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y_inf), R = R)
+out_1 = PartialMed(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y_ref), R = R)
 
 ```
-In order to work with the estimated posterior draws e.g. to compute posterior means, 95% HDI, and particularly to compute Bayes factors off of the posterior draws, it is important to make sure the MCMC procedure has converged and the estimated distribution is stable. We can do this by plotting the MCMC traces of the model parameters.
+In order to work with the estimated posterior draws e.g. to compute posterior means, 95% CI, and particularly to compute Bayes factors off of the posterior draws, it is important to make sure the MCMC procedure has converged and the estimated distribution is stable. We can do this by plotting the MCMC traces of the model parameters.
 The simple partial mediation model converges immediately and there is no need to set a burnin and throw away any number of initial draws:  
 ```
 if(.Platform$OS.type=="windows") {
@@ -86,7 +86,7 @@ We can then view any function of the posterior estimates, e.g. posterior means. 
 colMeans(out_1$beta_M)    #posterior means of M equation's coeffcients
 colMeans(out_1$beta_Y)    #posterior means of Y equation's coeffcients
 hist(out_1$beta_M[,2] * out_1$beta_Y[,2])   #plotting the distribution of the indirect effect
-quantile(out_1$beta_M[,2]*out_1$beta_Y[,2], probs = c(.025,.975))  #95% posterior highest density interval(HDI) of the indirect effect
+quantile(out_1$beta_M[,2]*out_1$beta_Y[,2], probs = c(.025,.975))  #95% posterior credible interval(CI) of the indirect effect
 ```
 
 We can compute and analyse the sensitivity of the Bayes factor to the direct effect prior variance (3rd element of A_Y) by estimating another model where the direct effect prior variance is =100.  
@@ -103,7 +103,7 @@ And compute Bayes factors for each model:
 
 ```
 #comparing  Bayes factors of the two models
-BF_1 = exp(BFSD(Post = out_1 , Prior = A_Y_inf[3], burnin = 0))
+BF_1 = exp(BFSD(Post = out_1 , Prior = A_Y_ref[3], burnin = 0))
 BF_100 = exp(BFSD(Post = out_100 , Prior = A_Y_dif[3], burnin = 0))
 
 ```
