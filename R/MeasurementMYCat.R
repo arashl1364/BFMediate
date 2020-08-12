@@ -328,6 +328,7 @@ MeasurementMYCat=function(Data,Prior,R=10000){
   cat(" ", fill=TRUE)
   cat("Table of y_tilde values",fill=TRUE)
   for(i in 1:Y_ind) print(table(y_tilde[,i]))
+  cat(" ", fill=TRUE)
   cat("Table of m_tilde values",fill=TRUE)
   for(i in 1:M_ind) print(table(m_tilde[,i]))
   cat(" ",fill=TRUE)

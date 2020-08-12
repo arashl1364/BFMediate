@@ -2,7 +2,7 @@
 
 The focus is on measuring evidence for (full) mediation using Bayes factors. The package covers models with measurement error and discretization in the mediator (M) and/or the dependent variable. 
 
-Note: This is a preliminary version of the package. We would appreciate if you could let us improve it by informing us in case you experience errors or have suggestions to make it more user-friendly. 
+Note: This is a preliminary version of the package. Please do not quote or distribute.
 
 ## Installation 
 
@@ -27,11 +27,11 @@ cat("\nCXX14FLAGS=-O3 -march=corei7 -mtune=corei7",
 
 ## Getting Started
 
-In what follows we use simulated data to illustrate how is mediation analysis done using this package. All the models and analyses done here are discussed in detail in Laghaie & Otter (2020).
+The following examples simulate data, call package functions, and summarize output to illustrate the models and analyses discussed in detail in Laghaie & Otter (2020).
 
 # Simple partial mediation model and BF sensitivity to the choice of prior
 
-Among other functions _BFMediate_ contains functions that estimate simple mediation models and compute empirical evidence in favor of/against full mediation in the causal theory level. We illustrate this by first simulating data from a full mediation model:  
+This example simulates data from a simple mediation model in which the data generating direct effect is zero, i.e., a model with full mediation. 
 ```
 library(BFMediate)
 
@@ -53,7 +53,7 @@ X = rnorm(N,mean = 1,sd = 1) # generate random X
 Data = simPartialMed(beta_1,beta_2,sigma_M,sigma_Y,N,X)
 
 ```
-We then estimate the model, using _PartialMed_ function that takes Data, a list containing the manipulation (X), the mediator (M), and the dependent variable (Y). Prior, that takes vector of prior variances of M equation (M = beta_0M + X*beta_1 + U_M) and Y equation (Y = beta_0Y + M*beta_2 + X*beta_3 + U_Y), A_M and A_Y, and the number of Mcmc iterations R.  
+We next estimate a simple mediation model conditional on the data just generated, using the function _PartialMed_.  The function takes Data (a list containing the manipulation (X), the mediator (M), and the dependent variable (Y)), Prior (two vectors of prior variances in the first and the second mediation equation, A_M and A_Y, organized in list form), and the number of Mcmc iterations R. 
 
 ```
 #Estimation
@@ -65,8 +65,8 @@ R = 2000
 out_1 = PartialMed(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y_ref), R = R)
 
 ```
-In order to work with the estimated posterior draws e.g. to compute posterior means, 95% CI, and particularly to compute Bayes factors off of the posterior draws, it is important to make sure the MCMC procedure has converged and the estimated distribution is stable. We can do this by plotting the MCMC traces of the model parameters.
-The simple partial mediation model converges immediately and there is no need to set a burnin and throw away any number of initial draws:  
+For valid inference, e.g., about posterior means, 95% HDIs, and meaningful Bayes factors computed from the posterior draws, it is important ensure the MCMC has converged.  One way to inspect convergence is to plot MCMC traces, i.e., the MCMC-iteration count on the x-axis agains draws of functions of draws on the y-axis.
+Even though the simple mediation model employs a Gibbs sampler, it essentially converges immediately. More specifically, based on R=2000 no burn-in period from starting values can be discerned:
 ```
 if(.Platform$OS.type=="windows") {
   quartz<-function() windows()
@@ -79,17 +79,24 @@ matplot(out_1$beta_M[,2], type = 'l')
 matplot(out_1$beta_Y[,2], type = 'l')
 matplot(out_1$beta_Y[,3], type = 'l')
 ```
-We can then view any function of the posterior estimates, e.g. posterior means. Distribution of the indirect effect can be computed, without any hassles, simply by multiplying the posteriors of beta_1 and beta_2.   
+As an example of a posterior summary of interest posterior mean estimates of regression coefficients are computed next:
 
 ```
 #estimation results
 colMeans(out_1$beta_M)    #posterior means of M equation's coeffcients
 colMeans(out_1$beta_Y)    #posterior means of Y equation's coeffcients
+
+```
+
+Distribution of the indirect effect can be computed simply by multiplying the posteriors of beta_1 and beta_2. A simple assessment of marginal posterior uncertainty is available by computing estimates of posterior quantiles:   
+
+```
 hist(out_1$beta_M[,2] * out_1$beta_Y[,2])   #plotting the distribution of the indirect effect
 quantile(out_1$beta_M[,2]*out_1$beta_Y[,2], probs = c(.025,.975))  #95% posterior credible interval(CI) of the indirect effect
 ```
 
-We can compute and analyse the sensitivity of the Bayes factor to the direct effect prior variance (3rd element of A_Y) by estimating another model where the direct effect prior variance is =100.  
+Next we re-estimate a model with a much more diffuse prior for the direct effect (the thirs element of A_Y is set to 100 below) to illustrate the sensitivity of the Bayes factor testing conditional mean independence to 
+this subjective prior choice:
 
 ```
 #Choosing a diffuse prior for the direct effect (beta_3)
@@ -99,7 +106,7 @@ out_100 = PartialMed(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y_dif), R = R)
 
 ```
 
-And compute Bayes factors for each model:
+The function _BFSD_ computes log Bayes factors for each model.  The resulting Bayes factors measure the degree of empirical support for the Null hypothesis that the direct effect is equal to zero, i.e., that X and Y are mean independent conditional on M.
 
 ```
 #comparing  Bayes factors of the two models
@@ -108,11 +115,11 @@ BF_100 = exp(BFSD(Post = out_100 , Prior = A_Y_dif[3], burnin = 0))
 
 ```
 
-Bayes factor of the model with a diffuse prior (100) is much larger than the one with our reference prior (1), as the former model assumes large values of direct effect a priori probable.
+The Bayes factor of the model with the diffuse prior (prior variance equal to 100) is much larger than the one that uses the suggested reference prior (prior variance equalt to 1).  This is because a diffuse prior places a relatively higher probability on (absolutely) very large direct effects.
 
-# Model with multiple (categorical) indicators for M and Y, and the sensitivity of variance explained to the choice of prior variance  
+# Model with multiple (discretized) indicators for M and Y, and the sensitivity of variance explained to the choice of prior variance  
 
-If rating scale data for multiple variables are collected to measure the mediator and the dependent variable, we can use them to account for measurement error in a latent variable model. This will help us reveal the evidence obfuscated due to measurement error and obtain more reliable estimates of indirect and direct effects. We illustrate this using simulated data from a full mediation model with multiple categorized indicators:    
+If, as often the case, multiple indicators for M and Y are available in the form of scale ratings, the function _MeasurementMYCat_ uses these indicators to control for both measurement error and discretization in a latent variable model. Based on the latent variable model, Bayes factors then test for conditional mean independence between X and (latent) Y given (latent) M.  Note that conditonal mean independence at the latent variable level may (strongly) hold even if conditional mean independence is (strongly) rejected at the level of observed variables.  We illustrate this result with simulated data from a full mediation model with multiple categorized indicators:      
 
 ```
 set.seed(60)
@@ -161,7 +168,7 @@ DataMYCat = SimMeasurementMYCat(X, beta_1, cutoff_M, beta_2, cutoff_Y, M_ind, Y_
 
 ```
 
-We assess the direct effect prior variance by plotting the variance explained from the manipulation through the direct effect implied by different values of prior variance: 
+We assess the subjective prior for the direct effect prior by plotting the corresponding distribution of  variance explained in the dependent variable: 
 
 ```
 ##Sensitivity analysis of variance explained to the choice of prior
@@ -182,11 +189,15 @@ for(i in 1:length(sd)){
   hist(var_explained[,i],main= paste("Var = ",sd[i]^2))
 }
 ```
+The histogram shows that the reference prior results in a distribtution of variance explained concentrated away from 1, i.e., embodies the idea that direct effects are unlikely to dominate the model a priori.
 
-After ascertaining that the reference prior for direct effect variance does not imply a large variance explained. We estimate the data using the reference prior. The estimation function takes the following parameters: 
-Data, a list containing X, a 2-column matrix with a vector of ones as its first and the manipulation variable as its second column; m_star and y_star, matrices of M and Y indicator variables respectively, stored column-wise; k_M and k_Y, the number of rating scales for M and Y indicators respectively; and M_ind and Y_ind, the number of M and Y indicators.
-Prior, a list containing priors for first and second mediation (latent) equations' coefficients.  
-R, number of Mcmc iterations.
+The estimation function _MeasurementMYCat_ takes the following arguments: 
+Data: a list containing 
+- X a 2-column matrix with a vector of ones as its first and the manipulated variable as its second column; 
+- m_tilde and y_tilde, matrices of M and Y indicator variables respectively, stored column-wise; - k_M and k_Y, scalars, the number of rating scale points for M and Y indicators respectively; 
+- M_ind and Y_ind, scalars, the number of M and Y indicators.
+Prior: a list containing vectors of prior variances for regression coefficients in the first and second (latent) mediation equations.  
+R: number of Mcmc iterations.
 ```
 Mcut = max(DataMYCat$m_tilde) + 1
 Ycut = max(DataMYCat$y_tilde) + 1
@@ -199,7 +210,7 @@ A_Y = c(100,100,1) #Prior variance for beta_0Y, beta_2, beta_3(reference prior)
 
 ```
 ## Estimation and convergence assessment 
-In order to assess the convergence of the MCMC procedure we estimate the model with different number of iterations (R), and plot the posteriors' MCMC traces each time.
+To illustrate convergence of the MCMC, and the assessment of convergence, we estimate the model with different numbers of iterations (R), and plot selected posterior MCMC traces.
 
 ```
 R = 2000
@@ -221,10 +232,10 @@ matplot(out_10000$beta_Y[,2], type = 'l')
 matplot(out_10000$beta_Y[,3], type = 'l')
 
 ```
-In the first estimation results, we see that posteriors seem to converge quite fast (after 500 iterations). But as the algorithm runs relatively fast, to make sure we are using draws from a converged posterior, we estimate the model with R = 10000 and throw away the first 2000 draws as burnin. 
+Based in R = 2000, we see that posteriors appear to converge quite fast (after 500 iterations or so). To ensure precise posterior summaries, we estimate the model with R = 10000 and throw away the first 2000 draws as burnin. Run time is not much of a constraint here.
 
 
-Similar to the simple model we can compute any function of the posteriors of the direct and indirect effects, measurement equations' parameters of both M and Y, and the indicators' cutoff values.
+Based on on 8000 posterior draws, one can now compute any function of the parameters and summarize its distribution, such as e.g., the direct and indirect effects.
 
 ```
 #results
@@ -240,7 +251,7 @@ apply(out_10000$cutoff_Y[,,(burnin+1):R],c(1,2),FUN = mean)   #posterior means o
 
 ## Comparing results from different approaches 
 
-Using the _Mediate_ function in the package, we can compare the results from Baron & Kenny (1986), Preacher & Hayes (2004), and the proposed Bayesian approach to mediation analysis. We can use the data generated in the previous example to do so.
+The _Mediate_ function in the package facilitates the comparison of mediation analysis results across different measurement approaches, i.e., Baron & Kenny (1986), Preacher & Hayes (2004), and the proposed Bayesian approach to mediation analysis. Next is an illustration using the data from the previous example.
 
 ```
 #creating composite measures of M and Y using their indicators
@@ -257,7 +268,7 @@ out_comp = Mediate(Data = Data_comp, Model = "Simple",Prior = Prior,R = R, burni
 
 ```
 
-If "Simple" is given as the model, _Mediate_ function performs a mediation analysis a la Baron & Kenny (1986), as well as, Preacher & Hayes (2004) bootstrapping analysis and the proposed Bayesian method. The results are stord in lists BK, PH, and Simple respecteively.
+If "Simple" is given as the model, _Mediate_ function performs a mediation analysis a la Baron & Kenny (1986), as well as, Preacher & Hayes (2004) bootstrapping analysis and the proposed Bayesian method. The results are stored in lists BK, PH, and Simple respectively.
 
 ```
 #Regression estimates of B&K's M and Y equations
@@ -278,24 +289,24 @@ out_comp$Simple$evidence    #evidence in favor of full mediation (Kass & Raftery
 
 ```
 
-Instead of estimating a simple model using the composite measures, we can estimate the the LVM to account for measurement error and descritization. Note that here the analysis done by _Mediate_ essentially runs _MeasurementMYCat_ and _BFSD_, as we did in the above example. 
+Instead of estimating a simple model using the composite measures, we can estimate the LVM to account for measurement error and descritization by setting Model = "MYCat". Note that here the analysis done by _Mediate_ essentially runs _MeasurementMYCat_ and _BFSD_, as illustrated previously. 
 
 ```
 out_MYCat = Mediate(Data = DataMYCat, Model = "MYCat",Prior = Prior,R = 10000, burnin = 2000)
 
 ```
 
-Comparing the results from LVM with the results from the simple model shows that accounting for measurement error reveals the obfuscated evidence in favor of full mediation in the underlying model:
+The comparison of results from the LVM to those from the simple model illustrates how accounting for measurement error improves inference for the underlying model structure and the direct and indirect effect:
 
 ```
 out_MYCat$BF
 out_MYCat$evidence
 ```
-
-All the parameter estimates e.g. direct effect posterior, estimated indicator cutoffs for M and Y, etc. are also stored in the output. For a complete list of the output values please see the help page of the function.   
+Draws for all the parameters are stored in the output. For a complete list of the output values please see the help page of the function.   
 
 ## Stability of Bayes factor 
-We can also investigate the convergence of Bayes factor in the number of draws used from the posterior
+Last, we illustrate how to assess Monte-Carlo variation in inferred Bayes factors.  Based on perfect knowledge of the posterior the Bayes factor is a fixed number given the model and the prior.  Because inferene is based on a finite sample from the posterior, it is important to check if the posterior sample is large enough to yield the same Monte-Carlo estimate of the Bayes factor (up to a required degree of precision) across independent replications.  
+
 ```
 rep = c(10,50,100,1000,2000,5000,8000)
 BF = rep(0,length(rep))
@@ -309,6 +320,6 @@ for(i in 1:length(rep)){
 BF
 ```
 
-The above analysis shows that the Bayes factor converges already with a sample size of 2000 from the posterior.
+The above analysis shows that Monte-Carlo based estimates of Bayes stabilize already with posterior samples of size 2000.  However, this is a somewhat optimistic estimate because it is based on randomly drawn 2000 posterior draws from a larger posterior sample.  An alternative assessment is based on batch estimates and their stability across different batch sizes.
 
 
