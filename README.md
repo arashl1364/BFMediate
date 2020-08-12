@@ -304,8 +304,8 @@ for(i in 1:length(rep)){
   samp$mu_draw = out_MYCat$mu_draw[draws]
   samp$var_draw = out_MYCat$var_draw[draws]
   BF[i] = exp(BFSD(samp,Prior = 1, burnin = 0))
-  BF
 }
+BF
 ```
 
 The above analysis shows that the Bayes factor converges already with a sample size of 2000 from the posterior.
