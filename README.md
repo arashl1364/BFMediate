@@ -65,7 +65,7 @@ R = 2000
 out_1 = PartialMed(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y_ref), R = R)
 
 ```
-For valid inference, e.g., about posterior means, 95% HDIs, and meaningful Bayes factors computed from the posterior draws, it is important ensure the MCMC has converged.  One way to inspect convergence is to plot MCMC traces, i.e., the MCMC-iteration count on the x-axis agains draws of functions of draws on the y-axis.
+For valid inference, e.g., about posterior means, 95% CIs, and meaningful Bayes factors computed from the posterior draws, it is important ensure to the MCMC has converged.  One way to inspect convergence is to plot MCMC traces, i.e., the MCMC-iteration count on the x-axis agains draws of functions of draws on the y-axis.
 Even though the simple mediation model employs a Gibbs sampler, it essentially converges immediately. More specifically, based on R=2000 no burn-in period from starting values can be discerned:
 ```
 if(.Platform$OS.type=="windows") {
@@ -88,7 +88,7 @@ colMeans(out_1$beta_Y)    #posterior means of Y equation's coeffcients
 
 ```
 
-Distribution of the indirect effect can be computed simply by multiplying the posteriors of beta_1 and beta_2. A simple assessment of marginal posterior uncertainty is available by computing estimates of posterior quantiles:   
+The distribution of the indirect effect is obtained by multiplying posterior draws of beta_1 and beta_2. An assessment of marginal posterior uncertainty is available by computing estimates of posterior quantiles:    
 
 ```
 hist(out_1$beta_M[,2] * out_1$beta_Y[,2])   #plotting the distribution of the indirect effect
