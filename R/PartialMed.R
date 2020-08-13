@@ -1,7 +1,7 @@
 #' Gibbs Sampler for Partial Mediation Model
 #'
 #' @description
-#' Estimates a partial mediation model using series of Gibbs Samplers
+#' Estimates a partial mediation model using series of Gibbs samplers
 #'
 #' @usage PartialMed(Data, Prior, R)
 
@@ -14,14 +14,14 @@
 #' @details
 #'
 #' ## Model
-#' (eq.1) \deqn{M = \beta_{0M} + X\beta_1 + U_M}{M = \beta_0M + X\beta_1 + U_M}
-#' (eq.2) \deqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y}
+#' \eqn{M = \beta_{0M} + X\beta_1 + U_M}{M = \beta_0M + X\beta_1 + U_M} (eq.1) \cr
+#' \eqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y} (eq.2) \cr
 #'
 #' ## Prior specification:
 #'
-#'\deqn{\beta_{0M} ~ N(0,100), \beta_{0Y} ~ N(0,100)}
-#'\deqn{\beta_1 ~ N(0,100), \beta_2 ~ N(0,100), \beta_3 ~ N(0,1)}
-#'\deqn{\sigma^2_M ~ (nu*S)/χ^2_{nu},\sigma^2_Y ~ (nu*S)/χ^2_{nu}}, where nu=1 and S=3.
+#'\eqn{\beta_{0M}} \eqn{\sim}{~} \eqn{N(0,100)}, \eqn{\beta_{0Y}} \eqn{\sim}{~} \eqn{N(0,100)} \cr
+#'\eqn{\beta_1} \eqn{\sim}{~} \eqn{N(0,100)}, \eqn{\beta_2} \eqn{\sim}{~} \eqn{N(0,100)}, \eqn{\beta_3} \eqn{\sim}{~} \eqn{N(0,1)} \cr
+#'\eqn{\sigma^2_M} \eqn{\sim}{~} \eqn{Inv\chi^2(\nu,\nu S),\sigma^2_Y} \eqn{\sim}{~} \eqn{Inv\chi^2(\nu,\nu S)}, where \eqn{\nu=1} and S=3. \cr
 #'
 #' ## Argument Details
 #'
@@ -46,8 +46,8 @@
 #' \item{beta_Y(R X 3)}{matrix of eq.2 coefficients' posterior draws}
 #' \item{ssq_M(R X 1)}{vector of eq.1 error variance posterior draws}
 #' \item{ssq_Y(R X 1)}{vector of eq.2 error variance posterior draws}
-#' \item{mu_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
-#' \item{var_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
+#' \item{mu_draw}{vector of means indexing MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
+#' \item{var_draw}{vector of variances indexing MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
 #' }
 #' @export
 #' @examples
@@ -74,31 +74,11 @@
 #' A_Y = c(100,100,1) #prior variance for beta_0Y, beta_2, beta_3
 #' R = 2000
 #' out = PartialMed(Data=Data, Prior = list(A_M=A_M, A_Y=A_Y), R = R)
-#Description PartialMed estimates a partial mediation model using series of Gibbs Samplers
-#Arguments:
-# Data  list(X, M, Y)
-# Prior list(A_M,A_Y)
-# R
-#Details:
-# Data = list(X, M, Y)
-# X(N x 1) treatment variable vector
-# M(N x 1) mediator vector
-# Y(N x 1) dependent variable vector
-# Prior = list(A_M,A_Y) [optional]
-# A_M vector of coefficients' prior variances of eq.1 (def: rep(100,2))
-# A_Y vector of coefficients' prior variances of eq.2 (def: c(100,100,1))
-# R number of MCMC iterations (def:10000)
-#Value:
-# beta_M(R X 2)  matrix of eq.1 coefficients' posterior draws
-# beta_Y(R X 3)  matrix of eq.2 coefficients' posterior draws
-# ssq_M(R X 1) vector of eq.1 error variance posterior draws
-# ssq_Y(R X 1) vector of eq.2 error variance posterior draws
-# mu_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
-# var_draw vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)
+
 PartialMed=function(Data, Prior, R=10000){
 
   ############################################
-  ## Arash Laghaie 2019
+  ## A. Laghaie 2019
   ############################################
 
   #Data

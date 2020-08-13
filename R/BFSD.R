@@ -55,7 +55,7 @@
 BFSD = function(Post,Prior=1,burnin){
 
   ############################################
-  ## Arash Laghaie 2019
+  ## A. Laghaie 2019
   ############################################
   A = Prior
   lik=0;

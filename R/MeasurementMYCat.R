@@ -10,38 +10,37 @@
 #'
 #' @details
 #' ## Model
-#' (eq.1) \deqn{M = \beta_{0M} + X\beta_1 + U_M}{M = \beta_0M + X\beta_1 + U_M}
-#' (eq.2) \deqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y}
+#' \eqn{M = \beta_{0M} + X\beta_1 + U_M}{M = \beta_0M + X\beta_1 + U_M} (eq.1) \cr
+#' \eqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y} (eq.2) \cr
 #'
-#' ## Indicator equations
-#' \deqn{m^*_1 = M + U_{m^*_1}}{m*_1 = M + U_{m*_1}}
-#' \deqn{\tilde{m}_1 = OrdProbit(m^*_1 ,C_{m_1})}{˜m_1 = OrdProbit(m*_1,C_{m_1})}
-#' \deqn{m^*_2 = \lambda_{01} + M + U_{m^*_2}}{m*_2 = \lambda_01 + M + U_{m*_2}}
-#' \deqn{\tilde{m}_2 = OrdProbit(m^*_2 ,C_{m_2})}{˜m_2 = OrdProbit(m*_2,C_{m_2})}
-#' \deqn{...}
-#' \deqn{m^*_k = \lambda_{0k-1} + M + U_{m^*_k}}{m*_k = \lambda_0k-1 + M + U_{m*_k}}
-#' \deqn{\tilde{m}_k = OrdProbit(m^*_k ,C_{m_k})}{˜m_k = OrdProbit(m*_k,C_{m_k})}
-#' \deqn{y^*_1 = M + U_{y^*_1}}{y*_1 = M + U_{y*_1}}
-#' \deqn{\tilde{y}_1 = OrdProbit(y^*_1 ,C_{y_1})}{˜y_1 = OrdProbit(y*_1,C_{y_1})}
-#' \deqn{y^*_2 = \tau_{01} + M + U_{y^*_2}}{y*_2 = \tau_01 + M + U_{y*_2}}
-#' \deqn{\tilde{y}_2 = OrdProbit(y^*_2 ,C_{y_2})}{˜y_2 = OrdProbit(y*_2,C_{y_2})}
-#' \deqn{...}
-#' \deqn{y^*_l = \tau_{0l-1} + M + U_{y^*_l}}{y*_l = \tau_0l-1 + M + U_{y*_l}}
-#' \deqn{\tilde{y}_l = OrdProbit(y^*_l ,C_{y_l})}{˜y_l = OrdProbit(y*_l,C_{y_l})}
+#' ## Measurement equations
+#' \eqn{m^*_1 = M + U_{m^*_1}}{m*_1 = M + U_{m*_1}} \cr
+#' \eqn{\tilde{m}_1 = OrdProbit(m^*_1 ,C_{m_1})}{˜m_1 = OrdProbit(m*_1,C_{m_1})} \cr
+#' \eqn{m^*_2 = \lambda_{20} + M + U_{m^*_2}}{m*_2 = \lambda_20 + M + U_{m*_2}} \cr
+#' \eqn{\tilde{m}_2 = OrdProbit(m^*_2 ,C_{m_2})}{˜m_2 = OrdProbit(m*_2,C_{m_2})} \cr
+#' \eqn{...} \cr
+#' \eqn{m^*_K = \lambda_{K0} + M + U_{m^*_K}}{m*_K = \lambda_K0 + M + U_{m*_K}} \cr
+#' \eqn{\tilde{m}_K = OrdProbit(m^*_K ,C_{m_K})}{˜m_K = OrdProbit(m*_K,C_{m_K})} \cr
+#' \eqn{y^*_1 = Y + U_{y^*_1}}{y*_1 = Y + U_{y*_1}} \cr
+#' \eqn{\tilde{y}_1 = OrdProbit(y^*_1 ,C_{y_1})}{˜y_1 = OrdProbit(y*_1,C_{y_1})} \cr
+#' \eqn{y^*_2 = \tau_{20} + Y + U_{y^*_2}}{y*_2 = \tau_20 + Y + U_{y*_2}} \cr
+#' \eqn{\tilde{y}_2 = OrdProbit(y^*_2 ,C_{y_2})}{˜y_2 = OrdProbit(y*_2,C_{y_2})} \cr
+#' \eqn{...} \cr
+#' \eqn{y^*_L = \tau_{L0} + Y + U_{y^*_L}}{y*_L = \tau_L0 + Y + U_{y*_L}} \cr
+#' \eqn{\tilde{y}_L = OrdProbit(y^*_L ,C_{y_L})}{˜y_L = OrdProbit(y*_L,C_{y_L})} \cr
 #'
 #' ## Prior specification:
 #'
-#'\deqn{\beta_{0M} ~ N(0,100), \beta_{0Y} ~ N(0,100)}
-#'\deqn{\beta_1 ~ N(0,100), \beta_2 ~ N(0,100), \beta_3 ~ N(0,1)}
-#\deqn{\sigma^2_M ~ (nu*S)/χ^2_{nu},{.2cm}\sigma^2_Y ~ (nu*S)/χ^2_{nu}}
-#'\deqn{\lambda_{20},...,\lambda_{K0} ~  N(0,100)}
-#'\deqn{\sigma^2_{m*_1}, ..., \sigma^2_{m*_K} ~ (nu*S)/χ^2_{nu}}
-#'\deqn{\tau_{20}, ..., \tau_{L0} ~  N(0,100)}
-#'\deqn{\sigma^2_{y*_1}, ..., \sigma^2_{y*_L} ~ (nu*S)/χ^2_{nu}}
-#'\deqn{C*_{m_1}, ..., C*_{m_K}, C*_{y_1}, ..., C*_{y_L}  ~  N(0,I)}
+#'\eqn{\beta_{0M}} \eqn{\sim}{~} N(0,100), \eqn{\beta_{0Y}} \eqn{\sim}{~} \eqn{N(0,100)}  \cr
+#'\eqn{\beta_1} \eqn{\sim}{~} \eqn{N(0,100), \beta_2} \eqn{\sim}{~} \eqn{N(0,100), \beta_3} \eqn{\sim}{~} \eqn{N(0,1)}  \cr
+#'\eqn{\lambda_{20},...,\lambda_{K0}} \eqn{\sim}{~}  \eqn{N(0,100)}  \cr
+#'\eqn{\sigma^2_{m*_1}, ..., \sigma^2_{m*_K}} \eqn{\sim}{~} \eqn{Inv\chi^2(\nu,\nu S)} \cr
+#'\eqn{\tau_{20}, ..., \tau_{L0}} \eqn{\sim}{~}  \eqn{N(0,100)} \cr
+#'\eqn{\sigma^2_{y*_1}, ..., \sigma^2_{y*_L}} \eqn{\sim}{~} \eqn{Inv\chi^2(\nu,\nu S)} \cr
+#'\eqn{C*_{m_1}, ..., C*_{m_K}, C*_{y_1}, ..., C*_{y_L}} \eqn{\sim}{~} \eqn{N(0,I)} \cr
 #'
-#' Note: \deqn{C*_{m_1}, ..., C*_{m_K}, C*_{y_1}, ..., C*_{y_L}} are untransformed
-#' cutoffs, which are then exponentially transformed to impose sign and order constraint on them. Subjective prior values for the error variances are nu=1, S=3.
+#' Note: \eqn{C*_{m_1}, ..., C*_{m_K}, C*_{y_1}, ..., C*_{y_L}} are untransformed
+#' cutoffs, which are then exponentially transformed to impose sign and order constraint on them. Subjective prior values for the error variances are \eqn{\nu=1}, S=3.
 #'
 #' ## Argument Details
 #'
@@ -62,11 +61,16 @@
 #' \describe{
 #'   \item{beta_M(R X 2)}{matrix of eq.1 coefficients' draws}
 #'   \item{beta_Y(R X 3)}{matrix of eq.2 coefficients' draws}
-#'   \item{lambda (M_ind X 2 X R)}{array of mediator indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively.}
+#'   \item{lambda (M_ind X 2 X R)}{array of mediator indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively.}
+#'   \item{tau (Y_ind X 2 X R)}{array of dependent variable indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively.}
 #'   \item{ssq_m_star(R X M_ind)}{Matrix of mediator indicator equations' coefficients' error variance draws}
 #'   \item{ssq_y_star(R X Y_ind)}{Matrix of dependent variable indicator equations' coefficients' error variance draws}
-#'   \item{mu_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
-#'   \item{var_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
+#'   \item{cutoff_M (M_ind X k_M X R)}{array of discretized mediator indicators' cutoff values.}
+#'   \item{cutoff_Y (Y_ind X k_Y X R)}{array of discretized dependent variable indicators' cutoff values.}
+#'   \item{Mdraw(R X N)}{Matrix of the augmented latent mediator}
+#'   \item{Ydraw(R X N)}{Matrix of the augmented latent dependent variable}
+#'   \item{mu_draw}{vector of means indexing MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
+#'   \item{var_draw}{vector of variance indexing MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
 #' }
 #'
 #' @export
@@ -175,7 +179,7 @@
 # beta_Y(R X 3)  matrix of eq.2 coefficients' draws
 # lambda (M_ind X 2 X R) array of mediator indicator coefficients' draws.
 # tau (Y_ind X 2 X R) array of dependent variable indicator coefficients' draws.
-# Each slice is one draw, where rows represent the indicator equation and columns are the coefficients
+# Each slice is one draw, where rows represent the indicator equation and columns the coefficients
 # All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively
 # ssq_m_star(R X M_ind) Matrix of mediator indicator equations' coefficients' error variance draws
 # ssq_y_star(R X Y_ind) Matrix of dependent variable indicator equations' coefficients' error variance draws
@@ -184,7 +188,7 @@
 
 MeasurementMYCat=function(Data,Prior,R=10000){
   #
-  # Arash Laghaie 2019
+  # A. Laghaie 2019
   # The ordered probit part of the inference and the R shell is based on rordprobitGibbs {bayesm}
   #
   # ----------------------------------------------------------------------

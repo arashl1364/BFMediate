@@ -139,7 +139,7 @@
 Mediate = function(Data, Model, Prior, R, burnin){  # BF){
 
   ############################################
-  ## Arash Laghaie 2019
+  ## A. Laghaie 2019
   ############################################
 
   if(missing(Prior))

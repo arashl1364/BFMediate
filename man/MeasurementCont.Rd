@@ -17,33 +17,45 @@ MeasurementCont(Data, Prior, R, burnin)
 \describe{
 \item{beta_M(R X 2)}{matrix of eq.1 coefficients' draws}
 \item{beta_Y(R X 3)}{matrix of eq.2 coefficients' draws}
-\item{lambda (M_ind X 2 X R)}{array of mediator indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. All Slope coefficients as well as intercept of the first equation are fixed to 1 and 0 respectively.}
+\item{lambda (M_ind X 2 X R)}{array of mediator indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. The ntercept and the slope of the first equation are fixed to 0 and 1 respectively.}
+\item{tau (Y_ind X 2 X R)}{array of dependent variable indicator coefficients' draws. Each slice is one draw, where rows represent the indicator equation and columns are the coefficients. The ntercept and the slope of the first equation are fixed to 0 and 1 respectively.}
 \item{ssq_m_star(R X M_ind)}{Matrix of mediator indicator equations' coefficients' error variance draws}
 \item{ssq_y_star(R X Y_ind)}{Matrix of dependent variable indicator equations' coefficients' error variance draws}
-\item{mu_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
-\item{var_draw}{vector of means of MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
+\item{mu_draw}{vector of means indexing MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
+\item{var_draw}{vector of variance indexing MCMC draws of the direct effect (used in BFSD to compute Bayes factor)}
 }
 }
 \description{
-Estimates a partial mediation model with multiple categorical indicators for the mediator and the dependent variable using Hamiltonian Monte Carlo (HMC) with Stan
+Estimates a partial mediation model with multiple continuous indicators for the mediator and the dependent variable using
+Stan's Hamiltonian Monte Carlo (HMC)
 }
 \details{
 \subsection{Model}{
 
-(eq.1) \deqn{M = \beta_0 M + X \beta_1 + U_M}{M = \beta_0*M + X*\beta_1 + U_M}
-(eq.2) \deqn{Y = \beta_0 Y + M \beta_2 + X \beta_3 + U_Y}{Y = \beta_0*Y + M*\beta_2 + X*\beta_3 + U_Y}
+\eqn{M = \beta_{0M} + X\beta_1 + U_M}{M = \beta_0M + X\beta_1 + U_M} (eq.1) \cr
+\eqn{Y = \beta_{0Y} + M\beta_2 + X\beta_3 + U_Y}{Y = \beta_0Y + M\beta_2 + X\beta_3 + U_Y} (eq.2) \cr
 }
 
 \subsection{Indicator equations}{
 
-\deqn{m^*_1 = M + U_{m^*_1}}{m*_1 = M + U_{m*_1}}
-\deqn{m^*_2 = \lambda_{01} + M + U_{m^*_2}}{m*_2 = \lambda_01 + M + U_{m*_2}}
+\eqn{m^*_1 = M + U_{m^*_1}}{m*_1 = M + U_{m*_1}}
+\eqn{m^*_2 = \lambda_{20} + M\lambda_{21} + U_{m^*_2}}{m*_2 = \lambda_20 + M\lambda_21 + U_{m*_2}}
 ...
-\deqn{m^*_k = \lambda_{0k-1} + M + U_{m^*_k}}{m*_k = \lambda_0k-1 + M + U_{m*_k}}
-\deqn{y^*_1 = M + U_{y^*_1}}{y*_1 = M + U_y*_1}
-\deqn{y^*_2 = \tau_{01} + M + U_{y^*_2}}{y*_2 = \tau_01 + M + U_{y*_2}}
+\eqn{m^*_K = \lambda_{K0} + M\lambda_{K1} + U_{m^*_K}}{m*_K = \lambda_K0 + M\lambda_K1 + U_{m*_K}}
+\eqn{y^*_1 = M + U_{y^*_1}}{y*_1 = M + U_y*_1}
+\eqn{y^*_2 = \tau_{20} + M\tau_{21} + U_{y^*_2}}{y*_2 = \tau_20 + M\tau_21 + U_{y*_2}}
 ...
-\deqn{y^*_l = \tau_{0l-1} + M + U_{y^*_l}}{y*_l = \tau_0l-1 + M + U_{y*_l}}
+\eqn{y^*_L = \tau_{L0} + M\tau_{L1} + U_{y^*_L}}{y*_L = \tau_L0 + M\tau_L1 + U_{y*_L}}
+}
+
+\subsection{Prior specification:}{
+
+\eqn{\beta_{0M}} \eqn{\sim}{~} \eqn{N(0,100)}, \eqn{\beta_{0Y}} \eqn{\sim}{~} \eqn{N(0,100)}  \cr
+\eqn{\beta_1} \eqn{\sim}{~} \eqn{N(0,100)}, \eqn{\beta_2} \eqn{\sim}{~} \eqn{N(0,100), \beta_3} \eqn{\sim}{~} \eqn{N(0,1)}  \cr
+\eqn{\lambda_{20},...,\lambda_{K0}} \eqn{\sim}{~}  \eqn{N(0,100)}  \cr
+\eqn{\sigma^2_{m*_1}, ..., \sigma^2_{m*_K}} \eqn{\sim}{~} \eqn{(nu*S)/\chi^2_{nu}} \cr
+\eqn{\tau_{20}, ..., \tau_{L0}} \eqn{\sim}{~}  \eqn{N(0,100)} \cr
+\eqn{\sigma^2_{y*_1}, ..., \sigma^2_{y*_L}} \eqn{\sim}{~} \eqn{(nu*S)/\chi^2_{nu}} \cr
 }
 
 \subsection{Argument Details}{
