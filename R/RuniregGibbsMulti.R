@@ -115,7 +115,7 @@ RuniregGibbsMulti=
 
     ###################################################################
     # Keunwoo Kim 08/05/2014
-    #edited by Arash Laghaie 2018 for the estimation of the measurement error
+    #edited by A. Laghaie 2018 for the estimation of the measurement error
     ###################################################################
     draws = RuniregGibbsMultiCpp(y,M, t(X), betabar, A, nu, ssq, sigmasq, R, keep, nprint, betafix, sigmafix, betavalue, sigmavalue)
     ###################################################################

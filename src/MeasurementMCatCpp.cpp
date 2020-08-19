@@ -57,7 +57,7 @@ List MeasurementMCatCpp(arma::vec const& dep,  arma::mat const& y, arma::mat con
   // mat const& cutoff_Y_init, mat const& Y_tilde_init, vec const& beta_tilde_init, vec const& ssq_y_tilde_init, vec const& beta_init, vec const& beta_2_init, vec const& Y_init){
   // vec const& z_init){
 
-  // Modified by Arash Laghaie 16/10/2018
+  // Modified by A. Laghaie 16/10/2018
 
   // "dep" is the dependent variable in the mediation Y
   //  z is the continuous latent mediator M

@@ -2,7 +2,7 @@ runiregGibbs_me=
   function(Data,Prior,Mcmc)
   {
     #
-    #     runiregGibbs {bayesm} modified by Arash Laghaie (2019) for estimating mediation models
+    #     runiregGibbs {bayesm} modified by A. Laghaie (2019) for estimating mediation models
     #
     # Purpose:
     #   perform Gibbs iterations for Univ Regression Model using
@@ -110,7 +110,7 @@ runiregGibbs_me=
 
     ###################################################################
     # Keunwoo Kim 08/05/2014
-    # edited by Arash Laghaie 2019 for the estimation of the mediation models
+    # edited by A. Laghaie 2019 for the estimation of the mediation models
     ###################################################################
     draws = runiregGibbs_rcpp_me(y, X, betabar, A, nu, ssq, sigmasq, R, keep, nprint, betafix, sigmafix, betavalue, sigmavalue)
     ###################################################################

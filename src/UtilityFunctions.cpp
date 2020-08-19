@@ -307,7 +307,7 @@ List dstarRwMetrop3(arma::vec const& y, arma::vec const& mu, arma::vec const& ol
 
 List breg2(arma::mat const& root, arma::mat const& X, arma::vec const& y, arma::vec const& Abetabar) {
 
-  // Arash Laghaie 10/20/2018
+  // A. Laghaie 10/20/2018
   // Equivalent to breg1 and additionally stores the beta moments
 
   arma::mat cov = trans(root)*root;

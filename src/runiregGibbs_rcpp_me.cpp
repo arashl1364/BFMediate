@@ -10,7 +10,7 @@ List runiregGibbs_rcpp_me(arma::vec const& y, arma::mat const& X, arma::vec cons
                                double sigmasq, int R, int keep, int nprint, bool betafix, bool sigmafix, arma::mat betavalue, arma::vec sigmavalue) {
 
   // Keunwoo Kim 09/09/2014
-  //edited by Arash Laghaie 13/02/2018 for estimating the mediation model with measurement error
+  //edited by A. Laghaie 13/02/2018 for estimating the mediation model with measurement error
 
   // Purpose: perform iid draws from posterior of regression model using conjugate prior
 
