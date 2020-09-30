@@ -184,7 +184,7 @@ out_comp$Simple$evidence    #evidence in favor of full mediation (Kass & Raftery
 
 ```
 
-Baron & Kenny (1986) and bootstrapping methods both reject full mediation and even though the indirect effect is significant, we cannot rule out alternative models. The Bayes factor of the simple model shows strong evidence against full mediation too. 
+Baron & Kenny (1986) and bootstrapping methods both reject full mediation and even though the indirect effect is significant, we cannot rule out alternative models. Also the Bayes factor of the simple model shows strong evidence against full mediation. 
 
 ##  Estimating a latent variable model
 
