@@ -115,20 +115,6 @@ runiregGibbs_me=
     draws = runiregGibbs_rcpp_me(y, X, betabar, A, nu, ssq, sigmasq, R, keep, nprint, betafix, sigmafix, betavalue, sigmavalue)
     ###################################################################
 
-    # attributes(draws$betadraw)$class=c("bayesm.mat","mcmc")
-    # attributes(draws$betadraw)$mcpar=c(1,R,keep)
-    # attributes(draws$sigmasqdraw)$class=c("bayesm.mat","mcmc")
-    # attributes(draws$sigmasqdraw)$mcpar=c(1,R,keep)
-    # #Moments for calculating Bayes factor
-    # attributes(draws$mubetadraw)$class=c("bayesm.mat","mcmc")
-    # attributes(draws$mubetadraw)$mcpar=c(1,R,keep)
-    # attributes(draws$IRdraw)$class=c("bayesm.mat","mcmc")
-    # attributes(draws$IRdraw)$mcpar=c(1,R,keep)
-    # attributes(draws$nudraw)$class=c("bayesm.mat","mcmc")
-    # attributes(draws$nudraw)$mcpar=c(1,R,keep)
-    # attributes(draws$ssqdraw)$class=c("bayesm.mat","mcmc")
-    # attributes(draws$ssqdraw)$mcpar=c(1,R,keep)
-
 
     return(draws)
   }

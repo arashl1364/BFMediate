@@ -311,8 +311,8 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$M,Data$X), y = as.matrix(Data$y_tilde) ,k=Ycut-1, Y_ind=dim(as.matrix(Data$y_tilde))[2])
     Mcmc=list(R=R)
     out = MeasurementYCat(Data=Data_cat, Prior=Prior, R=10000) #rordprobitGibbs_me_multi_merr_cpp(Data=Data_cat, Mcmc=Mcmc)
-    BF.LVM = BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = burnin))
-    Bayes.CI.Indirect = round(as.vector(quantile(out,multi$beta_M[,2]*out$beta_Y[,2], probs = c(.025,.975))),2)
+    BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = burnin))
+    Bayes.CI.Indirect = round(as.vector(quantile(out$beta_M[,2]*out$beta_Y[,2], probs = c(.025,.975))),2)
     Bayes.CI.Direct = round(as.vector(quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
 
     if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive in favor of full mediation",

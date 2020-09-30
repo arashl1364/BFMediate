@@ -21,3 +21,7 @@ RuniregGibbsMultiCpp <- function(y, M, X, betabar, A, nu, ssq, sigmasq, R, keep,
     .Call(`_BFMediate_RuniregGibbsMultiCpp`, y, M, X, betabar, A, nu, ssq, sigmasq, R, keep, nprint, betafix, sigmafix, betavalue, sigmavalue)
 }
 
+rbprobitGibbs_rcpp_me <- function(y, X, Abetabar, root, beta, sigma, trunpt, above, R, keep, nprint) {
+    .Call(`_BFMediate_rbprobitGibbs_rcpp_me`, y, X, Abetabar, root, beta, sigma, trunpt, above, R, keep, nprint)
+}
+

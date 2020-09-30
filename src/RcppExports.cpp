@@ -141,6 +141,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rbprobitGibbs_rcpp_me
+List rbprobitGibbs_rcpp_me(arma::vec const& y, arma::mat const& X, arma::vec const& Abetabar, arma::mat const& root, arma::vec beta, arma::vec const& sigma, arma::vec const& trunpt, arma::vec const& above, int R, int keep, int nprint);
+RcppExport SEXP _BFMediate_rbprobitGibbs_rcpp_me(SEXP ySEXP, SEXP XSEXP, SEXP AbetabarSEXP, SEXP rootSEXP, SEXP betaSEXP, SEXP sigmaSEXP, SEXP trunptSEXP, SEXP aboveSEXP, SEXP RSEXP, SEXP keepSEXP, SEXP nprintSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec const& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type Abetabar(AbetabarSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type root(rootSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type trunpt(trunptSEXP);
+    Rcpp::traits::input_parameter< arma::vec const& >::type above(aboveSEXP);
+    Rcpp::traits::input_parameter< int >::type R(RSEXP);
+    Rcpp::traits::input_parameter< int >::type keep(keepSEXP);
+    Rcpp::traits::input_parameter< int >::type nprint(nprintSEXP);
+    rcpp_result_gen = Rcpp::wrap(rbprobitGibbs_rcpp_me(y, X, Abetabar, root, beta, sigma, trunpt, above, R, keep, nprint));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_stan_fit4Measurement_Multi_mod();
 
@@ -150,6 +171,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BFMediate_MeasurementYCatCpp", (DL_FUNC) &_BFMediate_MeasurementYCatCpp, 14},
     {"_BFMediate_MeasurementMYCatCpp", (DL_FUNC) &_BFMediate_MeasurementMYCatCpp, 24},
     {"_BFMediate_RuniregGibbsMultiCpp", (DL_FUNC) &_BFMediate_RuniregGibbsMultiCpp, 15},
+    {"_BFMediate_rbprobitGibbs_rcpp_me", (DL_FUNC) &_BFMediate_rbprobitGibbs_rcpp_me, 11},
     {"_rcpp_module_boot_stan_fit4Measurement_Multi_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4Measurement_Multi_mod, 0},
     {NULL, NULL, 0}
 };

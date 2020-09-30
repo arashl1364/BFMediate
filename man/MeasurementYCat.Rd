@@ -38,12 +38,12 @@ Estimates a partial mediation model with multiple categorical indicator for the 
 
 \subsection{Indicator equations}{
 
-\eqn{y^*_1 = M + U_{y^*_1}}{y*_1 = M + U_{y*_1}} \cr
+\eqn{y^*_1 = Y + U_{y^*_1}}{y*_1 = Y + U_{y*_1}} \cr
 \eqn{\tilde{y}_1 = OrdProbit(y^*_1 ,C_{y_1})}{˜y_1 = OrdProbit(y*_1,C_{y_1})} \cr
-\eqn{y^*_2 = \tau_{20} + M + U_{y^*_2}}{y*_2 = \tau_20 + M + U_{y*_2}} \cr
+\eqn{y^*_2 = \tau_{20} + Y + U_{y^*_2}}{y*_2 = \tau_20 + Y + U_{y*_2}} \cr
 \eqn{\tilde{y}_2 = OrdProbit(y^*_2 ,C_{y_2})}{˜y_2 = OrdProbit(y*_2,C_{y_2})} \cr
 \eqn{...} \cr
-\eqn{y^*_L = \tau_{L0} + M + U_{y^*_L}}{y*_L = \tau_L0 + M + U_{y*_L}} \cr
+\eqn{y^*_L = \tau_{L0} + Y + U_{y^*_L}}{y*_L = \tau_L0 + Y + U_{y*_L}} \cr
 \eqn{\tilde{y}_L = OrdProbit(y^*_L ,C_{y_L})}{˜y_L = OrdProbit(y*_L,C_{y_L})} \cr
 }
 

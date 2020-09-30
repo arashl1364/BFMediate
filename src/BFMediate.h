@@ -53,6 +53,21 @@ double unif_rs(double a, double b);
 double exp_rs(double a, double b);
 
 
+// Truncated normal draw
+double dexpr(double const& a);
+
+double invCdfNorm(double const& a);
+
+double dnr(double const& a);
+
+double trunNormBelow(double const& a);
+
+double trunNorm(double mu,double sig, double trunpt, int above);
+
+arma::vec trunNorm_vec(arma::vec const& mu, arma::vec const& sig, arma::vec const& trunpt, arma::vec const& above);
+
+
+
 // Extra functions
 List runiregGibbs_betafix(arma::vec const& y, arma::mat const& X, arma::vec const& betabar, arma::mat const& A, double nu, double ssq,
                           double sigmasq, int R, int keep, int nprint, int betafix);

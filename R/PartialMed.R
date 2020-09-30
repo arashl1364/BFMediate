@@ -122,13 +122,36 @@ PartialMed=function(Data, Prior, R=10000){
     out<-runiregGibbs_me(Data = list(y=M,X=cbind(rep(1,N),X)),Prior=list(ssq=1,A = as.matrix(diag(A_M,k))),Mcmc = list(R=R))
     beta_1_draw = out$betadraw; ssq_M_draw = out$sigmasqdraw;
 
-    out<-runiregGibbs_me(Data = list(y=Y,X=cbind(rep(1,N),M,X)),Prior=list(ssq=1, A =  as.matrix(diag(A_Y,k+1))), Mcmc = list(R=R))
-    beta_2_draw = out$betadraw; ssq_y_draw = out$sigmasqdraw;
-    ##Moments
-    mu_beta_2_draw = out$mubeta
-    IR_beta_2_draw = out$IR    #covariance matrix of beta draws
-    # nu_ssq_y_draw = out$nu
-    # S_ssq_y_draw = out$S
+    # Check if Y is binary
+    #
+    if(sum(Y %in% c(0,1))==N){
+      # Binary Y
+      # draw beta_2, ssq_y | Y,M,X
+      repeat{
+        out<-rbprobitGibbs_me(Data = list(y=Y,X=cbind(rep(1,N),M,X)),Prior=list(A =  as.matrix(diag(A_Y,k+1))), Mcmc = list(R=R))
+        if (!sum(is.na(out$betadraw)) && sum(colMeans(out$betadraw))<10000) break
+      }
+      beta_2_draw = out$betadraw;
+      ##Moments
+      mu_beta_2_draw = out$mu_beta
+      IR_beta_2_draw = out$IR
+    }else{
+      # Continuous Y
+      # draw beta_2, ssq_y | Y,M,X
+      out<-runiregGibbs_me(Data = list(y=Y,X=cbind(rep(1,N),M,X)),Prior=list(ssq=1, A =  as.matrix(diag(A_Y,k+1))), Mcmc = list(R=R))
+      beta_2_draw = out$betadraw; ssq_y_draw = out$sigmasqdraw;
+      ##Moments
+      mu_beta_2_draw = out$mubeta
+      IR_beta_2_draw = out$IR
+      nu_ssq_y_draw = out$nu
+      S_ssq_y_draw = out$S
+    }
+    # out<-runiregGibbs_me(Data = list(y=Y,X=cbind(rep(1,N),M,X)),Prior=list(ssq=1, A =  as.matrix(diag(A_Y,k+1))), Mcmc = list(R=R))
+    # beta_2_draw = out$betadraw; ssq_y_draw = out$sigmasqdraw;
+    # ##Moments
+    # mu_beta_2_draw = out$mubeta
+    # IR_beta_2_draw = out$IR    #covariance matrix of beta draws
+
 
   ctime = proc.time()[3]
   cat('  Total Time Elapsed: ',round((ctime-itime)/60,2),'\n')
