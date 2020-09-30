@@ -186,7 +186,7 @@ out_comp$Simple$evidence    #evidence in favor of full mediation (Kass & Raftery
 
 Baron & Kenny (1986) and bootstrapping methods both reject full mediation and even though the indirect effect is significant, we cannot rule out alternative models. The Bayes factor of the simple model shows strong evidence against full mediation too. 
 
-##  Estimating a Latent variable model
+##  Estimating a latent variable model
 
 Instead of estimating a simple model using the composite measures, we can estimate the LVM to account for measurement error and descritization using _Mediate_ by setting Model = "MYCat". Note that Data argument here should be a list containing 
 - X a vector of the manipulated variable; 
@@ -207,7 +207,7 @@ out_MYCat$evidence
 
 ```
 
-# Illustration of BF sensitivity analysis and MCMC convergence
+# BF sensitivity analysis and MCMC convergence
 
 ## BF sensitivity to the choice of prior and convergence in the simple mediation model
 
