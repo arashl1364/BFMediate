@@ -93,7 +93,7 @@ out$Simple$evidence       # evidence in favor of full mediation (Kass & Raftery 
 The NHST test result from the Baron & Kenny (1986) procedure fails to reject full mediation, and the bootstrapped direct effect includes zero. However, as dicussed in Laghaie & Otter (2020), these could result from low power and high sampling variability, and are not necessarily evidence for mediation. Computing Bayes factor on the other hand provide a measure of data based evidence supporting/against mediation. The output of _Mediate_ also contains all the parameter estimates (posterior draws). For a complete list of the output values as well as the prior specification for all the model parameters please see the help page of the function.
 
 
-# Model with multiple (discretized) indicators for M and Y
+## Model with multiple (discretized) indicators for M and Y
 
 If, as often the case, multiple indicators for M and Y are available in the form of scale ratings, they can be used to control for both measurement error and discretization in a latent variable model(for a visual illustration of the model please see Appendix D.III of Laghaie & Otter (2020)). Based on the latent variable model, Bayes factors then test for conditional mean independence between X and (latent) Y given (latent) M.  Note that conditional mean independence at the latent variable level may (strongly) hold even if conditional mean independence is (strongly) rejected at the level of observed variables. We illustrate this result with simulated data from a full mediation model with multiple categorized indicators:      
 
@@ -144,7 +144,7 @@ DataMYCat = SimMeasurementMYCat(X, beta_1, cutoff_M, beta_2, cutoff_Y, M_ind, Y_
 
 ```
 
-## Simple model with composite measures 
+## Estimating a simple model with composite measures 
 
 We first average out the indicators to make composite measures and estimate a simple model using the those measures. 
 
@@ -186,7 +186,7 @@ out_comp$Simple$evidence    #evidence in favor of full mediation (Kass & Raftery
 
 Baron & Kenny (1986) and bootstrapping methods both reject full mediation and even though the indirect effect is significant, we cannot rule out alternative models. The Bayes factor of the simple model shows strong evidence against full mediation too. 
 
-## Latent variable model
+##  Estimating a Latent variable model
 
 Instead of estimating a simple model using the composite measures, we can estimate the LVM to account for measurement error and descritization using _Mediate_ by setting Model = "MYCat". Note that Data argument here should be a list containing 
 - X a vector of the manipulated variable; 
