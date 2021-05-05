@@ -1,4 +1,4 @@
-# Mediation Analysis using Latent Variable Models and Bayesian Estimation, and Bayes factors 
+# Mediation Analysis using Latent Variable Models, Bayesian Estimation, and Bayes Factors 
 
 The focus is on measuring evidence for (full) mediation using Bayes factors. The package covers models with measurement error and discretization in the mediator (M) and/or the dependent variable. 
 
