@@ -65,7 +65,6 @@ Mediation Analysis and Bayes Factor Computation
 For Data arguments and Models, see
 \itemize{
 \item \link[BFMediate]{PartialMed} for "Simple"
-\item \link[BFMediate]{MeasurementCont} for "Cont"
 \item \link[BFMediate]{MeasurementMCat} for "MCat"
 \item \link[BFMediate]{MeasurementYCat} for "YCat"
 \item \link[BFMediate]{MeasurementMYCat} for "MYCat"

@@ -163,8 +163,6 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP _rcpp_module_boot_stan_fit4Measurement_Multi_mod();
-
 static const R_CallMethodDef CallEntries[] = {
     {"_BFMediate_runiregGibbs_rcpp_me", (DL_FUNC) &_BFMediate_runiregGibbs_rcpp_me, 14},
     {"_BFMediate_MeasurementMCatCpp", (DL_FUNC) &_BFMediate_MeasurementMCatCpp, 17},
@@ -172,7 +170,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_BFMediate_MeasurementMYCatCpp", (DL_FUNC) &_BFMediate_MeasurementMYCatCpp, 24},
     {"_BFMediate_RuniregGibbsMultiCpp", (DL_FUNC) &_BFMediate_RuniregGibbsMultiCpp, 15},
     {"_BFMediate_rbprobitGibbs_rcpp_me", (DL_FUNC) &_BFMediate_rbprobitGibbs_rcpp_me, 11},
-    {"_rcpp_module_boot_stan_fit4Measurement_Multi_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4Measurement_Multi_mod, 0},
     {NULL, NULL, 0}
 };
 

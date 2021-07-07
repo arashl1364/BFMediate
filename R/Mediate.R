@@ -13,7 +13,6 @@
 #' For Data arguments and Models, see
 #'
 #' * \link[BFMediate]{PartialMed} for "Simple"
-#' * \link[BFMediate]{MeasurementCont} for "Cont"
 #' * \link[BFMediate]{MeasurementMCat} for "MCat"
 #' * \link[BFMediate]{MeasurementYCat} for "YCat"
 #' * \link[BFMediate]{MeasurementMYCat} for "MYCat"
