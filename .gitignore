@@ -28,4 +28,5 @@ src/*.dll
 # OS specific
 .DS_Store
 # Rstudio files
+*.Rproj
 .Rproj.user
