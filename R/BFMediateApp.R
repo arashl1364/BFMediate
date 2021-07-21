@@ -1,6 +1,3 @@
-#' @include utils.R
-NULL
-
 #' Run BFMediateApp
 #'
 #' Launches a Shiny app that shows a demo of what can be done with

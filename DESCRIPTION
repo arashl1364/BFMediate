@@ -24,3 +24,18 @@ Biarch: true
 Depends: 
     R (>= 3.4.0)
 SystemRequirements: GNU make
+Collate: 
+    'BFMediate-package.R'
+    'BFMediateApp.R'
+    'BFSD.R'
+    'GenMoments.R'
+    'MeasurementMCat.R'
+    'MeasurementMYCat.R'
+    'MeasurementYCat.R'
+    'Mediate.R'
+    'PartialMed.R'
+    'RcppExports.R'
+    'RuniregGibbsMulti.R'
+    'rbprobitgibbs_me.R'
+    'runiregGibbs_me.R'
+    'stanmodels.R'
