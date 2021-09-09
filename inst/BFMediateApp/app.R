@@ -1,6 +1,6 @@
 #' @include Mediate.R
 NULL
-# library(BFMediate)
+library(BFMediate)
 # mediation image
 img <- "www/mediation.png"
 
