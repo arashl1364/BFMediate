@@ -1,6 +1,6 @@
 #' @include Mediate.R
 NULL
-
+# library(BFMediate)
 # mediation image
 img <- "www/mediation.png"
 
@@ -82,7 +82,7 @@ shiny::shinyApp(
         shiny::numericInput(inputId='prior_2', label='Prior beta_2',
                             value=100),
         ), column(12,
-        shiny::numericInput(inputId='prior_3', label='Prior beta_3 (reference prior)',
+        shiny::numericInput(inputId='prior_3', label='Prior beta_3 (carefully chosen reference prior, see XXX & XXX (2021) before changing)',
                             value=1),
         ),
         shiny::hr(),
