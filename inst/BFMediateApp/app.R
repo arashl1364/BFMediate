@@ -156,7 +156,7 @@ shiny::shinyApp(
         #
         # Choosing the reference prior for the direct effect (beta_3)
         A_M <- c(input$prior_0M, input$prior_1); # Prior variance for beta_0M, beta_1
-        A_Y_ref <- c(input$prior_0Y, input$prior_2, input$prior_3) # Prior variance for beta_0Y, beta_2, beta_3(reference prior)
+        A_Y_ref <- c(input$prior_0Y, input$prior_2, input$prior_3) # Prior variance for beta_0Y, beta_2, beta_3(carefully chosen reference prior, please see xxx & xxx (2020) before changing)
         prior <- list(A_M = A_M, A_Y = A_Y_ref)
         shiny::showModal(shiny::modalDialog("Estimating ...", footer=NULL))
         res <- Mediate(Data = sim(), Model = input$model, Prior = prior, R = input$R, burnin = input$burnin)
