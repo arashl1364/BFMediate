@@ -107,7 +107,7 @@ List runiregGibbs_rcpp_me(arma::vec const& y, arma::mat const& X, arma::vec cons
 
 
 
-// //The functions below are used to print the output from MCMC draws for many of the bayesm functions
+
 // time_t itime;
 // char buf[100];
 //

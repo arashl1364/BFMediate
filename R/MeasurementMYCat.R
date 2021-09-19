@@ -114,9 +114,9 @@
 #' ssq_y_star = c(.2,.2)
 #' tau = c(0,-.5)
 #' cutoff_M = matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
-#'                     -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Mcut, byrow = T)
+#'                     -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Mcut, byrow = TRUE)
 #' cutoff_Y =  matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
-#'                      -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Ycut, byrow = T)
+#'                      -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Ycut, byrow = TRUE)
 #' DataMYCat = SimMeasurementMYCat(X, beta_M, cutoff_M, beta_Y, cutoff_Y, M_ind,
 #'                                 Y_ind, lambda, tau, ssq_m_star, ssq_y_star)
 #'
@@ -201,7 +201,7 @@ MeasurementMYCat=function(Data,Prior,R=10000){
   #
   lldstar=function(dstar_Y,y_tilde,mu){
     gamma=dstartoc(dstar_Y)
-    arg = pnorm(gamma[y_tilde+1]-mu)-pnorm(gamma[y_tilde]-mu)
+    arg = stats::pnorm(gamma[y_tilde+1]-mu)-stats::pnorm(gamma[y_tilde]-mu)
     epsilon=1.0e-50
     arg=ifelse(arg < epsilon,epsilon,arg)
     return(sum(log(arg)))
@@ -211,20 +211,20 @@ MeasurementMYCat=function(Data,Prior,R=10000){
   #
   # check arguments
   #
-  if(missing(Data)) {pandterm("Requires Data argument -- list of y_tilde and X")}
-  if(is.null(Data$X)) {pandterm("Requires Data element X")}
+  if(missing(Data)) {stop("Requires Data argument -- list of y_tilde and X")}
+  if(is.null(Data$X)) {stop("Requires Data element X")}
   X=Data$X
-  if(is.null(Data$y_tilde)) {pandterm("Requires Data element y_tilde")}
+  if(is.null(Data$y_tilde)) {stop("Requires Data element y_tilde")}
   y_tilde=Data$y_tilde
-  if(is.null(Data$k_Y)) {pandterm("Requires Data element k_Y")}
+  if(is.null(Data$k_Y)) {stop("Requires Data element k_Y")}
   k_Y=Data$k_Y
-  if(is.null(Data$m_tilde)) {pandterm("Requires Data element m_tilde")}
+  if(is.null(Data$m_tilde)) {stop("Requires Data element m_tilde")}
   m_tilde=Data$m_tilde
-  if(is.null(Data$k_M)) {pandterm("Requires Data element k_M")}
+  if(is.null(Data$k_M)) {stop("Requires Data element k_M")}
   k_M=Data$k_M
-  if(is.null(Data$M_ind)) {pandterm("Requires Data element M_ind")}
+  if(is.null(Data$M_ind)) {stop("Requires Data element M_ind")}
   M_ind=Data$M_ind
-  if(is.null(Data$Y_ind)) {pandterm("Requires Data element Y_ind")}
+  if(is.null(Data$Y_ind)) {stop("Requires Data element Y_ind")}
   Y_ind=Data$Y_ind
 
   # #fixing parameters for testing the sampler
@@ -263,12 +263,12 @@ MeasurementMYCat=function(Data,Prior,R=10000){
   #
   # check data for validity
   #
-  if(dim(y_tilde)[1] != nrow(X) ) {pandterm("y_tilde and X not of same row dim")}
+  if(dim(y_tilde)[1] != nrow(X) ) {stop("y_tilde and X not of same row dim")}
   if(  sum(unique(y_tilde[,1]) %in% (1:k_Y) ) < length(unique(y_tilde[,1])) )     #Tests only y_star1 but I really don't care! :D
-  {pandterm("some value of y_tilde is not vaild")}
-  if(dim(m_tilde)[1] != nrow(X) ) {pandterm("m_tilde and X not of same row dim")}
+  {stop("some value of y_tilde is not vaild")}
+  if(dim(m_tilde)[1] != nrow(X) ) {stop("m_tilde and X not of same row dim")}
   if(  sum(unique(m_tilde[,1]) %in% (1:k_M) ) < length(unique(m_tilde[,1])) )     #Tests only m_star1 but I really don't care! :D
-  {pandterm("some value of m_tilde is not vaild")}
+  {stop("some value of m_tilde is not vaild")}
 
   #
   # check for Prior
@@ -301,22 +301,22 @@ MeasurementMYCat=function(Data,Prior,R=10000){
   #
 
   if(ncol(A_M) != nrow(A_M) || ncol(A_M) != nvar_M || nrow(A_M) != nvar_M)
-  {pandterm(paste("bad dimensions for A_M",dim(A_M)))}
+  {stop(paste("bad dimensions for A_M",dim(A_M)))}
   if(length(betabar) != nvar_M)
-  {pandterm(paste("betabar wrong length, length= ",length(betabar)))}
+  {stop(paste("betabar wrong length, length= ",length(betabar)))}
   if(ncol(Ad_M) != nrow(Ad_M) || ncol(Ad_M) != ndstar_M || nrow(Ad_M) != ndstar_M)
-  {pandterm(paste("bad dimensions for Ad_M",dim(Ad_M)))}
+  {stop(paste("bad dimensions for Ad_M",dim(Ad_M)))}
   if(length(dstarbar_M) != ndstar_M)
-  {pandterm(paste("dstarbar_M wrong length, length= ",length(dstarbar_M)))}
+  {stop(paste("dstarbar_M wrong length, length= ",length(dstarbar_M)))}
 
   if(ncol(A_Y) != nrow(A_Y) || ncol(A_Y) != nvar_Y || nrow(A_Y) != nvar_Y)
-  {pandterm(paste("bad dimensions for A_Y",dim(A_Y)))}
+  {stop(paste("bad dimensions for A_Y",dim(A_Y)))}
   if(length(beta_2_bar) != nvar_Y)
-  {pandterm(paste("beta_2_bar wrong length, length= ",length(beta_2_bar)))}
+  {stop(paste("beta_2_bar wrong length, length= ",length(beta_2_bar)))}
   if(ncol(Ad_Y) != nrow(Ad_Y) || ncol(Ad_Y) != ndstar_Y || nrow(Ad_Y) != ndstar_Y)
-  {pandterm(paste("bad dimensions for Ad_Y",dim(Ad_Y)))}
+  {stop(paste("bad dimensions for Ad_Y",dim(Ad_Y)))}
   if(length(dstarbar_Y) != ndstar_Y)
-  {pandterm(paste("dstarbar_Y wrong length, length= ",length(dstarbar_Y)))}
+  {stop(paste("dstarbar_Y wrong length, length= ",length(dstarbar_Y)))}
 
   #
   # check MCMC argument
@@ -325,14 +325,14 @@ MeasurementMYCat=function(Data,Prior,R=10000){
   nprint = 100
   s_M = 2.38/sqrt(ndstar_M)
   s_Y = 2.38/sqrt(ndstar_Y)
-  # if(missing(Mcmc)) {pandterm("requires Mcmc argument")}
+  # if(missing(Mcmc)) {stop("requires Mcmc argument")}
   # else
   # {
   #   if(is.null(Mcmc$R))
-  #   {pandterm("requires Mcmc element R")} else {R=Mcmc$R}
+  #   {stop("requires Mcmc element R")} else {R=Mcmc$R}
   #   if(is.null(Mcmc$keep)) {keep=1} else {keep=Mcmc$keep}
   #   if(is.null(Mcmc$nprint)) {nprint=100} else {nprint=Mcmc$nprint}
-  #   if(nprint<0) {pandterm('nprint must be an integer greater than or equal to 0')}
+  #   if(nprint<0) {stop('nprint must be an integer greater than or equal to 0')}
   #   if(is.null(Mcmc$s_M)) {s_M=2.38/sqrt(ndstar_M)} else {s_M=Mcmc$s_M} #2.38 is RRscaling
   #   if(is.null(Mcmc$s_Y)) {s_Y=2.38/sqrt(ndstar_Y)} else {s_Y=Mcmc$s_Y}
   # }
@@ -379,7 +379,7 @@ MeasurementMYCat=function(Data,Prior,R=10000){
 
   betahat = chol2inv(chol(crossprod(X,X)))%*% crossprod(X,rowMeans(m_tilde))
   dstarini = c(cumsum(c( rep(0.1, ndstar_M))))     # set initial value for dstar_M
-  dstarout = optim(dstarini, lldstar, method = "BFGS", hessian=T,
+  dstarout = stats::optim(dstarini, lldstar, method = "BFGS", hessian=T,
                    control = list(fnscale = -1,maxit=500,
                                   reltol = 1e-06, trace=0), mu=X%*%betahat, y=rowMeans(m_tilde))
   inc.root_M=chol(chol2inv(chol((-dstarout$hessian+Ad_M))))  # chol((H+Ad_Y)^-1)
@@ -391,7 +391,7 @@ MeasurementMYCat=function(Data,Prior,R=10000){
   Xmstar=cbind(X[,1],rowMeans(m_tilde),X[,2])
   beta_2_hat = chol2inv(chol(crossprod(Xmstar,Xmstar)))%*% crossprod(Xmstar,rowMeans(y_tilde))
   dstarini = c(cumsum(c( rep(0.1, ndstar_Y))))     # set initial value for dstar_Y
-  dstarout = optim(dstarini, lldstar, method = "BFGS", hessian=T,
+  dstarout = stats::optim(dstarini, lldstar, method = "BFGS", hessian=T,
                    control = list(fnscale = -1,maxit=500,
                                   reltol = 1e-06, trace=0), mu=Xmstar%*%beta_2_hat, y=rowMeans(y_tilde))
   inc.root_Y=chol(chol2inv(chol((-dstarout$hessian+Ad_Y))))  # chol((H+Ad_Y)^-1)

@@ -93,7 +93,7 @@
 #' ssq_y_star = c(.5,.7)
 #' tau = c(0,-.5)   #first intercept should always be 0
 #' cutoff_Y =  matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
-#'                      -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Ycut, byrow = T)
+#'                      -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Ycut, byrow = TRUE)
 #' DataYCat = SimMeasurementYCat(X, beta_M, beta_Y, sigma_M, cutoff_Y, Y_ind, tau, ssq_y_star)
 #'
 #' #estimation
@@ -160,7 +160,7 @@ MeasurementYCat=function(Data,Prior,R=10000){  #,Mcmc){
   #
   lldstar=function(dstar,y,mu){
     gamma=dstartoc(dstar)
-    arg = pnorm(gamma[y+1]-mu)-pnorm(gamma[y]-mu)
+    arg = stats::pnorm(gamma[y+1]-mu)-stats::pnorm(gamma[y]-mu)
     epsilon=1.0e-50
     arg=ifelse(arg < epsilon,epsilon,arg)
     return(sum(log(arg)))
@@ -170,14 +170,14 @@ MeasurementYCat=function(Data,Prior,R=10000){  #,Mcmc){
   #
   # check arguments
   #
-  if(missing(Data)) {pandterm("Requires Data argument -- list of y and X")}
-  if(is.null(Data$X)) {pandterm("Requires Data element X")}
+  if(missing(Data)) {stop("Requires Data argument -- list of y and X")}
+  if(is.null(Data$X)) {stop("Requires Data element X")}
   X=Data$X
-  if(is.null(Data$y)) {pandterm("Requires Data element y")}
+  if(is.null(Data$y)) {stop("Requires Data element y")}
   y=Data$y
-  if(is.null(Data$k)) {pandterm("Requires Data element k")}
+  if(is.null(Data$k)) {stop("Requires Data element k")}
   k=Data$k
-  if(is.null(Data$Y_ind)) {pandterm("Requires Data element Y_ind")}
+  if(is.null(Data$Y_ind)) {stop("Requires Data element Y_ind")}
   Y_ind=Data$Y_ind
 
   nvar=ncol(X)
@@ -197,9 +197,9 @@ MeasurementYCat=function(Data,Prior,R=10000){  #,Mcmc){
   #
   # check data for validity
   #
-  if(dim(y)[1] != nrow(X) ) {pandterm("y and X not of same row dim")}
+  if(dim(y)[1] != nrow(X) ) {stop("y and X not of same row dim")}
   if(  sum(unique(y[,1]) %in% (1:k) ) < length(unique(y[,1])) )   #Tests only y_star1 but I really don't care! :D
-  {pandterm("some value of y is not vaild")}
+  {stop("some value of y is not vaild")}
 
   #
   # check for Prior
@@ -224,13 +224,13 @@ MeasurementYCat=function(Data,Prior,R=10000){  #,Mcmc){
   #
 
   if(ncol(A) != nrow(A) || ncol(A) != nvar || nrow(A) != nvar)
-  {pandterm(paste("bad dimensions for A",dim(A)))}
+  {stop(paste("bad dimensions for A",dim(A)))}
   if(length(betabar) != nvar)
-  {pandterm(paste("betabar wrong length, length= ",length(betabar)))}
+  {stop(paste("betabar wrong length, length= ",length(betabar)))}
   if(ncol(Ad) != nrow(Ad) || ncol(Ad) != ndstar || nrow(Ad) != ndstar)
-  {pandterm(paste("bad dimensions for Ad",dim(Ad)))}
+  {stop(paste("bad dimensions for Ad",dim(Ad)))}
   if(length(dstarbar) != ndstar)
-  {pandterm(paste("dstarbar wrong length, length= ",length(dstarbar)))}
+  {stop(paste("dstarbar wrong length, length= ",length(dstarbar)))}
 
   #
   # check MCMC argument
@@ -238,14 +238,14 @@ MeasurementYCat=function(Data,Prior,R=10000){  #,Mcmc){
   keep = 1
   nprint = 100
   s = 2.38/sqrt(ndstar)
-  # if(missing(Mcmc)) {pandterm("requires Mcmc argument")}
+  # if(missing(Mcmc)) {stop("requires Mcmc argument")}
   # else
   # {
   #   if(is.null(Mcmc$R))
-  #   {pandterm("requires Mcmc element R")} else {R=Mcmc$R}
+  #   {stop("requires Mcmc element R")} else {R=Mcmc$R}
   #   if(is.null(Mcmc$keep)) {keep=1} else {keep=Mcmc$keep}
   #   if(is.null(Mcmc$nprint)) {nprint=100} else {nprint=Mcmc$nprint}
-  #   if(nprint<0) {pandterm('nprint must be an integer greater than or equal to 0')}
+  #   if(nprint<0) {stop('nprint must be an integer greater than or equal to 0')}
   #   if(is.null(Mcmc$s)) {s=2.38/sqrt(ndstar)} else {s=Mcmc$s}  #2.38 is the RRscaling
   # }
   #
@@ -280,7 +280,7 @@ MeasurementYCat=function(Data,Prior,R=10000){  #,Mcmc){
 
   betahat = chol2inv(chol(crossprod(X,X)))%*% crossprod(X,rowMeans(y))    ###betahat is computed based on the average of y_stars
   dstarini = c(cumsum(c( rep(0.1, ndstar))))     # set initial value for dstar
-  dstarout = optim(dstarini, lldstar, method = "BFGS", hessian=T,
+  dstarout = stats::optim(dstarini, lldstar, method = "BFGS", hessian=T,
                    control = list(fnscale = -1,maxit=500,
                                   reltol = 1e-06, trace=0), mu=X%*%betahat, y=rowMeans(y))
   inc.root=chol(chol2inv(chol((-dstarout$hessian+Ad))))  # chol((H+Ad)^-1)

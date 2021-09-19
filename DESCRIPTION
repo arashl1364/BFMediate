@@ -17,6 +17,7 @@ LinkingTo:
     RcppEigen (>= 0.3.3.3.0),
 Imports: 
     methods,
+    stats,
     Rcpp (>= 0.12.0),
 Suggests: 
     abind
@@ -38,4 +39,4 @@ Collate:
     'RuniregGibbsMulti.R'
     'rbprobitgibbs_me.R'
     'runiregGibbs_me.R'
-    'stanmodels.R'
+    

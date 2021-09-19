@@ -38,37 +38,37 @@ RuniregGibbsMulti=
     #
     # check arguments
     #
-    if(missing(Data)) {pandterm("Requires Data argument -- list of y and X")}
-    if(is.null(Data$X)) {pandterm("Requires Data element X")}
+    if(missing(Data)) {stop("Requires Data argument -- list of y and X")}
+    if(is.null(Data$X)) {stop("Requires Data element X")}
     X=Data$X
-    if(is.null(Data$M)) {pandterm("Requires Data element y")}
+    if(is.null(Data$M)) {stop("Requires Data element y")}
     M=Data$M
-    if(is.null(Data$y)) {pandterm("Requires Data element y")}
+    if(is.null(Data$y)) {stop("Requires Data element y")}
     y=Data$y
     nvar= 3  # our X has 3 columns: intercept, X and M
     nobs=ncol(y)
     #
     # check data for validity
     #
-    if(nobs != nrow(X) ) {pandterm("length(y) ne nrow(X)")}
+    if(nobs != nrow(X) ) {stop("length(y) ne nrow(X)")}
     #
     # check MCMC argument
     #
-    if(missing(Mcmc)) {pandterm("requires Mcmc argument")}
+    if(missing(Mcmc)) {stop("requires Mcmc argument")}
     else
     {
       if(is.null(Mcmc$R))
-      {pandterm("requires Mcmc element R")} else {R=Mcmc$R}
+      {stop("requires Mcmc element R")} else {R=Mcmc$R}
       if(is.null(Mcmc$keep)) {keep=1} else {keep=Mcmc$keep}
       if(is.null(Mcmc$nprint)) {nprint=100} else {nprint=Mcmc$nprint}
-      if(nprint<0) {pandterm('nprint must be an integer greater than or equal to 0')}
-      if(is.null(Mcmc$sigmasq)) {sigmasq=var(y)} else {sigmasq=Mcmc$sigmasq}
+      if(nprint<0) {stop('nprint must be an integer greater than or equal to 0')}
+      if(is.null(Mcmc$sigmasq)) {sigmasq=stats::var(y)} else {sigmasq=Mcmc$sigmasq}
     }
     #
     # check for Prior
     #
     if(missing(Prior))
-    { betabar=c(rep(0,nvar)); A=.01*diag(nvar); nu=3; ssq=var(y); betafix=F; sigmafix=F; betavalue=matrix(double(R*nvar),ncol=nvar); sigmavalue=rep(0,R)}
+    { betabar=c(rep(0,nvar)); A=.01*diag(nvar); nu=3; ssq=stats::var(y); betafix=F; sigmafix=F; betavalue=matrix(double(R*nvar),ncol=nvar); sigmavalue=rep(0,R)}
     else
     {
       if(is.null(Prior$betabar)) {betabar=c(rep(0,nvar))}
@@ -77,7 +77,7 @@ RuniregGibbsMulti=
       else {A=Prior$A}
       if(is.null(Prior$nu)) {nu=3}
       else {nu=Prior$nu}
-      if(is.null(Prior$ssq)) {ssq=var(y)}
+      if(is.null(Prior$ssq)) {ssq=stats::var(y)}
       else {ssq=Prior$ssq}
       if(is.null(Prior$betafix)) {betafix=F}   #betafix is the indicator for setting the intercept to 0 and the beta coefficient to 1 (for estimating M in the measurement error equation )
       else {betafix=Prior$betafix}
@@ -92,9 +92,9 @@ RuniregGibbsMulti=
     # check dimensions of Priors
     #
     if(ncol(A) != nrow(A) || ncol(A) != nvar || nrow(A) != nvar)
-    {pandterm(paste("bad dimensions for A",dim(A)))}
+    {stop(paste("bad dimensions for A",dim(A)))}
     if(length(betabar) != nvar)
-    {pandterm(paste("betabar wrong length, length= ",length(betabar)))}
+    {stop(paste("betabar wrong length, length= ",length(betabar)))}
     #
     # print out problem
     #
@@ -120,19 +120,19 @@ RuniregGibbsMulti=
     draws = RuniregGibbsMultiCpp(y,M, t(X), betabar, A, nu, ssq, sigmasq, R, keep, nprint, betafix, sigmafix, betavalue, sigmavalue)
     ###################################################################
 
-    attributes(draws$betadraw)$class=c("bayesm.mat","mcmc")
-    attributes(draws$betadraw)$mcpar=c(1,R,keep)
-    attributes(draws$sigmasqdraw)$class=c("bayesm.mat","mcmc")
-    attributes(draws$sigmasqdraw)$mcpar=c(1,R,keep)
-    #Moments for calculating Bayes factor
-    attributes(draws$mubetadraw)$class=c("bayesm.mat","mcmc")
-    attributes(draws$mubetadraw)$mcpar=c(1,R,keep)
-    attributes(draws$IRdraw)$class=c("bayesm.mat","mcmc")
-    attributes(draws$IRdraw)$mcpar=c(1,R,keep)
-    attributes(draws$nudraw)$class=c("bayesm.mat","mcmc")
-    attributes(draws$nudraw)$mcpar=c(1,R,keep)
-    attributes(draws$ssqdraw)$class=c("bayesm.mat","mcmc")
-    attributes(draws$ssqdraw)$mcpar=c(1,R,keep)
+    # attributes(draws$betadraw)$class=c("bayesm.mat","mcmc")
+    # attributes(draws$betadraw)$mcpar=c(1,R,keep)
+    # attributes(draws$sigmasqdraw)$class=c("bayesm.mat","mcmc")
+    # attributes(draws$sigmasqdraw)$mcpar=c(1,R,keep)
+    # #Moments for calculating Bayes factor
+    # attributes(draws$mubetadraw)$class=c("bayesm.mat","mcmc")
+    # attributes(draws$mubetadraw)$mcpar=c(1,R,keep)
+    # attributes(draws$IRdraw)$class=c("bayesm.mat","mcmc")
+    # attributes(draws$IRdraw)$mcpar=c(1,R,keep)
+    # attributes(draws$nudraw)$class=c("bayesm.mat","mcmc")
+    # attributes(draws$nudraw)$mcpar=c(1,R,keep)
+    # attributes(draws$ssqdraw)$class=c("bayesm.mat","mcmc")
+    # attributes(draws$ssqdraw)$mcpar=c(1,R,keep)
 
 
     return(draws)

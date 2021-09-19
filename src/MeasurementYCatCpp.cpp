@@ -1,9 +1,4 @@
 #include "BFMediate.h"
-// // [[Rcpp::depends(RcppArmadillo)]]
-// // #include "bayesm.h" //if you include bayesm.h here, you do not need to define functions before calling them
-// #include "RcppArmadillo.h"
-// using namespace arma; // use the Armadillo library for matrix computations
-// using namespace Rcpp;
 
 //MAIN FUNCTION---------------------------------------------------------------------------------------
 List MeasurementYCatCpp(arma::mat const& y, arma::mat const& X, int k, arma::mat const& A, arma::vec const& betabar, arma::mat const& Ad,

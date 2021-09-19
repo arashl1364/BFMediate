@@ -50,7 +50,6 @@
 #'
 #' For the rest of the values, see
 #' * \link[BFMediate]{PartialMed} fpr "Simple"
-#' * \link[BFMediate]{MeasurementCont} for "Cont"
 #' * \link[BFMediate]{MeasurementMCat} for "MCat"
 #' * \link[BFMediate]{MeasurementYCat} for "YCat"
 #' * \link[BFMediate]{MeasurementMYCat} for "MYCat"
@@ -69,7 +68,7 @@
 #' sigma_M = .2^.5    # error std M
 #' sigma_Y = .2^.5    # error std Y
 #' beta_M = c(1, .3)   # beta_0M and beta_1
-#' beta_Y = c(1, .5, .01)    # beta_0Y, beta_2, beta_3
+#' beta_Y = c(1, .5, 0)    # beta_0Y, beta_2, beta_3
 #' X = rnorm(N,mean = 1,sd = 1)   # generate random X
 #' # Generate data based on parameters
 #' Data = simPartialMed(beta_M,beta_Y,sigma_M,sigma_Y,N,X)
@@ -84,7 +83,7 @@
 #' # Results
 #' out$BK$FullMed
 #' out$PH$Indirect_CI
-#' colMeans(out$Simple$beta_2)
+#' colMeans(out$Simple$beta_Y)
 #' out$Simple$BF
 ### Description BFMediate estimates different mediation models and computes Bayes factors
 # to test full mediation in them
@@ -162,8 +161,8 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Y = Data$Y
 
     # B&K
-    BK1 = summary(lm(formula = M ~ X))
-    BK2 = summary(lm(formula = Y ~ M + X))
+    BK1 = summary(stats::lm(formula = M ~ X))
+    BK2 = summary(stats::lm(formula = Y ~ M + X))
     BK.beta_1 = BK1$coefficients[2,1]
     BK.beta_1.sd = BK1$coefficients[2,2]
     BK.beta_2 = BK2$coefficients[2,1]
@@ -188,15 +187,15 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     for(i in 1:boot){
       samp = sample(length(X),replace = T)
       X_boot = X[samp]; M_boot = M[samp]; Y_boot = Y[samp]
-      temp = summary(lm(formula = M_boot ~ X_boot))
+      temp = summary(stats::lm(formula = M_boot ~ X_boot))
       b1[i] = temp$coefficients[2,1]
-      temp = summary(lm(formula = Y_boot ~ M_boot + X_boot))
+      temp = summary(stats::lm(formula = Y_boot ~ M_boot + X_boot))
       b2[i] = temp$coefficients[2,1]
       b3[i] = temp$coefficients[3,1]
     }
     PH.mean.Indirect = mean(b1*b2)
-    PH.CI.Indirect = round(as.vector(quantile(b1*b2,probs=c(.025,.975))),2)
-    PH.CI.Direct = round(as.vector(quantile(b3,probs=c(.025,.975))),2)
+    PH.CI.Indirect = round(as.vector(stats::quantile(b1*b2,probs=c(.025,.975))),2)
+    PH.CI.Direct = round(as.vector(stats::quantile(b3,probs=c(.025,.975))),2)
 
     PH = list(Indirect_mean = PH.mean.Indirect, Indirect_CI = PH.CI.Indirect, Direct_CI = PH.CI.Direct)
 
@@ -207,8 +206,8 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     beta_2 = Simple$beta_Y[,2]
     beta_3 = Simple$beta_Y[,3]
     BF.Simple = exp(BFSD(Post = Simple , Prior = A_Y[3], burnin = burnin))
-    Bayes.CI.Indirect = round(as.vector(quantile(beta_1*beta_2,probs = c(.025,.975))),2)
-    Bayes.CI.Direct = round(as.vector(quantile(beta_3,probs = c(.025,.975))),2)
+    Bayes.CI.Indirect = round(as.vector(stats::quantile(beta_1*beta_2,probs = c(.025,.975))),2)
+    Bayes.CI.Direct = round(as.vector(stats::quantile(beta_3,probs = c(.025,.975))),2)
 
     if(BF.Simple>1) evidence = ifelse(BF.Simple>100,"Decisive in favor of full mediation",
                                    ifelse(BF.Simple>10,"Strong in favor of full mediation",
@@ -218,7 +217,7 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
                                    ifelse(1/BF.Simple>10,"Strong against full mediation",
                                           ifelse(1/BF.Simple>3.2,"Substantial against full mediation","Not worth more than a bare mention")))
 
-    # CI = as.character(ifelse((quantile(beta_3,probs = .025)>0) | (quantile(beta_3,probs = .975)<0),"Reject","Accept"))
+    # CI = as.character(ifelse((stats::quantile(beta_3,probs = .025)>0) | (stats::quantile(beta_3,probs = .975)<0),"Reject","Accept"))
 
     Simple$evidence = evidence
     Simple$Indirect_CI = Bayes.CI.Indirect
@@ -233,40 +232,40 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
   ##### Continous Data Multi #####
   ################################
 
-  # BF multi
-  if(Model == 'Cont'){
-
-    m_star = Data$m_star
-    y_star = as.matrix(Data$y_star)
-    m_ind =  dim(m_star)[2];
-    y_ind =  dim(y_star)[2];
-
-    out = MeasurementCont(Data = Data, Prior = list(A_M = A_M, A_Y = A_Y),R=R, burnin = burnin)
-    BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = 0)) #we already accounted for burnin in estimation
-    Bayes.CI.Indirect = round(as.vector(quantile(out$beta_M[,2]*out$beta_Y[,2],probs = c(.025,.975))),2)
-    Bayes.CI.Direct = round(as.vector(quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
-
-    if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive in favor of full mediation",
-                                   ifelse(BF.LVM>10,"Strong in favor of full mediation",
-                                          ifelse(BF.LVM>3.2,"Substantial in favor of full mediation","Not worth more than a bare mention")))
-
-    if(BF.LVM<1) evidence = ifelse(1/BF.LVM>100,"Decisive against full mediation",
-                                   ifelse(1/BF.LVM>10,"Strong against full mediation",
-                                          ifelse(1/BF.LVM>3.2,"Substantial against full mediation","Not worth more than a bare mention")))
-
-    CI = as.character(ifelse((quantile(out$beta_Y[,3], probs = .025)>0) | (quantile(out$beta_Y[,3],probs = .975)<0),"Reject","Accept"))
-
-
-    out$evidence = evidence
-    out$Indirect_CI = Bayes.CI.Indirect
-    out$Direct_CI = Bayes.CI.Direct
-    out$BF = BF.LVM
-
-    return(out)
-    # return(list(Bayes.CI.Indirect = Bayes.CI.Indirect, Bayes.CI.Direct = Bayes.CI.Direct,
-    #             out = out, BF.LVM = BF.LVM, CI = CI, evidence = evidence))
-
-  }
+  # # BF multi
+  # if(Model == 'Cont'){
+  # 
+  #   m_star = Data$m_star
+  #   y_star = as.matrix(Data$y_star)
+  #   m_ind =  dim(m_star)[2];
+  #   y_ind =  dim(y_star)[2];
+  # 
+  #   out = MeasurementCont(Data = Data, Prior = list(A_M = A_M, A_Y = A_Y),R=R, burnin = burnin)
+  #   BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = 0)) #we already accounted for burnin in estimation
+  #   Bayes.CI.Indirect = round(as.vector(stats::quantile(out$beta_M[,2]*out$beta_Y[,2],probs = c(.025,.975))),2)
+  #   Bayes.CI.Direct = round(as.vector(stats::quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
+  # 
+  #   if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive in favor of full mediation",
+  #                                  ifelse(BF.LVM>10,"Strong in favor of full mediation",
+  #                                         ifelse(BF.LVM>3.2,"Substantial in favor of full mediation","Not worth more than a bare mention")))
+  # 
+  #   if(BF.LVM<1) evidence = ifelse(1/BF.LVM>100,"Decisive against full mediation",
+  #                                  ifelse(1/BF.LVM>10,"Strong against full mediation",
+  #                                         ifelse(1/BF.LVM>3.2,"Substantial against full mediation","Not worth more than a bare mention")))
+  # 
+  #   CI = as.character(ifelse((stats::quantile(out$beta_Y[,3], probs = .025)>0) | (stats::quantile(out$beta_Y[,3],probs = .975)<0),"Reject","Accept"))
+  # 
+  # 
+  #   out$evidence = evidence
+  #   out$Indirect_CI = Bayes.CI.Indirect
+  #   out$Direct_CI = Bayes.CI.Direct
+  #   out$BF = BF.LVM
+  # 
+  #   return(out)
+  #   # return(list(Bayes.CI.Indirect = Bayes.CI.Indirect, Bayes.CI.Direct = Bayes.CI.Direct,
+  #   #             out = out, BF.LVM = BF.LVM, CI = CI, evidence = evidence))
+  # 
+  # }
 
   ################################
   #### Categorical Data Multi ####
@@ -279,8 +278,8 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$X), m_tilde=as.matrix(Data$m_tilde), Y= as.matrix(Data$Y) ,k=Mcut-1, M_ind=dim(Data$m_tilde)[2])
     out = MeasurementMCat(Data=Data_cat, Prior = Prior, R=R) #rordprobitGibbs_me_M_multi_merr_cpp(Data=Data_cat, Mcmc=Mcmc)
     BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = burnin))
-    Bayes.CI.Indirect = round(as.vector(quantile(out$beta_M[,2]*out$beta_Y[,2],probs = c(.025,.975))),2)
-    Bayes.CI.Direct = round(as.vector(quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
+    Bayes.CI.Indirect = round(as.vector(stats::quantile(out$beta_M[,2]*out$beta_Y[,2],probs = c(.025,.975))),2)
+    Bayes.CI.Direct = round(as.vector(stats::quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
 
     if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive in favor of full mediation",
                                    ifelse(BF.LVM>10,"Strong in favor of full mediation",
@@ -290,7 +289,7 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
                                    ifelse(1/BF.LVM>10,"Strong against full mediation",
                                           ifelse(1/BF.LVM>3.2,"Substantial against full mediation","Not worth more than a bare mention")))
 
-    # CI = as.character(ifelse((quantile(out$beta_2[,3], probs = .025)>0) | (quantile(out$beta_2[,3],probs = .975)<0),"Reject","Accept"))
+    # CI = as.character(ifelse((stats::quantile(out$beta_2[,3], probs = .025)>0) | (stats::quantile(out$beta_2[,3],probs = .975)<0),"Reject","Accept"))
 
     out$evidence = evidence
     out$Indirect_CI = Bayes.CI.Indirect
@@ -311,8 +310,8 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Mcmc=list(R=R)
     out = MeasurementYCat(Data=Data_cat, Prior=Prior, R=R) #rordprobitGibbs_me_multi_merr_cpp(Data=Data_cat, Mcmc=Mcmc)
     BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = burnin))
-    Bayes.CI.Indirect = round(as.vector(quantile(out$beta_M[,2]*out$beta_Y[,2], probs = c(.025,.975))),2)
-    Bayes.CI.Direct = round(as.vector(quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
+    Bayes.CI.Indirect = round(as.vector(stats::quantile(out$beta_M[,2]*out$beta_Y[,2], probs = c(.025,.975))),2)
+    Bayes.CI.Direct = round(as.vector(stats::quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
 
     if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive in favor of full mediation",
                                    ifelse(BF.LVM>10,"Strong in favor of full mediation",
@@ -322,7 +321,7 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
                                    ifelse(1/BF.LVM>10,"Strong against full mediation",
                                           ifelse(1/BF.LVM>3.2,"Substantial against full mediation","Not worth more than a bare mention")))
 
-    # CI = as.character(ifelse((quantile(out$beta_2[,3], probs = .025)>0) | (quantile(out$beta_2[,3],probs = .975)<0),"Reject","Accept"))
+    # CI = as.character(ifelse((stats::quantile(out$beta_2[,3], probs = .025)>0) | (stats::quantile(out$beta_2[,3],probs = .975)<0),"Reject","Accept"))
 
     out$evidence = evidence
     out$Indirect_CI = Bayes.CI.Indirect
@@ -344,8 +343,8 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
     Data_cat=list(X=cbind(rep(1,length(Data$X)),Data$X), m_tilde=as.matrix(Data$m_tilde), y_tilde=as.matrix(Data$y_tilde), k_M = Mcut-1, k_Y=Ycut-1, M_ind=dim(as.matrix(Data$m_tilde))[2], Y_ind=dim(as.matrix(Data$y_tilde))[2])
     out = MeasurementMYCat(Data=Data_cat, Prior=Prior, R=R) #Mediation_Ordered_Multi_Merr(Data=Data_cat, Mcmc=Mcmc)
     BF.LVM = exp(BFSD(Post = out , Prior = A_Y[3], burnin = burnin))
-    Bayes.CI.Indirect = round(as.vector(quantile(out$beta_M[,2]*out$beta_Y[,2],probs = c(.025,.975))),2)
-    Bayes.CI.Direct = round(as.vector(quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
+    Bayes.CI.Indirect = round(as.vector(stats::quantile(out$beta_M[,2]*out$beta_Y[,2],probs = c(.025,.975))),2)
+    Bayes.CI.Direct = round(as.vector(stats::quantile(out$beta_Y[,3],probs = c(.025,.975))),2)
 
     if(BF.LVM>1) evidence = ifelse(BF.LVM>100,"Decisive in favor of full mediation",
                                    ifelse(BF.LVM>10,"Strong in favor of full mediation",
@@ -355,7 +354,7 @@ Mediate = function(Data, Model, Prior, R, burnin){  # BF){
                                    ifelse(1/BF.LVM>10,"Strong against full mediation",
                                           ifelse(1/BF.LVM>3.2,"Substantial against full mediation","Not worth more than a bare mention")))
 
-    # CI = as.character(ifelse((quantile(out$beta_2[,3], probs = .025)>0) | (quantile(out$beta_2[,3],probs = .975)<0),"Reject","Accept"))
+    # CI = as.character(ifelse((stats::quantile(out$beta_2[,3], probs = .025)>0) | (stats::quantile(out$beta_2[,3],probs = .975)<0),"Reject","Accept"))
 
     out$evidence = evidence
     out$Indirect_CI = Bayes.CI.Indirect

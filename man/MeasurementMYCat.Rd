@@ -131,9 +131,9 @@ lambda = c(0,-.5) #the intercepts for the latent M indicators w. measurement err
 ssq_y_star = c(.2,.2)
 tau = c(0,-.5)
 cutoff_M = matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
-                    -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Mcut, byrow = T)
+                    -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Mcut, byrow = TRUE)
 cutoff_Y =  matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
-                     -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Ycut, byrow = T)
+                     -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Ycut, byrow = TRUE)
 DataMYCat = SimMeasurementMYCat(X, beta_M, cutoff_M, beta_Y, cutoff_Y, M_ind,
                                 Y_ind, lambda, tau, ssq_m_star, ssq_y_star)
 

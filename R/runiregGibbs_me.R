@@ -35,35 +35,35 @@ runiregGibbs_me=
     #
     # check arguments
     #
-    if(missing(Data)) {pandterm("Requires Data argument -- list of y and X")}
-    if(is.null(Data$X)) {pandterm("Requires Data element X")}
+    if(missing(Data)) {stop("Requires Data argument -- list of y and X")}
+    if(is.null(Data$X)) {stop("Requires Data element X")}
     X=Data$X
-    if(is.null(Data$y)) {pandterm("Requires Data element y")}
+    if(is.null(Data$y)) {stop("Requires Data element y")}
     y=Data$y
     nvar=ncol(X)
     nobs=length(y)
     #
     # check data for validity
     #
-    if(nobs != nrow(X) ) {pandterm("length(y) ne nrow(X)")}
+    if(nobs != nrow(X) ) {stop("length(y) ne nrow(X)")}
     #
     # check MCMC argument
     #
-    if(missing(Mcmc)) {pandterm("requires Mcmc argument")}
+    if(missing(Mcmc)) {stop("requires Mcmc argument")}
     else
     {
       if(is.null(Mcmc$R))
-      {pandterm("requires Mcmc element R")} else {R=Mcmc$R}
+      {stop("requires Mcmc element R")} else {R=Mcmc$R}
       if(is.null(Mcmc$keep)) {keep=1} else {keep=Mcmc$keep}
       if(is.null(Mcmc$nprint)) {nprint=100} else {nprint=Mcmc$nprint}
-      if(nprint<0) {pandterm('nprint must be an integer greater than or equal to 0')}
-      if(is.null(Mcmc$sigmasq)) {sigmasq=var(y)} else {sigmasq=Mcmc$sigmasq}
+      if(nprint<0) {stop('nprint must be an integer greater than or equal to 0')}
+      if(is.null(Mcmc$sigmasq)) {sigmasq=stats::var(y)} else {sigmasq=Mcmc$sigmasq}
     }
     #
     # check for Prior
     #
     if(missing(Prior))
-    { betabar=c(rep(0,nvar)); A=.01*diag(nvar); nu=3; ssq=var(y); betafix=F; sigmafix=F; betavalue=matrix(double(R*nvar),ncol=nvar); sigmavalue=rep(0,R)}
+    { betabar=c(rep(0,nvar)); A=.01*diag(nvar); nu=3; ssq=stats::var(y); betafix=F; sigmafix=F; betavalue=matrix(double(R*nvar),ncol=nvar); sigmavalue=rep(0,R)}
     else
     {
       if(is.null(Prior$betabar)) {betabar=c(rep(0,nvar))}
@@ -72,7 +72,7 @@ runiregGibbs_me=
       else {A=Prior$A}
       if(is.null(Prior$nu)) {nu=3}
       else {nu=Prior$nu}
-      if(is.null(Prior$ssq)) {ssq=var(y)}
+      if(is.null(Prior$ssq)) {ssq=stats::var(y)}
       else {ssq=Prior$ssq}
       if(is.null(Prior$betafix)) {betafix=F}   #betafix is the indicator for setting the intercept to 0 and the beta coefficient to 1 (for estimating M in the measurement error equation )
       else {betafix=Prior$betafix}
@@ -87,9 +87,9 @@ runiregGibbs_me=
     # check dimensions of Priors
     #
     if(ncol(A) != nrow(A) || ncol(A) != nvar || nrow(A) != nvar)
-    {pandterm(paste("bad dimensions for A",dim(A)))}
+    {stop(paste("bad dimensions for A",dim(A)))}
     if(length(betabar) != nvar)
-    {pandterm(paste("betabar wrong length, length= ",length(betabar)))}
+    {stop(paste("betabar wrong length, length= ",length(betabar)))}
     #
     # print out problem
     #

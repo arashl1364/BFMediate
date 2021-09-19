@@ -112,7 +112,7 @@ sigma_M = 1^.5
 ssq_y_star = c(.5,.7)
 tau = c(0,-.5)   #first intercept should always be 0
 cutoff_Y =  matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
-                     -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Ycut, byrow = T)
+                     -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Ycut, byrow = TRUE)
 DataYCat = SimMeasurementYCat(X, beta_M, beta_Y, sigma_M, cutoff_Y, Y_ind, tau, ssq_y_star)
 
 #estimation

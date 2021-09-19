@@ -99,13 +99,13 @@
 #'                     #error (first intercept should always be 0)
 #'
 #' cutoff_M = matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
-#'                     -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Mcut, byrow = T)
+#'                     -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Mcut, byrow = TRUE)
 #' DataMCat = SimMeasurementMCat(X, beta_M, cutoff_M, beta_Y, Sigma_Y, M_ind, lambda, ssq_m_star)
 #'
 #' #estimation
 #' Data = list(X=cbind(rep(1,length(DataMCat$X)),DataMCat$X), m_tilde=as.matrix(DataMCat$m_tilde),
 #'             Y= as.matrix(DataMCat$Y) ,k=Mcut-1, M_ind=dim(DataMCat$m_tilde)[2])
-#' out = MeasurementMCat(Data=Data, R=R)
+#' out = MeasurementMCat(Data=Data, R=10000)
 #'
 #'
 #' #results
@@ -161,7 +161,7 @@ MeasurementMCat=function(Data,Prior,R=10000){
   #
   lldstar=function(dstar,y,mu){
     gamma=dstartoc(dstar)
-    arg = pnorm(gamma[y+1]-mu)-pnorm(gamma[y]-mu)
+    arg = stats::pnorm(gamma[y+1]-mu)-stats::pnorm(gamma[y]-mu)
     epsilon=1.0e-50
     arg=ifelse(arg < epsilon,epsilon,arg)
     return(sum(log(arg)))
@@ -171,18 +171,18 @@ MeasurementMCat=function(Data,Prior,R=10000){
   #
   # check arguments
   #
-  if(missing(Data)) {pandterm("Requires Data argument -- list of y and X")}
-  if(is.null(Data$X)) {pandterm("Requires Data element X")}
+  if(missing(Data)) {stop("Requires Data argument -- list of y and X")}
+  if(is.null(Data$X)) {stop("Requires Data element X")}
   X=Data$X
-  if(is.null(Data$m_tilde)) {pandterm("Requires Data element m_tilde")}
+  if(is.null(Data$m_tilde)) {stop("Requires Data element m_tilde")}
   y=Data$m_tilde
-  if(is.null(Data$Y)) {pandterm("Requires Data element Y")}
+  if(is.null(Data$Y)) {stop("Requires Data element Y")}
   dep=Data$Y
-  # if(is.null(Data$beta_2)) {pandterm("Requires Data element beta_2")}
+  # if(is.null(Data$beta_2)) {stop("Requires Data element beta_2")}
   # beta_2=Data$beta_2
-  if(is.null(Data$k)) {pandterm("Requires Data element k")}
+  if(is.null(Data$k)) {stop("Requires Data element k")}
   k=Data$k
-  if(is.null(Data$M_ind)) {pandterm("Requires Data element M_ind")}
+  if(is.null(Data$M_ind)) {stop("Requires Data element M_ind")}
   M_ind=Data$M_ind
 
 
@@ -204,9 +204,9 @@ MeasurementMCat=function(Data,Prior,R=10000){
   #
   # check data for validity
   #
-  if(dim(y)[1] != nrow(X) ) {pandterm("y and X not of same row dim")}
+  if(dim(y)[1] != nrow(X) ) {stop("y and X not of same row dim")}
   if(  sum(unique(y[,1]) %in% (1:k) ) < length(unique(y[,1])) )     #Tests only y_star1 but I really don't care! :D
-  {pandterm("some value of y is not vaild")}
+  {stop("some value of y is not vaild")}
 
   #
   # check for Prior
@@ -234,17 +234,17 @@ MeasurementMCat=function(Data,Prior,R=10000){
   #
 
   if(ncol(A) != nrow(A) || ncol(A) != nvar || nrow(A) != nvar)
-  {pandterm(paste("bad dimensions for A",dim(A)))}
+  {stop(paste("bad dimensions for A",dim(A)))}
   if(length(betabar) != nvar)
-  {pandterm(paste("betabar wrong length, length= ",length(betabar)))}
+  {stop(paste("betabar wrong length, length= ",length(betabar)))}
   if(ncol(A_2) != nrow(A_2) || ncol(A_2) != nvar+1 || nrow(A_2) != nvar+1)
-  {pandterm(paste("bad dimensions for A_2",dim(A_2)))}
+  {stop(paste("bad dimensions for A_2",dim(A_2)))}
   if(length(betabar_2) != nvar+1)
-  {pandterm(paste("betabar_2 wrong length, length= ",length(betabar_2)))}
+  {stop(paste("betabar_2 wrong length, length= ",length(betabar_2)))}
   if(ncol(Ad) != nrow(Ad) || ncol(Ad) != ndstar || nrow(Ad) != ndstar)
-  {pandterm(paste("bad dimensions for Ad",dim(Ad)))}
+  {stop(paste("bad dimensions for Ad",dim(Ad)))}
   if(length(dstarbar) != ndstar)
-  {pandterm(paste("dstarbar wrong length, length= ",length(dstarbar)))}
+  {stop(paste("dstarbar wrong length, length= ",length(dstarbar)))}
 
   #
   # check MCMC argument
@@ -252,14 +252,14 @@ MeasurementMCat=function(Data,Prior,R=10000){
   keep = 1
   nprint = 100
   s = 2.38/sqrt(ndstar)
-  # if(missing(Mcmc)) {pandterm("requires Mcmc argument")}
+  # if(missing(Mcmc)) {stop("requires Mcmc argument")}
   # else
   # {
   #   if(is.null(Mcmc$R))
-  #   {pandterm("requires Mcmc element R")} else {R=Mcmc$R}
+  #   {stop("requires Mcmc element R")} else {R=Mcmc$R}
   #   if(is.null(Mcmc$keep)) {keep=1} else {keep=Mcmc$keep}
   #   if(is.null(Mcmc$nprint)) {nprint=100} else {nprint=Mcmc$nprint}
-  #   if(nprint<0) {pandterm('nprint must be an integer greater than or equal to 0')}
+  #   if(nprint<0) {stop('nprint must be an integer greater than or equal to 0')}
   #   if(is.null(Mcmc$s)) {s=2.38/sqrt(ndstar)} else {s=Mcmc$s} #2.38 is the RRscaling
   # }
   #
@@ -300,7 +300,7 @@ MeasurementMCat=function(Data,Prior,R=10000){
 
   betahat = chol2inv(chol(crossprod(X,X)))%*% crossprod(X,rowMeans(y))    ###betahat is computed based on the average of y_stars
   dstarini = c(cumsum(c( rep(0.1, ndstar))))     # set initial value for dstar
-  dstarout = optim(dstarini, lldstar, method = "BFGS", hessian=T,
+  dstarout = stats::optim(dstarini, lldstar, method = "BFGS", hessian=T,
                    control = list(fnscale = -1,maxit=500,
                                   reltol = 1e-06, trace=0), mu=X%*%betahat, y=rowMeans(y))
   inc.root=chol(chol2inv(chol((-dstarout$hessian+Ad))))  # chol((H+Ad)^-1)

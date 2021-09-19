@@ -115,13 +115,13 @@ lambda = c(0,-.5)   #the intercepts for the latent M indicators w. measurement
                     #error (first intercept should always be 0)
 
 cutoff_M = matrix(c(-100, 0, 1.6, 2, 2.2, 3.3, 6,  100,
-                    -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Mcut, byrow = T)
+                    -100, 0, 1, 2, 3, 4, 5, 100) ,ncol= Mcut, byrow = TRUE)
 DataMCat = SimMeasurementMCat(X, beta_M, cutoff_M, beta_Y, Sigma_Y, M_ind, lambda, ssq_m_star)
 
 #estimation
 Data = list(X=cbind(rep(1,length(DataMCat$X)),DataMCat$X), m_tilde=as.matrix(DataMCat$m_tilde),
             Y= as.matrix(DataMCat$Y) ,k=Mcut-1, M_ind=dim(DataMCat$m_tilde)[2])
-out = MeasurementMCat(Data=Data, R=R)
+out = MeasurementMCat(Data=Data, R=10000)
 
 
 #results

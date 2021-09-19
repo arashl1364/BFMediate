@@ -49,7 +49,6 @@ Mediate(Data, Model, Prior, R, burnin)
 For the rest of the values, see
 \itemize{
 \item \link[BFMediate]{PartialMed} fpr "Simple"
-\item \link[BFMediate]{MeasurementCont} for "Cont"
 \item \link[BFMediate]{MeasurementMCat} for "MCat"
 \item \link[BFMediate]{MeasurementYCat} for "YCat"
 \item \link[BFMediate]{MeasurementMYCat} for "MYCat"
@@ -92,7 +91,7 @@ N = 1000    # number of observations
 sigma_M = .2^.5    # error std M
 sigma_Y = .2^.5    # error std Y
 beta_M = c(1, .3)   # beta_0M and beta_1
-beta_Y = c(1, .5, .01)    # beta_0Y, beta_2, beta_3
+beta_Y = c(1, .5, 0)    # beta_0Y, beta_2, beta_3
 X = rnorm(N,mean = 1,sd = 1)   # generate random X
 # Generate data based on parameters
 Data = simPartialMed(beta_M,beta_Y,sigma_M,sigma_Y,N,X)
@@ -107,6 +106,6 @@ out = Mediate(Data = Data, Model = 'Simple',
 # Results
 out$BK$FullMed
 out$PH$Indirect_CI
-colMeans(out$Simple$beta_2)
+colMeans(out$Simple$beta_Y)
 out$Simple$BF
 }

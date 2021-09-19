@@ -69,8 +69,8 @@ BFSD = function(Post,Prior=1,burnin){
 
   #computing the marginal posterior of beta_3
   for(r in (burnin+1):R){
-    outer[r-burnin] = dnorm(x = 0, mean = Post$mu_draw[r], sd = sqrt(Post$var_draw[r]), log = T)
-    # outer[r-burnin] = dnorm(x = 0, mean = Post$mubeta_2_draw[r,k+1], sd = sqrt(Post$varbeta_2_draw[k+1,k+1,r]), log = T)
+    outer[r-burnin] = stats::dnorm(x = 0, mean = Post$mu_draw[r], sd = sqrt(Post$var_draw[r]), log = T)
+    # outer[r-burnin] = stats::dnorm(x = 0, mean = Post$mubeta_2_draw[r,k+1], sd = sqrt(Post$varbeta_2_draw[k+1,k+1,r]), log = T)
   }
 
   #Numerically Stably computing the log of the outer sum
@@ -79,7 +79,7 @@ BFSD = function(Post,Prior=1,burnin){
   lik = (outermax + log(1 + sum(exp(outer - outermax))))  #the outer sum in the log-scale
   lik = -log((R-burnin)) + lik
 
-  lik = lik - dnorm(x = 0, mean = 0, sd = sqrt(A), log = T)
+  lik = lik - stats::dnorm(x = 0, mean = 0, sd = sqrt(A), log = T)
   lik = -lik #only to adjust to the function output
   ######################################
   ######################################

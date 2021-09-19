@@ -27,18 +27,18 @@ function(Data,Prior,Mcmc)
 #
 # check arguments
 #
-if(missing(Data)) {pandterm("Requires Data argument -- list of y and X")}
-    if(is.null(Data$X)) {pandterm("Requires Data element X")}
+if(missing(Data)) {stop("Requires Data argument -- list of y and X")}
+    if(is.null(Data$X)) {stop("Requires Data element X")}
     X=Data$X
-    if(is.null(Data$y)) {pandterm("Requires Data element y")}
+    if(is.null(Data$y)) {stop("Requires Data element y")}
     y=Data$y
 nvar=ncol(X)
 nobs=length(y)
 #
 # check data for validity
 #
-if(length(y) != nrow(X) ) {pandterm("y and X not of same row dim")}
-if(sum(unique(y) %in% c(0:1)) < length(unique(y))) {pandterm("Invalid y, must be 0,1")}
+if(length(y) != nrow(X) ) {stop("y and X not of same row dim")}
+if(sum(unique(y) %in% c(0:1)) < length(unique(y))) {stop("Invalid y, must be 0,1")}
 #
 # check for Prior
 #
@@ -55,20 +55,20 @@ else
 # check dimensions of Priors
 #
 if(ncol(A) != nrow(A) || ncol(A) != nvar || nrow(A) != nvar)
-   {pandterm(paste("bad dimensions for A",dim(A)))}
+   {stop(paste("bad dimensions for A",dim(A)))}
 if(length(betabar) != nvar)
-   {pandterm(paste("betabar wrong length, length= ",length(betabar)))}
+   {stop(paste("betabar wrong length, length= ",length(betabar)))}
 #
 # check MCMC argument
 #
-if(missing(Mcmc)) {pandterm("requires Mcmc argument")}
+if(missing(Mcmc)) {stop("requires Mcmc argument")}
 else
    {
     if(is.null(Mcmc$R))
-       {pandterm("requires Mcmc element R")} else {R=Mcmc$R}
+       {stop("requires Mcmc element R")} else {R=Mcmc$R}
     if(is.null(Mcmc$keep)) {keep=1} else {keep=Mcmc$keep}
     if(is.null(Mcmc$nprint)) {nprint=100} else {nprint=Mcmc$nprint}
-      if(nprint<0) {pandterm('nprint must be an integer greater than or equal to 0')}
+      if(nprint<0) {stop('nprint must be an integer greater than or equal to 0')}
     }
 #
 # # print out problem

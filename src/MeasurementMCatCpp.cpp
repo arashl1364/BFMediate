@@ -1,9 +1,4 @@
 #include "BFMediate.h"
-// // [[Rcpp::depends(RcppArmadillo)]]
-// // #include <bayesm.h> //if you include bayesm.h here, you do not need to define functions before calling them
-// #include <RcppArmadillo.h>
-// using namespace arma; // use the Armadillo library for matrix computations
-// using namespace Rcpp;
 
 // List runiregG(vec const& y, mat const& X, mat const& XpX, vec const& Xpy, double sigmasq, mat const& A,
 //                 vec const& Abetabar, double nu, double ssq) {
