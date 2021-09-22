@@ -27,6 +27,8 @@ src/*.so
 src/*.dll
 # OS specific
 .DS_Store
+# varios other files/folders
+shinyapps_io/
 # Rstudio files
 *.Rproj
 .Rproj.user
