@@ -1,0 +1,13 @@
+name: BFMediateApp
+title: BFMediateApp
+username:
+account: bfmediate
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4743653
+bundleId: 5078297
+url: https://bfmediate.shinyapps.io/BFMediateApp/
+when: 1632778404.81078
+lastSyncTime: 1632778404.8108
+asMultiple: FALSE
+asStatic: FALSE

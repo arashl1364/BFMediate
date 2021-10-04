@@ -48,7 +48,7 @@ Mediate(Data, Model, Prior, R, burnin)
 
 For the rest of the values, see
 \itemize{
-\item \link[BFMediate]{PartialMed} fpr "Simple"
+\item \link[BFMediate]{PartialMed} for "Simple"
 \item \link[BFMediate]{MeasurementMCat} for "MCat"
 \item \link[BFMediate]{MeasurementYCat} for "YCat"
 \item \link[BFMediate]{MeasurementMYCat} for "MYCat"

@@ -49,7 +49,7 @@
 #' }
 #'
 #' For the rest of the values, see
-#' * \link[BFMediate]{PartialMed} fpr "Simple"
+#' * \link[BFMediate]{PartialMed} for "Simple"
 #' * \link[BFMediate]{MeasurementMCat} for "MCat"
 #' * \link[BFMediate]{MeasurementYCat} for "YCat"
 #' * \link[BFMediate]{MeasurementMYCat} for "MYCat"
@@ -85,6 +85,8 @@
 #' out$PH$Indirect_CI
 #' colMeans(out$Simple$beta_Y)
 #' out$Simple$BF
+#---------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------
 ### Description BFMediate estimates different mediation models and computes Bayes factors
 # to test full mediation in them
 
