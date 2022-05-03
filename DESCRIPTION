@@ -9,7 +9,7 @@ Roxygen: list(markdown = TRUE)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 LinkingTo: 
     BH (>= 1.66.0),
     Rcpp (>= 0.12.0),
@@ -41,4 +41,3 @@ Collate:
     'RuniregGibbsMulti.R'
     'rbprobitgibbs_me.R'
     'runiregGibbs_me.R'
-    
