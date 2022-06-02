@@ -41,3 +41,6 @@ Collate:
     'RuniregGibbsMulti.R'
     'rbprobitgibbs_me.R'
     'runiregGibbs_me.R'
+    'Shaddy_Fishbach.R'
+    'Sussman_Obrien.R'
+    'Tonietto_Malkoc.R'
