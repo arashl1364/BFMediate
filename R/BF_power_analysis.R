@@ -215,13 +215,13 @@ BF_range[1] = min(dense_BF$x) #- 1
 BF_range[2] = max(dense_BF$x) #+ 1
 
 df = data.frame(N=rep(pars$N,pars$N),BF = BF)
-quartz();
-ggplot2::ggplot(df, aes(x=BF)) + 
-  # theme_bw() +
-  geom_density(color = 'deeppink',fill='deeppink4') +
-  geom_segment(aes(x = BF_quant[1] , y = 0 , xend = BF_quant[1] , yend=ref_len),color = "yellow")  +
-  geom_segment(aes(x = BF_quant[2] , y = 0 , xend = BF_quant[2] , yend=ref_len),color = "yellow") +
-  geom_segment(aes(x = mean(BF) , y = 0 , xend = mean(BF) , yend=ref_len),color = "orange",size=1.5) +
-  xlim(BF_range)
+# quartz();
+# ggplot2::ggplot(df, aes(x=BF)) + 
+#   # theme_bw() +
+#   geom_density(color = 'deeppink',fill='deeppink4') +
+#   geom_segment(aes(x = BF_quant[1] , y = 0 , xend = BF_quant[1] , yend=ref_len),color = "yellow")  +
+#   geom_segment(aes(x = BF_quant[2] , y = 0 , xend = BF_quant[2] , yend=ref_len),color = "yellow") +
+#   geom_segment(aes(x = mean(BF) , y = 0 , xend = mean(BF) , yend=ref_len),color = "orange",size=1.5) +
+#   xlim(BF_range)
   
 }
