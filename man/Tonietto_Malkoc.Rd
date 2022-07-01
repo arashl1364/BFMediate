@@ -30,6 +30,15 @@ Type of scheduling -> Free-flowing -> Work construal -> Anticipation utility (X-
 
 data(Tonietto_Malkoc)
 
+Data = NULL
+Data$X = ifelse(Tonietto_Malkoc$Condition=="Impromptu",2,-1)    # C1 contrast coding of X (based on the paper)
+Data$M1 = Tonietto_Malkoc$Scale_Freeflowing
+Data$M2 = Tonietto_Malkoc$Scale_Work
+Data$Y = Tonietto_Malkoc$Scale_Anticipation_Utility
+
+# Saving the dataset to use in the Shiny app (https://bfmediate.shinyapps.io/bfmediate_app/)
+save(Data,file = "~/Tonietto_Malkoc.rda")    # the file path can be changed by replacing ~
+
 # Setting priors
 A_M = c(100,100)
 A_Y = c(100,100,1)
@@ -41,45 +50,45 @@ A_Y = c(100,100,1)
 
 # X->M1->M2
 
-Data = NULL
-Data$X = ifelse(Tonietto_Malkoc$Condition=="Impromptu",2,-1)    # C1 contrast coding of X (based on the paper)
-Data$M = Tonietto_Malkoc$Scale_Freeflowing
-Data$Y = Tonietto_Malkoc$Scale_Work
+Data1 = NULL
+Data1$X = Data$X
+Data1$M = Data$M1
+Data1$Y = Data$M2
 
-out1 = Mediate(Data = Data, Model = 'Simple', Prior = list(A_M = A_M, A_Y = A_Y),R=10000, burnin = 2000)
+out1 = Mediate(Data = Data1, Model = 'Simple', Prior = list(A_M = A_M, A_Y = A_Y),R=10000, burnin = 2000)
 out1$Simple$BF
 out1$Simple$evidence
 
 # X->M1->Y
 
-Data = NULL
-Data$X = ifelse(Tonietto_Malkoc$Condition=="Impromptu",2,-1)
-Data$M = Tonietto_Malkoc$Scale_Freeflowing
-Data$Y = Tonietto_Malkoc$Scale_Anticipation_Utility
+Data2 = NULL
+Data2$X = Data$X
+Data2$M = Data$M1
+Data2$Y = Data$Y
 
-out2 = Mediate(Data = Data, Model = 'Simple', Prior = list(A_M = A_M, A_Y = A_Y),R=10000, burnin = 2000)
+out2 = Mediate(Data = Data2, Model = 'Simple', Prior = list(A_M = A_M, A_Y = A_Y),R=10000, burnin = 2000)
 out2$Simple$BF
 out2$Simple$evidence
 
 # X->M2->Y
 
-Data = NULL
-Data$X = ifelse(Tonietto_Malkoc$Condition=="Impromptu",2,-1)
-Data$M = Tonietto_Malkoc$Scale_Work
-Data$Y = Tonietto_Malkoc$Scale_Anticipation_Utility
+Data3 = NULL
+Data3$X = Data$X
+Data3$M = Data$M2
+Data3$Y = Data$Y
 
-out3 = Mediate(Data = Data, Model = 'Simple', Prior = list(A_M = A_M, A_Y = A_Y),R=10000, burnin = 2000)
+out3 = Mediate(Data = Data3, Model = 'Simple', Prior = list(A_M = A_M, A_Y = A_Y),R=10000, burnin = 2000)
 out3$Simple$BF
 out3$Simple$evidence
 
 # M1->M2->Y
 
-Data = NULL
-Data$X = Tonietto_Malkoc$Scale_Freeflowing
-Data$M = Tonietto_Malkoc$Scale_Work
-Data$Y = Tonietto_Malkoc$Scale_Anticipation_Utility
+Data4 = NULL
+Data4$X = Data$M1
+Data4$M = Data$M2
+Data4$Y = Data$Y
 
-out4 = Mediate(Data = Data, Model = 'Simple', Prior = list(A_M = A_M, A_Y = A_Y),R=10000, burnin = 2000)
+out4 = Mediate(Data = Data4, Model = 'Simple', Prior = list(A_M = A_M, A_Y = A_Y),R=10000, burnin = 2000)
 out4$Simple$BF
 out4$Simple$evidence
 
@@ -88,13 +97,14 @@ out4$Simple$evidence
 
 # Next we explore a different data-generating process where M1 and M2 are indicators of a latent mediator
 
-Data$X = ifelse(Tonietto_Malkoc$Condition=="Impromptu",2,-1)
+Data5 = NULL
+Data5$X = Data$X
 # using the indicators of (reverse) Freeflowing and work construal as indicators for a common latent mediator
-Data$m_tilde = cbind(Tonietto_Malkoc$Chore,Tonietto_Malkoc$Effortful,Tonietto_Malkoc$WorkLike,8-Tonietto_Malkoc$Flexible,8-Tonietto_Malkoc$Freeflowing)
-Data$Y = Tonietto_Malkoc$Scale_Anticipation_Utility
+Data5$m_tilde = Data$m_tilde
+Data5$Y = Data$Y
 
 # Computing Bayes factor for the new latent variable model
-outnew = Mediate(Data = Data, Model = 'MCat', Prior = list(A_M = A_M, A_Y = A_Y),R=10000, burnin = 2000)
+outnew = Mediate(Data = Data5, Model = 'MCat', Prior = list(A_M = A_M, A_Y = A_Y),R=10000, burnin = 2000)
 outnew$BF
 outnew$evidence
 }

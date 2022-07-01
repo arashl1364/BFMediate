@@ -29,6 +29,9 @@ Data$X = Shaddy_Fishbach$bundled_cond
 Data$M = Shaddy_Fishbach$replacement
 Data$Y = Shaddy_Fishbach$value_log
 
+# Saving the dataset to use in the Shiny app (https://bfmediate.shinyapps.io/bfmediate_app/)
+save(Data,file = "~/Shaddy_Fishbach.rda")    # the file path can be changed by replacing ~
+
 # Setting priors
 A_M = c(100,100)
 A_Y = c(100,100,1)
