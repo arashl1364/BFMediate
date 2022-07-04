@@ -28,6 +28,7 @@
 #' Data$X = ifelse(Tonietto_Malkoc$Condition=="Impromptu",2,-1)    # C1 contrast coding of X (based on the paper)
 #' Data$M1 = Tonietto_Malkoc$Scale_Freeflowing
 #' Data$M2 = Tonietto_Malkoc$Scale_Work
+#' Data$m_tilde = cbind(Tonietto_Data$Chore,Tonietto_Data$Effortful,Tonietto_Data$WorkLike,8-Tonietto_Data$Flexible,8-Tonietto_Data$Freeflowing)
 #' Data$Y = Tonietto_Malkoc$Scale_Anticipation_Utility
 #' 
 #' # Saving the dataset to use in the Shiny app (https://bfmediate.shinyapps.io/bfmediate_app/)
