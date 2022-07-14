@@ -40,7 +40,7 @@ data(Tonietto_Malkoc)
 which(is.na(Tonietto_Malkoc),arr.ind = T)
 
 # Removing (the two) observations that contain missing values from the dataset
-Tonietto_Malkoc = Tonietto_Malkoc[-c(56,96),]
+Tonietto_Malkoc = Tonietto_Malkoc[-c(65,96),]
 
 Data = NULL
 Data$X = ifelse(Tonietto_Malkoc$Condition=="Impromptu",2,-1)    # C1 contrast coding of X (based on the paper)
