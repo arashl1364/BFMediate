@@ -2,7 +2,7 @@
 
 The focus is on measuring evidence for (full) mediation using Bayes factors. The package covers models with measurement error and discretization in the mediator (M) and/or the dependent variable. 
 
-Note: This is a preliminary version of the package. Please do not quote or distribute.
+This is a preliminary version of the package.
 
 ## Installation 
 
@@ -14,7 +14,7 @@ devtools::install_github("arashl1364/BFMediate")
 
 #  Measuring data based evidence of mediation 
 
-The following examples simulate data, call package functions, and summarize output to illustrate the models and analyses discussed in detail in Laghaie & Otter (2020).
+The following examples simulate data, call package functions, and summarize output to illustrate the models and analyses discussed in detail in Laghaie & Otter (2023).
 
 
 ## Simple mediation model 
@@ -77,12 +77,12 @@ out$Simple$BF             # Bayes factor
 out$Simple$evidence       # evidence in favor of full mediation (Kass & Raftery 1995)
 
 ```
-The NHST test result from the Baron & Kenny (1986) procedure fails to reject full mediation, and the bootstrapped direct effect includes zero. However, as dicussed in Laghaie & Otter (2020), these could result from low power and high sampling variability, and are not necessarily evidence for mediation. Computing Bayes factor on the other hand provide a measure of data based evidence supporting/against mediation. The output of _Mediate_ also contains all the parameter estimates (posterior draws). For a complete list of the output values as well as the prior specification for all the model parameters please see the help page of the function.
+The NHST test result from the Baron & Kenny (1986) procedure fails to reject full mediation, and the bootstrapped direct effect includes zero. However, as dicussed in Laghaie & Otter (2023), these could result from low power and high sampling variability, and are not necessarily evidence for mediation. Computing Bayes factor on the other hand provide a measure of data based evidence supporting/against mediation. The output of _Mediate_ also contains all the parameter estimates (posterior draws). For a complete list of the output values as well as the prior specification for all the model parameters please see the help page of the function.
 
 
 ## Model with multiple (discretized) indicators for M and Y
 
-If, as often the case, multiple indicators for M and Y are available in the form of scale ratings, they can be used to control for both measurement error and discretization in a latent variable model(for a visual illustration of the model please see Appendix D.III of Laghaie & Otter (2020)). Based on the latent variable model, Bayes factors then test for conditional mean independence between X and (latent) Y given (latent) M.  Note that conditional mean independence at the latent variable level may (strongly) hold even if conditional mean independence is (strongly) rejected at the level of observed variables. We illustrate this result with simulated data from a full mediation model with multiple categorized indicators:      
+If, as often the case, multiple indicators for M and Y are available in the form of scale ratings, they can be used to control for both measurement error and discretization in a latent variable model(for a visual illustration of the model please see the web appendix of Laghaie & Otter (2023)). Based on the latent variable model, Bayes factors then test for conditional mean independence between X and (latent) Y given (latent) M.  Note that conditional mean independence at the latent variable level may (strongly) hold even if conditional mean independence is (strongly) rejected at the level of observed variables. We illustrate this result with simulated data from a full mediation model with multiple categorized indicators:      
 
 ```
 set.seed(60)
