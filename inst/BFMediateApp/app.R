@@ -82,7 +82,7 @@ shiny::shinyApp(
         shiny::numericInput(inputId='prior_2', label='Prior beta_2',
                             value=100),
         ), column(12,
-        shiny::numericInput(inputId='prior_3', label='Prior beta_3 (carefully chosen reference prior, see XXX & XXX (2021) before changing)',
+        shiny::numericInput(inputId='prior_3', label='Prior beta_3 (carefully chosen reference prior, see Laghaie & Otter (2023) before changing)',
                             value=1),
         ),
         shiny::hr(),
@@ -156,7 +156,7 @@ shiny::shinyApp(
         #
         # Choosing the reference prior for the direct effect (beta_3)
         A_M <- c(input$prior_0M, input$prior_1); # Prior variance for beta_0M, beta_1
-        A_Y_ref <- c(input$prior_0Y, input$prior_2, input$prior_3) # Prior variance for beta_0Y, beta_2, beta_3(carefully chosen reference prior, please see xxx & xxx (2020) before changing)
+        A_Y_ref <- c(input$prior_0Y, input$prior_2, input$prior_3) # Prior variance for beta_0Y, beta_2, beta_3(carefully chosen reference prior, please see Laghaie & Otter (2023) before changing)
         prior <- list(A_M = A_M, A_Y = A_Y_ref)
         shiny::showModal(shiny::modalDialog("Estimating ...", footer=NULL))
         res <- Mediate(Data = sim(), Model = input$model, Prior = prior, R = input$R, burnin = input$burnin)

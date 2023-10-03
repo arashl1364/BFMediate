@@ -31,7 +31,7 @@ Data = NULL
 Data$X = Sussman_Obrien$CondGroup
 Data$M = Sussman_Obrien$IrresponsibleScale
 Data$Y = Sussman_Obrien$BorrowAmount
-Data$m_tilde = cbind(Sussman_Obrien$Irresponsible1, Sussman_Obrien$Irresponsible2, Sussman_Obrien$Irresponsibility3_R)
+Data$m_tilde = cbind(Sussman_Obrien$Irresponsible1, Sussman_Obrien$Irresponsible2, Sussman_Obrien$Irresponsible3)
 
 # Saving the dataset to use in the Shiny app (https://bfmediate.shinyapps.io/bfmediate_app/)
 save(Data,file = "~/Sussman_Obrien.rda")    # the file path can be changed by replacing ~
